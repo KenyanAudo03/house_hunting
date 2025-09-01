@@ -1,0 +1,30 @@
+# Django migrations (except __init__.py)
+migrations/
+!migrations/__init__.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+
+# SQLite database
+*.sqlite3
+db.sqlite3
+
+# Virtual environments
+env/
+venv/
+
+# Media files
+media/
+
+# Django stuff
+*.log
+staticfiles/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# CREDENTIALS
+.env
