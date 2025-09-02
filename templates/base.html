@@ -37,9 +37,9 @@
 
       <nav class="nav-menu">
         <a href="/" class="{% if request.path == '/' %}active{% endif %}"
-          >Home</a
+          >Houses</a
         >
-        <a href="#">Properties</a>
+        <a href="#">Roomies</a>
         <a
           href="{% url 'about' %}"
           class="{% if request.path == '/about' %}active{% endif %}"
@@ -83,10 +83,10 @@
       <ul class="sidebar-nav">
         <li>
           <a href="/" class="{% if request.path == '/' %}active{% endif %}"
-            >Home</a
+            >Houses</a
           >
         </li>
-        <li><a href="#">Properties</a></li>
+        <li><a href="#">Roomies</a></li>
         <li>
           <a
             href="{% url 'about' %}"
@@ -107,7 +107,7 @@
         <a href="#">Sign Up</a>
       </div>
     </div>
-`
+    `
     <div class="overlay" id="overlay"></div>
 
     <main class="main-content">{% block content %}{% endblock %}</main>
@@ -143,8 +143,8 @@
           <div class="footer-section">
             <h4>Quick Links</h4>
             <div class="footer-links">
-              <a href="/">Home</a>
-              <a href="#">Properties</a>
+              <a href="/">Houses</a>
+              <a href="#">Roomies</a>
               <a href="{% url 'about' %}">About</a>
               <a href="{% url 'contact' %}">Contact</a>
             </div>
@@ -165,8 +165,8 @@
             <div class="footer-section">
               <h4>Quick Links</h4>
               <div class="footer-links">
-                <a href="/">Home</a>
-                <a href="#">Properties</a>
+                <a href="/">Houses</a>
+                <a href="#">Roomies</a>
                 <a href="{% url 'about' %}">About</a>
                 <a href="{% url 'contact' %}">Contact</a>
               </div>
