@@ -1,0 +1,50 @@
+.contact-form {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: left;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.cta-button {
+    display: inline-flex;
+    border: none;
+    cursor: pointer;
+}
