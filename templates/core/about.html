@@ -1,0 +1,416 @@
+{% extends "base.html" %} {% block title %} About JoouStay {% endblock %} 
+{% block content %}
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    padding: 80px 0 60px;
+    color: #1e293b;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: var(--brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 60px 0;
+  }
+
+  .stat-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .stat-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .content-section {
+    padding: 80px 0;
+    background: var(--bg);
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    line-height: 1.7;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin: 60px 0;
+  }
+
+  .feature-card {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .feature-card:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: var(--bg);
+  }
+
+  .feature-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 15px;
+  }
+
+  .feature-description {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .mission-section {
+    background: var(--card-bg);
+    padding: 80px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .mission-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .mission-highlight {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 30px;
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, var(--brand) 0%, #1e7e1e 100%);
+    padding: 80px 0;
+    text-align: center;
+    color: white;
+  }
+
+  .cta-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .cta-description {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-button {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 15px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .cta-button:hover {
+    background: #e6c200;
+    color: var(--bg);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 40px 0 40px;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .feature-card {
+      padding: 30px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cta-title {
+      font-size: 2rem;
+    }
+
+    .cta-description {
+      font-size: 1.1rem;
+      padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<section class="hero-section">
+  <div class="container">
+    <h1 class="hero-title">About JoouStay</h1>
+    <p class="hero-subtitle">
+      Connecting students with quality, affordable housing near their schools.
+      We believe every student deserves a comfortable place to call home during
+      their academic journey.
+    </p>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">5,000+</span>
+        <span class="stat-label">Happy Students</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">1,200+</span>
+        <span class="stat-label">Available Properties</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">50+</span>
+        <span class="stat-label">Partner Schools</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">98%</span>
+        <span class="stat-label">Satisfaction Rate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="mission-section">
+  <div class="container">
+    <div class="mission-content">
+      <h2 class="section-title">Our Mission</h2>
+      <p class="mission-highlight">
+        "Making student housing search simple, transparent, and stress-free"
+      </p>
+      <p class="mission-text">
+        At JoouStay, we understand that finding the right accommodation as a
+        student can be overwhelming. Between managing coursework, adjusting to
+        campus life, and maintaining a budget, the last thing you need is
+        housing stress. That's why we created a platform that puts students
+        first, connecting you with verified, affordable housing options within
+        walking distance or a short commute to your school.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="content-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose JoouStay?</h2>
+    <p class="section-subtitle">
+      We've built our platform around what students actually need: affordable
+      prices, convenient locations, and hassle-free processes.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-search-alt-2"></i>
+        </div>
+        <h3 class="feature-title">Smart Search & Filters</h3>
+        <p class="feature-description">
+          Find housing that fits your needs with our advanced search filters.
+          Search by distance from campus, price range, amenities, and more to
+          discover your perfect student home.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-shield-quarter"></i>
+        </div>
+        <h3 class="feature-title">Verified Properties</h3>
+        <p class="feature-description">
+          Every property on our platform is verified and inspected. We work
+          directly with trusted landlords and property managers to ensure you
+          get exactly what you see in the listings.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-wallet"></i>
+        </div>
+        <h3 class="feature-title">Student-Friendly Pricing</h3>
+        <p class="feature-description">
+          No hidden fees or surprise costs. We display transparent pricing and
+          work with landlords who understand student budgets and offer flexible
+          payment terms.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-map"></i>
+        </div>
+        <h3 class="feature-title">Campus Proximity</h3>
+        <p class="feature-description">
+          All our properties are strategically located within reasonable
+          distance to partner schools. Walk to class or catch a quick ride - we
+          ensure your commute is never a burden.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-support"></i>
+        </div>
+        <h3 class="feature-title">24/7 Student Support</h3>
+        <p class="feature-description">
+          Our dedicated support team understands student schedules and needs.
+          Get help with applications, move-in processes, or any housing concerns
+          whenever you need it.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="bx bx-group"></i>
+        </div>
+        <h3 class="feature-title">Roommate Matching</h3>
+        <p class="feature-description">
+          Looking for roommates? Our platform helps you connect with other
+          students seeking shared accommodation, making housing more affordable
+          and socially enriching.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Ready to Find Your Perfect Student Home?</h2>
+    <p class="cta-description">
+      Join thousands of students who've found their ideal accommodation through
+      JoouStay. Start your housing search today and focus on what matters most -
+      your education.
+    </p>
+    <a href="/" class="cta-button">
+      <i class="bx bx-search"></i>
+      Start House Hunting
+    </a>
+  </div>
+</section>
+
+{% endblock %}
