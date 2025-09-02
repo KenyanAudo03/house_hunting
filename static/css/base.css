@@ -329,6 +329,16 @@ body {
     display: none;
 }
 
+/* Active links */
+.nav-menu a.active {
+    color: var(--accent);
+}
+
+.sidebar-nav a.active {
+    color: var(--accent);
+}
+
+
 .main-content {
     flex: 1;
 }
