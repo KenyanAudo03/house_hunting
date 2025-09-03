@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   const sections = document.querySelectorAll(".section[id]");
-  const navLinks = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+  const navLinks = document.querySelectorAll(
+    '.privacy-sidebar-nav a[href^="#"]'
+  );
 
   // Function to remove active class from all nav links
   function removeActiveClasses() {
@@ -10,12 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to add active class to current section link
   function addActiveClass(id) {
     removeActiveClasses();
-    const activeLink = document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+    const activeLink = document.querySelector(
+      `.privacy-sidebar-nav a[href="#${id}"]`
+    );
     if (activeLink) {
       activeLink.classList.add("active");
     }
   }
-  
+
   const observerOptions = {
     root: null,
     rootMargin: "-20% 0px -70% 0px", // Trigger when section is in the middle third of viewport
