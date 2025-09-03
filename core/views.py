@@ -34,5 +34,18 @@ def about(request):
 def contact(request):
     return render(request, "core/contact.html")
 
+
 def privacy_policy(request):
-    return render(request, "core/privacy_policy.html")
+    return render(request, "core/policy.html")
+
+
+def terms_of_service(request):
+    return render(request, "core/terms.html")
+
+
+def cookie_policy(request):
+    return render(request, "core/cookies.html")
+
+
+def support(request):
+    return render(request, "core/support.html")
