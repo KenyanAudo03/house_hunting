@@ -33,3 +33,6 @@ def about(request):
 
 def contact(request):
     return render(request, "core/contact.html")
+
+def privacy_policy(request):
+    return render(request, "core/privacy_policy.html")
