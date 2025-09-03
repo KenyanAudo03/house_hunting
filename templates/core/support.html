@@ -1,0 +1,404 @@
+{% extends "base.html" %} {% load static %} {% block title %} Support Center -
+JoouStay {% endblock %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/core/support.css' %}" />
+
+<div class="support-hero">
+  <div class="container">
+    <h1 class="support-title">How can we help you?</h1>
+    <p class="support-subtitle">
+      Get quick answers to common questions about finding housing and roommates
+      at JOOUST
+    </p>
+
+    <!-- Quick Search -->
+    <div class="search-container">
+      <div class="search-box">
+        <i class="bx bx-search"></i>
+        <input
+          type="text"
+          placeholder="Search for help articles..."
+          id="supportSearch"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Help Cards -->
+<section class="quick-help-section">
+  <div class="container">
+    <div class="quick-help-grid">
+      <div class="help-card">
+        <div class="help-icon">
+          <i class="bx bx-home-heart"></i>
+        </div>
+        <h3>Finding Housing</h3>
+        <p>
+          Learn how to search and filter available houses near JOOUST campus
+        </p>
+        <a href="#housing-help" class="help-link"
+          >Get Help <i class="bx bx-right-arrow-alt"></i
+        ></a>
+      </div>
+
+      <div class="help-card">
+        <div class="help-icon">
+          <i class="bx bx-group"></i>
+        </div>
+        <h3>Roommate Matching</h3>
+        <p>Find compatible roommates and manage your roommate profile</p>
+        <a href="#roommate-help" class="help-link"
+          >Get Help <i class="bx bx-right-arrow-alt"></i
+        ></a>
+      </div>
+
+      <div class="help-card">
+        <div class="help-icon">
+          <i class="bx bx-user-circle"></i>
+        </div>
+        <h3>Account Issues</h3>
+        <p>Manage your account, passwords, and profile settings</p>
+        <a href="#account-help" class="help-link"
+          >Get Help <i class="bx bx-right-arrow-alt"></i
+        ></a>
+      </div>
+
+      <div class="help-card">
+        <div class="help-icon">
+          <i class="bx bx-credit-card"></i>
+        </div>
+        <h3>Payments & Fees</h3>
+        <p>Understand service fees, refunds, and payment processes</p>
+        <a href="#payment-help" class="help-link"
+          >Get Help <i class="bx bx-right-arrow-alt"></i
+        ></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+  <div class="container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+
+    <!-- Housing Help -->
+    <div class="faq-category" id="housing-help">
+      <h3 class="category-title">
+        <i class="bx bx-home-heart"></i>
+        Finding Housing
+      </h3>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I search for available houses near JOOUST?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Use our search filters on the homepage to narrow down houses by
+              price range, number of bedrooms, distance from campus, and other
+              preferences. All listed houses are within walking distance or a
+              short ride from JOOUST main campus.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Are all the house listings verified?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes! JoouStay gathers and verifies all property information before
+              listing. Our team checks that houses are real, available, and
+              accurately described to save you time and prevent disappointment.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I request to view a house?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Click the "Request Information" button on any house listing. We'll
+              connect you with the property owner to arrange a viewing at your
+              convenience.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I save houses I'm interested in?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes! Create an account to save your favorite listings and receive
+              updates when similar houses become available.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roommate Help -->
+    <div class="faq-category" id="roommate-help">
+      <h3 class="category-title">
+        <i class="bx bx-group"></i>
+        Roommate Matching
+      </h3>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How does roommate matching work?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Create a roommate profile with your preferences, budget, and
+              contact information. Other JOOUST students can view your profile
+              and contact you directly if you seem like a good match.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Is roommate matching only for JOOUST students?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes, JoouStay is exclusively for JOOUST students. This ensures all
+              potential roommates are part of the same campus community.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I contact potential roommates?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Roommate profiles include contact information provided by the
+              user. You can reach out to them directly using their preferred
+              contact method.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I update my roommate preferences?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Absolutely! Log into your account anytime to update your roommate
+              profile, preferences, or contact information.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Help -->
+    <div class="faq-category" id="account-help">
+      <h3 class="category-title">
+        <i class="bx bx-user-circle"></i>
+        Account Issues
+      </h3>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>I forgot my password. How do I reset it?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Click "Forgot Password" on the login page and enter your email
+              address. We'll send you a link to create a new password.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I verify my JOOUST student status?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              During registration, you'll need to provide your email. We verify
+              this information to ensure platform security.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I change my email address?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes, go to your account settings to update your email address.
+              You'll need to verify the new email before the change takes
+              effect.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>How do I delete my account?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Contact our support team to request account deletion. We'll remove
+              your information while keeping necessary records for legal
+              compliance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Help -->
+    <div class="faq-category" id="payment-help">
+      <h3 class="category-title">
+        <i class="bx bx-credit-card"></i>
+        Payments & Fees
+      </h3>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>What fees does JoouStay charge?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              JoouStay charges a small service fee for facilitating housing
+              connections. You pay rent directly to the property owner. All fees
+              are clearly shown before you agree to any charges.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>When do I pay the service fee?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Service fees are typically charged when you successfully connect
+              with a property owner through our platform. The exact timing and
+              amount are explained during the process.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>Can I get a refund if I change my mind?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Service fees are generally non-refundable, but we consider refunds
+              in cases of technical errors or exceptional circumstances. Contact
+              support to discuss your situation.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <h4>What payment methods do you accept?</h4>
+            <i class="bx bx-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              We accept major credit cards, debit cards, and mobile money
+              payments common in Kenya. All payments are processed securely
+              through trusted payment providers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Support Section -->
+<section class="contact-support-section">
+  <div class="container">
+    <div class="support-contact-grid">
+      <div class="support-contact-card">
+        <div class="contact-icon">
+          <i class="bx bxl-whatsapp"></i>
+        </div>
+        <h3>WhatsApp Support</h3>
+        <p>Get instant help through WhatsApp during business hours</p>
+        <a
+          href="https://wa.me/254XXXXXXXXX"
+          class="contact-btn primary"
+          target="_blank"
+          >Chat on WhatsApp</a
+        >
+        <small>Available Mon-Fri, 8AM-6PM EAT</small>
+      </div>
+
+      <div class="support-contact-card">
+        <div class="contact-icon">
+          <i class="bx bx-envelope"></i>
+        </div>
+        <h3>Email Support</h3>
+        <p>Send us detailed questions and we'll respond within 24 hours</p>
+        <a href="mailto:support@jooustay.com" class="contact-btn">Email Us</a>
+        <small>support@jooustay.com</small>
+      </div>
+
+      <div class="support-contact-card">
+        <div class="contact-icon">
+          <i class="bx bx-phone"></i>
+        </div>
+        <h3>Phone Support</h3>
+        <p>Speak directly with our team for urgent issues</p>
+        <a href="tel:+254XXXXXXXXX" class="contact-btn">Call Now</a>
+        <small>+254 XXX XXX XXX</small>
+      </div>
+    </div>
+
+    <div class="emergency-notice">
+      <div class="notice-content">
+        <div>
+          <h4>Need immediate assistance?</h4>
+          <p>
+            For urgent housing issues or safety concerns, contact our emergency
+            support line at +254 XXX XXX XXX (available 24/7)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{% static 'js/core/support.js' %}"></script>
+
+{% endblock %}
