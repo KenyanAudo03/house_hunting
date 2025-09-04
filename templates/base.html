@@ -53,8 +53,13 @@
       </nav>
 
       <div class="auth-links">
-        <a href="#">Login</a>
-        <a href="#">Signup</a>
+        {% if user.is_authenticated %}
+          <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
+          <a href="{% url 'account_logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'account_login' %}">Login</a>
+          <a href="{% url 'account_signup' %}">Signup</a>
+        {% endif %}
       </div>
 
       <button class="nav-toggle" id="navToggle">
@@ -103,8 +108,15 @@
         </li>
       </ul>
       <div class="sidebar-auth">
-        <a href="#">Login</a>
-        <a href="#">Sign Up</a>
+        {% if user.is_authenticated %}
+          <div class="user-info">
+            <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
+          </div>
+          <a href="{% url 'account_logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'account_login' %}">Login</a>
+          <a href="{% url 'account_signup' %}">Sign Up</a>
+        {% endif %}
       </div>
     </div>
     `

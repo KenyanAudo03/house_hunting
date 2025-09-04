@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Sign In</h2>
+                
+                <!-- Google Sign-In Button -->
+                <div class="d-grid gap-2 mb-3">
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-lg">
+                        <i class="fab fa-google me-2"></i>
+                        Sign in with Google
+                    </a>
+                </div>
+                
+                <hr>
+                <p class="text-center text-muted">Or use email and password</p>
+                
+                <!-- Regular Login Form -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.login.id_for_label }}" class="form-label">Email</label>
+                        {{ form.login.as_widget }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                        {{ form.password.as_widget }}
+                    </div>
+                    <div class="mb-3 form-check">
+                        {{ form.remember }}
+                        <label class="form-check-label" for="{{ form.remember.id_for_label }}">
+                            Remember me
+                        </label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign up</a></p>
+                    <p><a href="{% url 'account_reset_password' %}">Forgot password?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
