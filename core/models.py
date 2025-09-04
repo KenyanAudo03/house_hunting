@@ -1,5 +1,15 @@
 from django.db import models
 
+class Amenity(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Amenities"
+
 class HostelImage(models.Model):
     hostel = models.ForeignKey('Hostel', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='hostel_images/')
@@ -24,6 +34,7 @@ class Hostel(models.Model):
     video = models.FileField(upload_to='hostel_videos/', null=True, blank=True)
     pricing = models.DecimalField(max_digits=10, decimal_places=2)
     available_vacants = models.IntegerField(default=0)
+    amenities = models.ManyToManyField(Amenity, blank=True)
 
     def __str__(self):
         return self.name
