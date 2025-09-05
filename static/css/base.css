@@ -84,6 +84,11 @@ body {
     color: var(--bg);
 }
 
+     .auth-links a.active {
+    background-color: var(--accent);
+    color: var(--bg);
+}
+
 .logo {
     display: inline-flex;
     align-items: center;

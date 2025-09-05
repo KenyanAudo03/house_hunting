@@ -54,11 +54,19 @@
 
       <div class="auth-links">
         {% if user.is_authenticated %}
-          <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
-          <a href="{% url 'account_logout' %}">Logout</a>
+        <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
+        <a href="{% url 'account_logout' %}">Logout</a>
         {% else %}
-          <a href="{% url 'account_login' %}">Login</a>
-          <a href="{% url 'account_signup' %}">Signup</a>
+        <a
+          href="{% url 'account_login' %}"
+          class="{% if request.path == '/accounts/login/' %}active{% endif %}"
+          >Login</a
+        >
+        <a
+          href="{% url 'account_signup' %}"
+          class="{% if request.path == '/accounts/signup/' %}active{% endif %}"
+          >Sign Up</a
+        >
         {% endif %}
       </div>
 
@@ -109,17 +117,23 @@
       </ul>
       <div class="sidebar-auth">
         {% if user.is_authenticated %}
-          <div class="user-info">
-            <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
-          </div>
-          <a href="{% url 'account_logout' %}">Logout</a>
+        <div class="user-info">
+          <span>Welcome, {{ user.get_full_name|default:user.username }}</span>
+        </div>
+        <a href="{% url 'account_logout' %}">Logout</a>
         {% else %}
-          <a href="{% url 'account_login' %}">Login</a>
-          <a href="{% url 'account_signup' %}">Sign Up</a>
+        <a
+          href="{% url 'account_login' %}"
+          >Login</a
+        >
+        <a
+          href="{% url 'account_signup' %}"
+          >Sign Up</a
+        >
         {% endif %}
       </div>
     </div>
-      
+
     <div class="overlay" id="overlay"></div>
 
     <main class="main-content">{% block content %}{% endblock %}</main>
