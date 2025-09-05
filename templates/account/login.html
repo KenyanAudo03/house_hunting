@@ -1,34 +1,15 @@
 {% extends 'base.html' %} {% load static %} {% load socialaccount %} 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
+
 <div class="login-container">
   <div class="login-card">
     <h2 class="login-title">Welcome to JoouStay</h2>
     <p class="login-subtitle">
       Log in to find housing near JOOUST and connect with roommates.
     </p>
- {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-          <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
-            {% if 'success' in message.tags %}
-              <i class='bx bx-check-circle'></i>
-            {% elif 'error' in message.tags or 'danger' in message.tags %}
-              <i class='bx bx-error-circle'></i>
-            {% elif 'warning' in message.tags %}
-              <i class='bx bx-error'></i>
-            {% elif 'info' in message.tags %}
-              <i class='bx bx-info-circle'></i>
-            {% else %}
-              <i class='bx bx-info-circle'></i>
-            {% endif %}
-            {{ message }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
 
-    <!-- Google Auoth link -->
+    <!-- Continue with Google -->
     <a href="{% provider_login_url 'google' %}" class="google-btn">
       <svg class="google-icon" width="20" height="20" viewBox="0 0 24 24">
         <path
@@ -51,49 +32,46 @@
       Continue with Google
     </a>
 
-    <!-- Normal Login Form -->
     <div class="divider">or Login with</div>
+
+    <!-- Login using Email and Password -->
     <form method="post">
       {% csrf_token %}
-      <div class="form-group">
-        <input
-          type="email"
-          class="form-input"
-          name="{{ form.login.name }}"
-          placeholder="Email address"
-          required
-        />
+      <div class="form-messages">
+        {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+        <div class="message message-error">{{ error }}</div>
+        {% endfor %} {% endif %}
       </div>
+
+      <div class="form-group">{{ form.login.label_tag }} {{ form.login }}</div>
+
       <div class="form-group">
-        <input
-          type="password"
-          class="form-input"
-          name="{{ form.password.name }}"
-          placeholder="Password"
-          required
-          id="password"
-        />
-        <button
-          type="button"
-          class="password-toggle"
-          onclick="togglePassword()"
-        >
-          <svg
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            id="eye-icon"
+        {{ form.password.label_tag }}
+        <div class="password-field">
+          {{ form.password }}
+          <button
+            type="button"
+            class="password-toggle"
+            onclick="togglePassword()"
           >
-            <path
-              d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
-            />
-            <path
-              d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
-            />
-          </svg>
-        </button>
+            <svg
+              width="20"
+              height="20"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              id="eye-icon"
+            >
+              <path
+                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
+              />
+              <path
+                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+
       <button type="submit" class="login-btn">LOGIN</button>
     </form>
 
@@ -109,9 +87,12 @@
   </div>
 </div>
 
+<!-- Toggle Password -->
 <script>
   function togglePassword() {
-    const passwordInput = document.getElementById("password");
+    const passwordInput = document.getElementById(
+      "{{ form.password.id_for_label }}"
+    );
     const eyeIcon = document.getElementById("eye-icon");
 
     if (passwordInput.type === "password") {
