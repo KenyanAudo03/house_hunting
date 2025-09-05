@@ -1,52 +1,128 @@
-{% extends 'base.html' %}
-{% load socialaccount %}
-
+{% extends 'base.html' %} {% load static %} {% load socialaccount %} 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Sign In</h2>
-                
-                <!-- Google Sign-In Button -->
-                <div class="d-grid gap-2 mb-3">
-                    <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-lg">
-                        <i class="fab fa-google me-2"></i>
-                        Sign in with Google
-                    </a>
-                </div>
-                
-                <hr>
-                <p class="text-center text-muted">Or use email and password</p>
-                
-                <!-- Regular Login Form -->
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="{{ form.login.id_for_label }}" class="form-label">Email</label>
-                        {{ form.login.as_widget }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
-                        {{ form.password.as_widget }}
-                    </div>
-                    <div class="mb-3 form-check">
-                        {{ form.remember }}
-                        <label class="form-check-label" for="{{ form.remember.id_for_label }}">
-                            Remember me
-                        </label>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Sign In</button>
-                    </div>
-                </form>
-                
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign up</a></p>
-                    <p><a href="{% url 'account_reset_password' %}">Forgot password?</a></p>
-                </div>
-            </div>
-        </div>
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Welcome to JoouStay</h2>
+    <p class="login-subtitle">
+      Log in to find housing near JOOUST and connect with roommates.
+    </p>
+ {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {% if 'success' in message.tags %}
+              <i class='bx bx-check-circle'></i>
+            {% elif 'error' in message.tags or 'danger' in message.tags %}
+              <i class='bx bx-error-circle'></i>
+            {% elif 'warning' in message.tags %}
+              <i class='bx bx-error'></i>
+            {% elif 'info' in message.tags %}
+              <i class='bx bx-info-circle'></i>
+            {% else %}
+              <i class='bx bx-info-circle'></i>
+            {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Google Auoth link -->
+    <a href="{% provider_login_url 'google' %}" class="google-btn">
+      <svg class="google-icon" width="20" height="20" viewBox="0 0 24 24">
+        <path
+          fill="#4285F4"
+          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+        />
+        <path
+          fill="#34A853"
+          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+        />
+        <path
+          fill="#FBBC05"
+          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+        />
+        <path
+          fill="#EA4335"
+          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+        />
+      </svg>
+      Continue with Google
+    </a>
+
+    <!-- Normal Login Form -->
+    <div class="divider">or Login with</div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-input"
+          name="{{ form.login.name }}"
+          placeholder="Email address"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-input"
+          name="{{ form.password.name }}"
+          placeholder="Password"
+          required
+          id="password"
+        />
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword()"
+        >
+          <svg
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            id="eye-icon"
+          >
+            <path
+              d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"
+            />
+            <path
+              d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+            />
+          </svg>
+        </button>
+      </div>
+      <button type="submit" class="login-btn">LOGIN</button>
+    </form>
+
+    <div class="links">
+      <div class="forgot-password">
+        <a href="{% url 'account_reset_password' %}">Forgot your password</a>
+      </div>
+      <div>
+        <span class="text-muted">Don't have an account?</span>
+        <a href="{% url 'account_signup' %}">Create a new account.</a>
+      </div>
     </div>
+  </div>
 </div>
+
+<script>
+  function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eye-icon");
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      eyeIcon.innerHTML =
+        '<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/><path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/><path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"/>';
+    } else {
+      passwordInput.type = "password";
+      eyeIcon.innerHTML =
+        '<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>';
+    }
+  }
+</script>
 {% endblock %}
