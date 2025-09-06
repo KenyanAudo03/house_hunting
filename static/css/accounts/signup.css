@@ -310,7 +310,7 @@ form input[type="password"]::placeholder {
 @media (max-width: 768px) {
     .signup-card {
         padding: 30px 20px;
-        margin: 20px;
+        margin: 15px;
     }
 
     .signup-container {
