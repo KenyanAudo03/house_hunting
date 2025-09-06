@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% load socialaccount %} 
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load socialaccount %}
+{% block title %} JoouStay Login {% endblock %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
 
 <div class="login-container">
@@ -121,14 +121,14 @@
   }
 
   // Add event listeners when the page loads
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById(
       "{{ form.password.id_for_label }}"
     );
     togglePasswordVisibility();
     passwordInput.addEventListener("input", togglePasswordVisibility);
     passwordInput.addEventListener("keyup", togglePasswordVisibility);
-    passwordInput.addEventListener("paste", function() {
+    passwordInput.addEventListener("paste", function () {
       setTimeout(togglePasswordVisibility, 10);
     });
   });
