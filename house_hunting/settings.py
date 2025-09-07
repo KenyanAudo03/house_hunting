@@ -62,7 +62,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
-ACCOUNT_FORMS = {"signup": "core.forms.CustomSignupForm"}
+ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
 # Add the custom social account adapter
 SOCIALACCOUNT_ADAPTER = "core.adapters.CustomSocialAccountAdapter"
