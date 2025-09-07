@@ -3,18 +3,21 @@ from .models import Hostel, HostelImage, Review, Amenity
 
 @admin.register(Hostel)
 class HostelAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address', 'pricing', 'available_vacants', 'average_rating')
-    search_fields = ('name', 'address')
+    list_display = ('name', 'location', 'category', 'pricing', 'available_vacants', 'average_rating')
+    search_fields = ('name', 'address', 'location')
+    list_filter = ('category', 'location')
     filter_horizontal = ('amenities',)
 
 @admin.register(HostelImage)
 class HostelImageAdmin(admin.ModelAdmin):
     list_display = ('hostel', 'image')
+    list_filter = ('hostel',)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('hostel', 'rating', 'created_at')
     list_filter = ('rating', 'created_at')
+    search_fields = ('hostel__name', 'comment')
 
 @admin.register(Amenity)
 class AmenityAdmin(admin.ModelAdmin):
