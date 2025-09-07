@@ -53,3 +53,41 @@ backToTop.addEventListener("click", function () {
     behavior: "smooth",
   });
 });
+
+// Profile dropdown functionality
+const profileTrigger = document.getElementById("profileTrigger");
+const profileDropdown = document.getElementById("profileDropdown");
+
+if (profileTrigger && profileDropdown) {
+  profileTrigger.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const isOpen = profileDropdown.classList.contains("show");
+
+    if (isOpen) {
+      profileDropdown.classList.remove("show");
+      profileTrigger.classList.remove("open");
+    } else {
+      profileDropdown.classList.add("show");
+      profileTrigger.classList.add("open");
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (
+      !profileTrigger.contains(e.target) &&
+      !profileDropdown.contains(e.target)
+    ) {
+      profileDropdown.classList.remove("show");
+      profileTrigger.classList.remove("open");
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && profileDropdown.classList.contains("show")) {
+      profileDropdown.classList.remove("show");
+      profileTrigger.classList.remove("open");
+    }
+  });
+}
