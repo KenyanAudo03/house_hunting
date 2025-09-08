@@ -42,7 +42,14 @@ class Hostel(models.Model):
         ("two_bedroom", "2 Bedroom"),
     ]
 
+    BILLING_CYCLE_CHOICES = [
+        ("monthly", "Per Month"),
+        ("two_months", "Every Two Months"),
+        ("semester", "Per Semester"),
+    ]
+
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
     address = models.CharField(max_length=255)
     location = models.CharField(
         max_length=100, help_text="e.g. Gate A, Bondo town, etc."
@@ -50,8 +57,14 @@ class Hostel(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     video = models.FileField(upload_to="hostel_videos/", null=True, blank=True)
     pricing = models.DecimalField(max_digits=10, decimal_places=2)
+    billing_cycle = models.CharField(
+        max_length=20,
+        choices=BILLING_CYCLE_CHOICES,
+        default="monthly",
+        help_text="How often the rent is paid",
+    )
     available_vacants = models.IntegerField(default=0)
-    amenities = models.ManyToManyField(Amenity, blank=True)
+    amenities = models.ManyToManyField("Amenity", blank=True)
 
     def __str__(self):
         return self.name
