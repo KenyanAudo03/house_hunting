@@ -202,6 +202,10 @@
       font-weight: 600;
   }
 
+  .see-all-link {
+      font-size: 1.5rem;
+  }
+
   .prev-next {
       display: flex;
       gap: 8px;
@@ -342,6 +346,14 @@
 
   /* Phone - 1.5 cards per view for better scrolling */
   @media (max-width: 480px) {
+      .section-title-tag {
+          font-size: 1.2rem;
+      }
+
+      .see-all-link {
+          font-size: 1.1rem;
+      }
+
       .house-card {
           width: calc((100vw - 20px - 20px) / 2);
       }

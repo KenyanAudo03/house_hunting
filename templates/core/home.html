@@ -40,6 +40,7 @@ Student Housing - JoouStay{% endblock %} {% block content %}
 
 <div class="hostels">
   <h3 class="house-listing-title">Vacant Listing</h3>
+  <!-- Latest Hostels/Houses -->
   <section class="latest-houses">
     <div class="section-title">
       <h2 class="section-title-tag">
@@ -63,6 +64,9 @@ Student Housing - JoouStay{% endblock %} {% block content %}
     <!-- Latest Hostels List -->
     {% include "core/partials/latest_hostels.html" %}
   </section>
+
+  <!-- List a house/hostel -->
+  <section class="list-hostel"></section>
 </div>
 
 <script src="{% static 'js/core/home.js' %}"></script>
