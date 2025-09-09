@@ -43,7 +43,7 @@ class Hostel(models.Model):
     ]
 
     BILLING_CYCLE_CHOICES = [
-        ("monthly", "Per Month"),
+        ("month", "Per Month"),
         ("two_months", "Every Two Months"),
         ("semester", "Per Semester"),
     ]
@@ -60,7 +60,7 @@ class Hostel(models.Model):
     billing_cycle = models.CharField(
         max_length=20,
         choices=BILLING_CYCLE_CHOICES,
-        default="monthly",
+        default="month",
         help_text="How often the rent is paid",
     )
     available_vacants = models.IntegerField(default=0)
