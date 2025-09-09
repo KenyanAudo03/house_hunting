@@ -1,0 +1,100 @@
+{% load static %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/core/partial/house-listing-info.css' %}"
+/>
+
+<div class="listing-container">
+  <div class="listing-left-side">
+    <div class="listing-info">
+      <h2>List Your Property</h2>
+      <p>
+        If you are a landlord or tenant with a vacant house or hostel, start by
+        filling out the form. Provide your name, contact information, whether
+        you're a landlord or tenant, the vacant area, property name, and rent
+        amount.
+      </p>
+      <p>
+        After you submit the form, one of our team members will contact you. At
+        that stage, you can send us pictures and more details about the
+        property. Once everything is reviewed and approved, our admin will add
+        your listing to the platform.
+      </p>
+    </div>
+  </div>
+  <div class="listing-right-side">
+    <form id="propertyForm">
+      <label for="name">Your Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        placeholder="Full name"
+      />
+
+      <div class="input-row">
+        <div>
+          <label for="contact">Contact</label>
+          <input
+            type="text"
+            id="contact"
+            name="contact"
+            required
+            placeholder="0712345678"
+          />
+        </div>
+        <div>
+          <label for="role">Landlord or tenant?</label>
+          <select id="role" name="role" required>
+            <option value="">Select</option>
+            <option value="landlord">Landlord</option>
+            <option value="tenant">Tenant</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div>
+          <label for="area">Vacant Area</label>
+          <input
+            type="text"
+            id="area"
+            name="area"
+            required
+            placeholder="eg. Gate A"
+          />
+        </div>
+        <div>
+          <label for="rent">Rent Amount</label>
+          <input
+            type="number"
+            id="rent"
+            name="rent"
+            required
+            placeholder="eg. 3500"
+          />
+        </div>
+      </div>
+
+      <label for="hostel">Hostel/House Name</label>
+      <input type="text" id="hostel" name="hostel" placeholder="eg. Waridi" />
+
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-message">
+    <div class="success-checkmark">✓</div>
+    <h3>Success!</h3>
+    <p>
+      Your property listing has been submitted successfully. Our team will
+      contact you soon.
+    </p>
+  </div>
+</div>
+
+<script src="{% static 'js/core/partials/house-listing-info.js' %}"></script>
