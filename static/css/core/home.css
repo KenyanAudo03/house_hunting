@@ -303,7 +303,7 @@
 
   .no-hostels {
       text-align: center;
-      color: var(--muted);
+      color: #fff;
       font-size: 1.1rem;
       padding: 60px 20px;
       background: #f8f9fa;

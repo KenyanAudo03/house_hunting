@@ -33,14 +33,18 @@ JoouStay{% endblock %} {% load static %} {% block content %} {% load static %}
 </div>
 
 <div class="hostels">
-  <h3 class="house-listing-title">House/Hostel Listing</h3>
+  <h3 class="house-listing-title">Vacant Listing</h3>
   <section class="latest-houses">
     <div class="section-title">
-      <h2 class="section-title-tag">Latest Houses</h2>  
+      <h2 class="section-title-tag">Latest Houses/Hostels</h2>  
+
+      <!-- Show buttons only when there are latest hostels -->
+      {% if latest_hostels %}
       <div class="prev-next" id="carousel-controls">
         <button class="prev-btn" id="prevBtn"><i class="bx bx-chevron-left"></i></button>
         <button class="next-btn" id="nextBtn"><i class="bx bx-chevron-right"></i></button>
       </div>
+      {% endif %}
     </div>
     
     {% if latest_hostels %}
