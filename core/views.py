@@ -69,7 +69,7 @@ def home(request):
     latest_hostels = latest_hostels_qs[:15]
     more_hostels = more_hostels_qs[:15]
 
-    has_more_latest = latest_hostels_qs.count() > 2
+    has_more_latest = latest_hostels_qs.count() > 15
     has_more_more = more_hostels_qs.count() > 15
 
     context = {
