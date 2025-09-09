@@ -176,7 +176,8 @@
           />
           {% endif %}
           <div class="sidebar-profile-text">
-            <span class="sidebar-username" >{{ user.get_full_name|title|truncatechars:20|default:user.username }}
+            <span class="sidebar-username"
+              >{{ user.get_full_name|title|truncatechars:20|default:user.username }}
             </span>
             <span class="sidebar-email">{{ user.email }}</span>
           </div>
@@ -239,6 +240,27 @@
               <a href="{% url 'terms' %}">Terms of Service</a>
               <a href="{% url 'cookies' %}">Cookie Policy</a>
               <a href="{% url 'support' %}">Support</a>
+            </div>
+          </div>
+          <div class="footer-links-container">
+            <div class="footer-section">
+              <h4>Quick Links</h4>
+              <div class="footer-links">
+                <a href="/">Houses</a>
+                <a href="#">Roomies</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+              </div>
+            </div>
+
+            <div class="footer-section">
+              <h4>Legal</h4>
+              <div class="footer-links">
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                <a href="{% url 'terms' %}">Terms of Service</a>
+                <a href="{% url 'cookies' %}">Cookie Policy</a>
+                <a href="{% url 'support' %}">Support</a>
+              </div>
             </div>
           </div>
         </div>
