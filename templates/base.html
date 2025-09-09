@@ -176,9 +176,7 @@
           />
           {% endif %}
           <div class="sidebar-profile-text">
-            <span class="sidebar-username"
-              >{{
-              user.get_full_name|title|truncatechars:20|default:user.username }}
+            <span class="sidebar-username" >{{ user.get_full_name|title|truncatechars:20|default:user.username }}
             </span>
             <span class="sidebar-email">{{ user.email }}</span>
           </div>
