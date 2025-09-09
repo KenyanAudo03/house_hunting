@@ -1,131 +1,75 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}Find Your Perfect Student Housing -
+JoouStay{% endblock %} {% load static %} {% block content %} {% load static %}
+<link rel="stylesheet" href="{% static 'css/core/home.css' %}">
 
-{% block title %}Hostel Listings{% endblock %}
+<div class="hero" style="background: url('{% static "images/default_images/background.jpg" %}') center/cover;">
 
-{% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1 class="mb-4">Available Hostels</h1>
+  <div class="hero-content">
+    <h1 class="hero-title">JoouStay</h1>
 
-        <!-- Search Bar -->
-        <div class="mb-4">
-            <input type="text" id="search-input" class="form-control" placeholder="Search hostels..." style="max-width: 400px;">
+    <p class="hero-subtitle">
+      Search for student hostels and housing options close to JOOUST campus.
+    </p>
+
+    <div class="search-container">
+      <form class="search-form" method="GET" action="{% url 'home' %}">
+        <div class="search-input-group">
+          <i class="bx bx-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            name="q"
+            placeholder="Search by name, location, price..."
+            value="{{ query }}"
+          />
+          <button type="submit" class="search-btn">
+            <i class="bx bx-search"></i>
+            Search
+          </button>
         </div>
-
-        <!-- Hostel Listings -->
-        <div id="hostel-list" class="row">
-            {% for hostel in hostels %}
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    {% if hostel.images.all %}
-                        <img src="{{ hostel.images.first.image.url }}" class="card-img-top" alt="{{ hostel.name }}" style="height: 200px; object-fit: cover;">
-                    {% else %}
-                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <span class="text-muted">No image available</span>
-                        </div>
-                    {% endif %}
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ hostel.name }}</h5>
-                        <p class="card-text text-muted">{{ hostel.address }}</p>
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="h6 text-primary mb-0">${{ hostel.pricing }}</span>
-                                <span class="badge bg-success">{{ hostel.available_vacants }} available</span>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <span class="me-2">Rating:</span>
-                                <div class="rating">
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= hostel.average_rating %}
-                                            <span class="text-warning">★</span>
-                                        {% else %}
-                                            <span class="text-muted">☆</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <small class="text-muted ms-1">({{ hostel.average_rating|floatformat:1 }})</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="alert alert-info">
-                    No hostels available at the moment.
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+      </form>
     </div>
+  </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-document.getElementById('search-input').addEventListener('input', function() {
-    const query = this.value;
-    const hostelList = document.getElementById('hostel-list');
+<div class="hostels">
+  <h3 class="house-listing-title">House/Hostel Listing</h3>
+  <section class="latest-houses">
+    <div class="section-title">
+      <h2 class="section-title-tag">Latest Houses</h2>  
+      <div class="prev-next" id="carousel-controls">
+        <button class="prev-btn" id="prevBtn"><i class="bx bx-chevron-left"></i></button>
+        <button class="next-btn" id="nextBtn"><i class="bx bx-chevron-right"></i></button>
+      </div>
+    </div>
+    
+    {% if latest_hostels %}
+    <div class="carousel-container">
+      <div class="house-cards" id="hostelCards">
+        {% for hostel in latest_hostels %}
+        <div class="house-card">
+          <img
+            src="{{ hostel.images.first.image.url }}"
+            alt="{{ hostel.name }}"
+            class="house-image"
+            loading="lazy"
+          />
+          <div class="house-details">
+            <p class="house-price">Ksh {{ hostel.pricing }} / {{ hostel.billing_cycle }}</p>
+            <h4 class="house-name">{{ hostel.name }}</h4>
+            <p class="house-location"><i class='bxr  bx-location'></i>  {{ hostel.location }}</p>
+          </div>    
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="no-hostels">
+      <p>No hostels found.</p>
+    </div>
+    {% endif %}
+  </section>
+</div>
 
-    if (query.length < 2) {
-        // Reset to original content if query is too short
-        location.reload();
-        return;
-    }
-
-    fetch(`/search/?q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-            hostelList.innerHTML = '';
-
-            if (data.hostels.length === 0) {
-                hostelList.innerHTML = `
-                    <div class="col-12">
-                        <div class="alert alert-warning">
-                            No hostels found matching "${query}".
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            data.hostels.forEach(hostel => {
-                const ratingStars = Array.from({length: 5}, (_, i) =>
-                    i < Math.floor(hostel.average_rating) ? '★' : '☆'
-                ).join('');
-
-                const cardHtml = `
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <span class="text-muted">No image available</span>
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${hostel.name}</h5>
-                                <p class="card-text text-muted">${hostel.address}</p>
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="h6 text-primary mb-0">$${hostel.pricing}</span>
-                                        <span class="badge bg-success">${hostel.available_vacants} available</span>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="me-2">Rating:</span>
-                                        <div class="rating">
-                                            ${ratingStars}
-                                            <small class="text-muted ms-1">(${hostel.average_rating})</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                hostelList.insertAdjacentHTML('beforeend', cardHtml);
-            });
-        })
-        .catch(error => {
-            console.error('Search error:', error);
-        });
-});
-</script>
+<script src="{% static 'js/core/home.js' %}"></script>
 {% endblock %}
