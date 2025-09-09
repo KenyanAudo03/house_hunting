@@ -76,3 +76,18 @@ class Hostel(models.Model):
         if reviews:
             return sum(r.rating for r in reviews) / len(reviews)
         return 0.0
+
+
+class PropertyListing(models.Model):
+    name = models.CharField(max_length=100)
+    contact = models.CharField(max_length=50)
+    role = models.CharField(
+        max_length=20, choices=[("landlord", "Landlord"), ("tenant", "Tenant")]
+    )
+    area = models.CharField(max_length=100)
+    rent = models.DecimalField(max_digits=10, decimal_places=2)
+    hostel = models.CharField(max_length=150, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.role}"
