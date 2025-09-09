@@ -11,11 +11,15 @@ def home(request):
     now = timezone.now()
     five_days_ago = now - timedelta(days=5)
 
-    # Latest hostels: created in the last 5 days
-    latest_hostels = Hostel.objects.filter(created_at__gte=five_days_ago)
+    # Latest hostels: created in the last 5 days AND with available vacants
+    latest_hostels_qs = Hostel.objects.filter(
+        created_at__gte=five_days_ago, available_vacants__gt=0
+    )
 
-    # More hostels: created more than 5 days ago (all older hostels)
-    more_hostels = Hostel.objects.filter(created_at__lt=five_days_ago)
+    # More hostels: created more than 5 days ago AND with available vacants
+    more_hostels_qs = Hostel.objects.filter(
+        created_at__lt=five_days_ago, available_vacants__gt=0
+    )
 
     categories = Hostel.CATEGORY_CHOICES
     locations = Hostel.objects.values_list("location", flat=True).distinct()
@@ -54,13 +58,19 @@ def home(request):
 
             search_filter &= price_filter
 
-        # Apply search filter to both querysets
-        latest_hostels = latest_hostels.filter(search_filter)
-        more_hostels = more_hostels.filter(search_filter)
+        latest_hostels_qs = latest_hostels_qs.filter(search_filter)
+        more_hostels_qs = more_hostels_qs.filter(search_filter)
 
     # Order by creation date (newest first)
-    latest_hostels = latest_hostels.order_by("-created_at")
-    more_hostels = more_hostels.order_by("-created_at")
+    latest_hostels_qs = latest_hostels_qs.order_by("-created_at")
+    more_hostels_qs = more_hostels_qs.order_by("-created_at")
+
+    # Slice to 15 items and set flags for more results
+    latest_hostels = latest_hostels_qs[:15]
+    more_hostels = more_hostels_qs[:15]
+
+    has_more_latest = latest_hostels_qs.count() > 15
+    has_more_more = more_hostels_qs.count() > 15
 
     context = {
         "latest_hostels": latest_hostels,
@@ -68,6 +78,8 @@ def home(request):
         "categories": categories,
         "locations": locations,
         "query": query,
+        "has_more_latest": has_more_latest,
+        "has_more_more": has_more_more,
     }
     return render(request, "core/home.html", context)
 
