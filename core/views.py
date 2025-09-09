@@ -2,85 +2,74 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Hostel
+import re
+from django.utils import timezone
+from datetime import timedelta
 
 
 def home(request):
-    hostels = Hostel.objects.all()
+    now = timezone.now()
+    five_days_ago = now - timedelta(days=5)
+
+    # Latest hostels: created in the last 5 days
+    latest_hostels = Hostel.objects.filter(created_at__gte=five_days_ago)
+
+    # More hostels: created more than 5 days ago (all older hostels)
+    more_hostels = Hostel.objects.filter(created_at__lt=five_days_ago)
+
     categories = Hostel.CATEGORY_CHOICES
-    locations = Hostel.objects.values_list('location', flat=True).distinct()
-    
-    category = request.GET.get('category', '')
-    location = request.GET.get('location', '')
-    min_price = request.GET.get('min_price', '')
-    max_price = request.GET.get('max_price', '')
-    query = request.GET.get('q', '')
-    
-    if category:
-        hostels = hostels.filter(category=category)
-    if location:
-        hostels = hostels.filter(location__icontains=location)
-    if min_price:
-        hostels = hostels.filter(pricing__gte=min_price)
-    if max_price:
-        hostels = hostels.filter(pricing__lte=max_price)
+    locations = Hostel.objects.values_list("location", flat=True).distinct()
+
+    query = request.GET.get("q", "")
+
     if query:
-        hostels = hostels.filter(
-            Q(name__icontains=query) |
-            Q(address__icontains=query) |
-            Q(location__icontains=query)
-        )
-    
+        search_filter = Q()
+
+        query_words = query.split()
+        price_numbers = re.findall(r"\d+", query)
+
+        for word in query_words:
+            word_filter = (
+                Q(name__icontains=word)
+                | Q(address__icontains=word)
+                | Q(location__icontains=word)
+                | Q(description__icontains=word)
+            )
+
+            for choice_key, choice_display in categories:
+                if word.lower() in choice_display.lower():
+                    word_filter |= Q(category=choice_key)
+
+            search_filter &= word_filter
+
+        if price_numbers:
+            price_filter = Q()
+            for price_str in price_numbers:
+                price_value = int(price_str)
+
+                # e.g., "3500" finds hostels from 3000 to 4000
+                price_filter |= Q(
+                    pricing__gte=price_value - 500, pricing__lte=price_value + 500
+                )
+
+            search_filter &= price_filter
+
+        # Apply search filter to both querysets
+        latest_hostels = latest_hostels.filter(search_filter)
+        more_hostels = more_hostels.filter(search_filter)
+
+    # Order by creation date (newest first)
+    latest_hostels = latest_hostels.order_by("-created_at")
+    more_hostels = more_hostels.order_by("-created_at")
+
     context = {
-        'hostels': hostels,
-        'categories': categories,
-        'locations': locations,
-        'selected_category': category,
-        'selected_location': location,
-        'min_price': min_price,
-        'max_price': max_price,
-        'query': query,
+        "latest_hostels": latest_hostels,
+        "more_hostels": more_hostels,
+        "categories": categories,
+        "locations": locations,
+        "query": query,
     }
     return render(request, "core/home.html", context)
-
-def search(request):
-    query = request.GET.get("q", "")
-    category = request.GET.get("category", "")
-    location = request.GET.get("location", "")
-    min_price = request.GET.get("min_price", "")
-    
-    hostels = Hostel.objects.all()
-    
-    if query:
-        hostels = hostels.filter(
-            Q(name__icontains=query) |
-            Q(address__icontains=query) |
-            Q(location__icontains=query)
-        )
-    if category:
-        hostels = hostels.filter(category=category)
-    if location:
-        hostels = hostels.filter(location__icontains=location)
-    if min_price:
-        hostels = hostels.filter(pricing__gte=min_price)
-    
-    data = {
-        "hostels": [
-            {
-                "id": h.id,
-                "name": h.name,
-                "address": h.address,
-                "location": h.location,
-                "category": h.get_category_display(),
-                "pricing": str(h.pricing),
-                "available_vacants": h.available_vacants,
-                "average_rating": round(h.average_rating, 1) if hasattr(h, 'average_rating') else 0,
-                "amenities": [a.name for a in h.amenities.all()],
-                "video_url": h.video.url if h.video else None,
-            }
-            for h in hostels
-        ]
-    }
-    return JsonResponse(data)
 
 
 def about(request):

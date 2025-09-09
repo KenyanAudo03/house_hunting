@@ -65,6 +65,7 @@ class Hostel(models.Model):
     )
     available_vacants = models.IntegerField(default=0)
     amenities = models.ManyToManyField("Amenity", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
