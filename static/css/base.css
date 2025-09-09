@@ -126,10 +126,13 @@ body {
     color: var(--accent);
     font-size: 16px;
     transition: transform 0.3s ease;
+    margin-top: 5px;
+
 }
 
 .profile-trigger.open i {
     transform: rotate(180deg);
+    margin-top: 0;
 }
 
 .profile-dropdown {
