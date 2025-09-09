@@ -1,0 +1,212 @@
+      .container {
+          padding: 30px 0;
+      }
+
+      .header {
+          margin-bottom: 80px;
+          text-align: center;
+      }
+
+      .main-title {
+          font-size: 2.75rem;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 20px;
+      }
+
+      .subtitle {
+          font-size: 1.125rem;
+          color: #64748b;
+          line-height: 1.6;
+          max-width: 700px;
+          margin: 0 auto;
+      }
+
+      .brand {
+          color: #228b22;
+          font-weight: 600;
+      }
+
+      .process-container {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 40px;
+          margin-top: 60px;
+          position: relative;
+      }
+
+      .step {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          position: relative;
+      }
+
+      .icon-wrapper {
+          width: 100px;
+          height: 100px;
+          background: #f1f5f9;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 24px;
+          transition: all 0.3s ease;
+      }
+
+      .step:hover .icon-wrapper {
+          background: #e2e8f0;
+      }
+
+      .icon {
+          font-size: 2.5rem;
+          color: #228b22;
+      }
+
+      .step-label {
+          font-size: 1rem;
+          color: #228b22;
+          font-weight: 600;
+          margin-bottom: 8px;
+          letter-spacing: 0.02em;
+      }
+
+      .step-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #1e293b;
+          margin-bottom: 0;
+          line-height: 1.4;
+      }
+
+      .connector-line {
+          position: absolute;
+          top: 50px;
+          height: 2px;
+          background: linear-gradient(90deg,
+                  transparent 0%,
+                  #e2e8f0 20%,
+                  #e2e8f0 80%,
+                  transparent 100%);
+          z-index: 1;
+      }
+
+      .connector-line.first {
+          left: 16.666%;
+          width: 33.333%;
+      }
+
+      .connector-line.second {
+          right: 16.666%;
+          width: 33.333%;
+      }
+
+      .connector-dots {
+          position: absolute;
+          top: 49px;
+          width: 4px;
+          height: 4px;
+          background: #cbd5e1;
+          border-radius: 50%;
+      }
+
+      .connector-dots.dot1 {
+          left: 25%;
+      }
+
+      .connector-dots.dot2 {
+          left: 33.333%;
+      }
+
+      .connector-dots.dot3 {
+          left: 41.666%;
+      }
+
+      .connector-dots.dot4 {
+          right: 41.666%;
+      }
+
+      .connector-dots.dot5 {
+          right: 33.333%;
+      }
+
+      .connector-dots.dot6 {
+          right: 25%;
+      }
+
+      .vertical-layout {
+          display: none;
+      }
+
+      @media (max-width: 768px) {
+          .process-container {
+              display: none;
+          }
+
+          .vertical-layout {
+              display: block;
+              margin-top: 50px;
+          }
+
+          .vertical-step {
+              display: flex;
+              align-items: flex-start;
+              text-align: left;
+              margin-bottom: 40px;
+              padding: 0 20px;
+              position: relative;
+          }
+
+          .vertical-step:last-child {
+              margin-bottom: 0;
+          }
+
+          .vertical-icon-wrapper {
+              width: 70px;
+              height: 70px;
+              background: #f1f5f9;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-right: 20px;
+              flex-shrink: 0;
+              position: relative;
+              z-index: 2;
+          }
+
+          .vertical-icon {
+              font-size: 2rem;
+              color: #228b22;
+          }
+
+          .vertical-content {
+              flex: 1;
+              padding-top: 4px;
+          }
+
+          .vertical-connector {
+              position: absolute;
+              left: 53px;
+              top: 70px;
+              height: 50px;
+              width: 2px;
+              background: #e2e8f0;
+              z-index: 1;
+          }
+
+          .vertical-step:last-child .vertical-connector {
+              display: none;
+          }
+
+          .main-title {
+              font-size: 2.2rem;
+          }
+
+          .step-title {
+              font-size: 1.125rem;
+          }
+      }
