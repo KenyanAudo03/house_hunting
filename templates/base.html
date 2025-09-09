@@ -44,7 +44,9 @@
       </a>
 
       <nav class="nav-menu">
-        <a href="/" class="{% if request.path == '/' %}active{% endif %}"
+        <a
+          href="/"
+          class="{% if request.path == '/' or request.path == '/all-hostels/' %}active{% endif %}"
           >Houses</a
         >
         <a href="#">Roomies</a>
@@ -132,7 +134,9 @@
 
       <ul class="sidebar-nav">
         <li>
-          <a href="/" class="{% if request.path == '/' %}active{% endif %}"
+          <a
+            href="/"
+            class="{% if request.path == '/' or request.path == '/all-hostels/' %}active{% endif %}"
             >Houses</a
           >
         </li>
