@@ -189,6 +189,12 @@
       margin-top: 30px;
   }
 
+  .list-hostel,
+  .more-houses {
+      margin-top: 30px;
+      margin-bottom: 40px;
+  }
+
   .section-title {
       display: flex;
       justify-content: space-between;
@@ -326,6 +332,12 @@
   @media (min-width: 769px) and (max-width: 1024px) {
       .house-card {
           width: calc((100vw - 80px - 40px) / 3);
+      }
+  }
+
+  @media(max-width: 768px) {
+      .house-listing-title {
+          font-size: 1.5rem;
       }
   }
 
