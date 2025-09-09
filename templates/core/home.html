@@ -1,9 +1,15 @@
-{% extends 'base.html' %} {% block title %}Find Your Perfect Student Housing -
-JoouStay{% endblock %} {% load static %} {% block content %} {% load static %}
-<link rel="stylesheet" href="{% static 'css/core/home.css' %}">
+{% extends "base.html" %} {% load static %} {% block title %}Find Your Perfect
+Student Housing - JoouStay{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/core/home.css' %}" />
 
-<div class="hero" style="background: url('{% static "images/default_images/background.jpg" %}') center/cover;">
+<style>
+  .hero {
+    background: url('{% static "images/default_images/background.jpg" %}')
+      center/cover;
+  }
+</style>
 
+<div class="hero">
   <div class="hero-content">
     <h1 class="hero-title">JoouStay</h1>
 
@@ -36,42 +42,26 @@ JoouStay{% endblock %} {% load static %} {% block content %} {% load static %}
   <h3 class="house-listing-title">Vacant Listing</h3>
   <section class="latest-houses">
     <div class="section-title">
-      <h2 class="section-title-tag">Latest Houses/Hostels</h2>  
+      <h2 class="section-title-tag">
+        Latest Houses/Hostels {% if has_more_latest %}
+        <a href="#" class="see-all-link">See all</a>
+        {% endif %}
+      </h2>
 
       <!-- Show buttons only when there are latest hostels -->
       {% if latest_hostels %}
       <div class="prev-next" id="carousel-controls">
-        <button class="prev-btn" id="prevBtn"><i class="bx bx-chevron-left"></i></button>
-        <button class="next-btn" id="nextBtn"><i class="bx bx-chevron-right"></i></button>
+        <button class="prev-btn" id="prevBtn">
+          <i class="bx bx-chevron-left"></i>
+        </button>
+        <button class="next-btn" id="nextBtn">
+          <i class="bx bx-chevron-right"></i>
+        </button>
       </div>
       {% endif %}
     </div>
-    
-    {% if latest_hostels %}
-    <div class="carousel-container">
-      <div class="house-cards" id="hostelCards">
-        {% for hostel in latest_hostels %}
-        <div class="house-card">
-          <img
-            src="{{ hostel.images.first.image.url }}"
-            alt="{{ hostel.name }}"
-            class="house-image"
-            loading="lazy"
-          />
-          <div class="house-details">
-            <p class="house-price">Ksh {{ hostel.pricing }} / {{ hostel.billing_cycle }}</p>
-            <h4 class="house-name">{{ hostel.name }}</h4>
-            <p class="house-location"><i class='bxr  bx-location'></i>  {{ hostel.location }}</p>
-          </div>    
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% else %}
-    <div class="no-hostels">
-      <p>No hostels found.</p>
-    </div>
-    {% endif %}
+    <!-- Latest Hostels List -->
+    {% include "core/partials/latest_hostels.html" %}
   </section>
 </div>
 
