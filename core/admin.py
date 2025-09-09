@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Hostel, HostelImage, Review, Amenity
+from .models import Hostel, HostelImage, Review, Amenity, PropertyListing
 
 @admin.register(Hostel)
 class HostelAdmin(admin.ModelAdmin):
@@ -23,3 +23,11 @@ class ReviewAdmin(admin.ModelAdmin):
 class AmenityAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name',)
+
+
+@admin.register(PropertyListing)
+class PropertyListingAdmin(admin.ModelAdmin):
+    list_display = ("name", "contact", "role", "area", "rent", "hostel", "created_at")
+    list_filter = ("role", "created_at")
+    search_fields = ("name", "contact", "hostel", "area")
+    ordering = ("-created_at",)

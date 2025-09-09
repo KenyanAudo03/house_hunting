@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Hostel
+from .models import Hostel, PropertyListing
 import re
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
+from django.views.decorators.http import require_http_methods
+import json
 
 
 def home(request):
@@ -82,6 +85,53 @@ def home(request):
         "has_more_more": has_more_more,
     }
     return render(request, "core/home.html", context)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def submit_property_listing(request):
+    try:
+        data = json.loads(request.body)
+
+        # Validate required fields
+        required_fields = ["name", "contact", "role", "area", "rent"]
+        for field in required_fields:
+            if not data.get(field):
+                return JsonResponse(
+                    {"status": "error", "message": f"{field} is required"}, status=400
+                )
+
+        # Create new property listing
+        property_listing = PropertyListing.objects.create(
+            name=data["name"],
+            contact=data["contact"],
+            role=data["role"],
+            area=data["area"],
+            rent=data["rent"],
+            hostel=data.get("hostel", ""),
+        )
+
+        return JsonResponse(
+            {
+                "status": "success",
+                "message": "Property listing submitted successfully",
+                "listing_id": property_listing.id,
+            }
+        )
+
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid JSON data"}, status=400
+        )
+
+    except Exception as e:
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "An error occurred while processing your request",
+            },
+            status=500,
+        )
 
 
 def about(request):
