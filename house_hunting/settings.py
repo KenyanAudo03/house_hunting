@@ -65,7 +65,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
 # Add the custom social account adapter
-SOCIALACCOUNT_ADAPTER = "core.adapters.CustomSocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "accounts.adapters.CustomSocialAccountAdapter"
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
