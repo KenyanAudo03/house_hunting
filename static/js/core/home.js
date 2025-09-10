@@ -23,21 +23,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     let currentIndex = 0;
-    let cardsPerView = 4;
+    let cardsPerView = 4; // Desktop default
     let resizeTimeout;
 
     function getCardWidth() {
       if (cards.length > 0) {
         const cardStyle = window.getComputedStyle(cards[0]);
-        return parseFloat(cardStyle.width);
+        const cardWidth = parseFloat(cardStyle.width);
+        return cardWidth;
       }
-      return 280;
+      return 280; // fallback
     }
 
     function updateCardsPerView() {
       const screenWidth = window.innerWidth;
       if (screenWidth <= 480) {
-        cardsPerView = 1;
+        cardsPerView = 2; // Keep original value
       } else if (screenWidth <= 768) {
         cardsPerView = 2;
       } else if (screenWidth <= 1024) {
@@ -57,15 +58,18 @@ document.addEventListener("DOMContentLoaded", function () {
       if (nextBtn) nextBtn.disabled = currentIndex >= totalCards - cardsPerView;
 
       if (carouselControls) {
-        carouselControls.style.display =
-          totalCards <= cardsPerView ? "none" : "flex";
+        if (totalCards <= cardsPerView) {
+          carouselControls.style.display = "none";
+        } else {
+          carouselControls.style.display = "flex";
+        }
       }
     }
 
     if (prevBtn) {
       prevBtn.addEventListener("click", function () {
         if (currentIndex > 0) {
-          currentIndex = Math.max(0, currentIndex - 1);
+          currentIndex = Math.max(0, currentIndex - 1); // Move by 1
           updateCarousel();
         }
       });
@@ -75,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nextBtn.addEventListener("click", function () {
         const maxIndex = Math.max(0, totalCards - cardsPerView);
         if (currentIndex < maxIndex) {
-          currentIndex = Math.min(maxIndex, currentIndex + 1);
+          currentIndex = Math.min(maxIndex, currentIndex + 1); // Move by 1
           updateCarousel();
         }
       });
@@ -84,15 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", function () {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(function () {
-        const oldCardsPerView = cardsPerView;
         updateCardsPerView();
-
-        if (oldCardsPerView !== cardsPerView) {
-          const maxIndex = Math.max(0, totalCards - cardsPerView);
-          currentIndex = Math.min(currentIndex, maxIndex);
+        const maxIndex = Math.max(0, totalCards - cardsPerView);
+        if (currentIndex > maxIndex) {
+          currentIndex = maxIndex;
         }
-
+        // Force CSS update
         cardsContainer.style.opacity = "0";
+        cards.forEach((card) => {
+          card.offsetHeight;
+        });
         setTimeout(() => {
           cardsContainer.style.opacity = "1";
           updateCarousel();
@@ -100,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 150);
     });
 
+    // Initialize
     updateCardsPerView();
     updateCarousel();
   }
