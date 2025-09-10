@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Hostel, PropertyListing
@@ -12,95 +12,92 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
-    now = timezone.now()
-    three_days_ago = now - timedelta(days=3)
-
-    # Hostels created within 3 days and still available
-    latest_hostels_qs = Hostel.objects.filter(
-        created_at__gte=three_days_ago, available_vacants__gt=0
-    )
-
-    # Hostels older than 3 days and still available
-    more_hostels_qs = Hostel.objects.filter(
-        created_at__lt=three_days_ago, available_vacants__gt=0
-    )
-
-    categories = Hostel.CATEGORY_CHOICES
     query = request.GET.get("q", "")
 
     if query:
-        search_filter = Q()
-        query_words = query.split()
-        price_numbers = re.findall(r"\d+", query)
+        return redirect(f"/all-hostels/?type=search&q={query}")
 
-        for word in query_words:
-            word_filter = (
-                Q(name__icontains=word)
-                | Q(address__icontains=word)
-                | Q(location__icontains=word)
-                | Q(description__icontains=word)
-            )
+    now = timezone.now()
+    five_days_ago = now - timedelta(days=5)
 
-            for choice_key, choice_display in categories:
-                if word.lower() in choice_display.lower():
-                    word_filter |= Q(category=choice_key)
+    # Latest (5 days) - all categories
+    latest_hostels_qs = Hostel.objects.filter(
+        created_at__gte=five_days_ago, available_vacants__gt=0
+    ).order_by("-created_at")
 
-            search_filter &= word_filter
+    # Single rooms only
+    single_hostels_qs = Hostel.objects.filter(
+        category="single", available_vacants__gt=0
+    ).order_by("-created_at")
 
-        if price_numbers:
-            price_filter = Q()
-            for price_str in price_numbers:
-                price_value = int(price_str)
-                price_filter |= Q(
-                    pricing__gte=price_value - 500, pricing__lte=price_value + 500
-                )
-            search_filter &= price_filter
-
-        latest_hostels_qs = latest_hostels_qs.filter(search_filter)
-        more_hostels_qs = more_hostels_qs.filter(search_filter)
-
-    latest_hostels_qs = latest_hostels_qs.order_by("-created_at")
-    more_hostels_qs = more_hostels_qs.order_by("-created_at")
+    # Bedsitter + 1-bedroom + 2-bedroom
+    bedsitter_bedroom_qs = Hostel.objects.filter(
+        category__in=["bedsitter", "one_bedroom", "two_bedroom"],
+        available_vacants__gt=0,
+    ).order_by("-created_at")
 
     latest_hostels = latest_hostels_qs[:15]
-    more_hostels = more_hostels_qs[:15]
+    single_hostels = single_hostels_qs[:15]
+    bedsitter_bedroom_hostels = bedsitter_bedroom_qs[:15]
 
+    # Show "View All" if more than 4 exist
     has_more_latest = latest_hostels_qs.count() > 4
-    has_more_more = more_hostels_qs.count() > 4
+    has_more_single = single_hostels_qs.count() > 4
+    has_more_bedsitter_bedroom = bedsitter_bedroom_qs.count() > 4
 
     context = {
         "latest_hostels": latest_hostels,
-        "more_hostels": more_hostels,
+        "single_hostels": single_hostels,
+        "bedsitter_bedroom_hostels": bedsitter_bedroom_hostels,
         "query": query,
         "has_more_latest": has_more_latest,
-        "has_more_more": has_more_more,
+        "has_more_single": has_more_single,
+        "has_more_bedsitter_bedroom": has_more_bedsitter_bedroom,
     }
     return render(request, "core/home.html", context)
 
 
 def all_hostel_view(request):
-    now = timezone.now()
-    three_days_ago = now - timedelta(days=3)
     hostel_type = request.GET.get("type", "latest")
     categories = Hostel.CATEGORY_CHOICES
     query = request.GET.get("q", "")
     page_number = request.GET.get("page", 1)
 
+    now = timezone.now()
+    five_days_ago = now - timedelta(days=5)
+
+    # Select queryset by hostel type
     if hostel_type == "latest":
         hostels_qs = Hostel.objects.filter(
-            created_at__gte=three_days_ago, available_vacants__gt=0
+            created_at__gte=five_days_ago, available_vacants__gt=0
         )
-        base_title = "All Latest Hostels"
-    else:
-        hostels_qs = Hostel.objects.filter(
-            created_at__lt=three_days_ago, available_vacants__gt=0
-        )
-        base_title = "All More Hostels"
+        base_title = "Latest Hostels"
 
+    elif hostel_type == "single":
+        hostels_qs = Hostel.objects.filter(category="single", available_vacants__gt=0)
+        base_title = "Single Room Hostels"
+
+    elif hostel_type == "bedsitter_bedroom":
+        hostels_qs = Hostel.objects.filter(
+            category__in=["bedsitter", "one_bedroom", "two_bedroom"],
+            available_vacants__gt=0,
+        )
+        base_title = "Bedsitters & Bedrooms"
+
+    elif hostel_type == "search":
+        hostels_qs = Hostel.objects.filter(available_vacants__gt=0)
+        base_title = "Search Results"
+
+    else:  # fallback
+        hostels_qs = Hostel.objects.filter(
+            created_at__gte=five_days_ago, available_vacants__gt=0
+        )
+        base_title = "Latest Hostels"
+
+    # Apply search if query exists
     if query:
         search_filter = Q()
         query_words = query.split()
-        price_numbers = re.findall(r"\d+", query)
 
         for word in query_words:
             word_filter = (
@@ -109,19 +106,18 @@ def all_hostel_view(request):
                 | Q(location__icontains=word)
                 | Q(description__icontains=word)
             )
+
+            if word.isdigit():  # Match numeric query to price range
+                price_value = int(word)
+                word_filter |= Q(
+                    pricing__gte=price_value - 500, pricing__lte=price_value + 500
+                )
+
             for choice_key, choice_display in categories:
                 if word.lower() in choice_display.lower():
                     word_filter |= Q(category=choice_key)
-            search_filter &= word_filter
 
-        if price_numbers:
-            price_filter = Q()
-            for price_str in price_numbers:
-                price_value = int(price_str)
-                price_filter |= Q(
-                    pricing__gte=price_value - 500, pricing__lte=price_value + 500
-                )
-            search_filter &= price_filter
+            search_filter &= word_filter
 
         hostels_qs = hostels_qs.filter(search_filter)
 
@@ -129,8 +125,7 @@ def all_hostel_view(request):
     total_results = hostels_qs.count()
 
     # Pagination
-    paginator = Paginator(hostels_qs, 10)  # Show 10 hostels per page
-
+    paginator = Paginator(hostels_qs, 10)
     try:
         hostels = paginator.page(page_number)
     except PageNotAnInteger:
@@ -138,8 +133,11 @@ def all_hostel_view(request):
     except EmptyPage:
         hostels = paginator.page(paginator.num_pages)
 
-    # Append count to page title
-    page_title = f"{base_title}"
+    page_title = (
+        f"Search Results for '{query}'"
+        if hostel_type == "search" and query
+        else base_title
+    )
 
     context = {
         "hostels": hostels,
