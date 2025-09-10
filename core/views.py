@@ -8,6 +8,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.http import require_http_methods
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
@@ -25,7 +26,6 @@ def home(request):
     )
 
     categories = Hostel.CATEGORY_CHOICES
-    locations = Hostel.objects.values_list("location", flat=True).distinct()
     query = request.GET.get("q", "")
 
     if query:
@@ -65,14 +65,12 @@ def home(request):
     latest_hostels = latest_hostels_qs[:15]
     more_hostels = more_hostels_qs[:15]
 
-    has_more_latest = latest_hostels_qs.count() > 3
-    has_more_more = more_hostels_qs.count() > 3
+    has_more_latest = latest_hostels_qs.count() > 4
+    has_more_more = more_hostels_qs.count() > 4
 
     context = {
         "latest_hostels": latest_hostels,
         "more_hostels": more_hostels,
-        "categories": categories,
-        "locations": locations,
         "query": query,
         "has_more_latest": has_more_latest,
         "has_more_more": has_more_more,
@@ -83,23 +81,21 @@ def home(request):
 def all_hostel_view(request):
     now = timezone.now()
     three_days_ago = now - timedelta(days=3)
-
     hostel_type = request.GET.get("type", "latest")
-
     categories = Hostel.CATEGORY_CHOICES
-    locations = Hostel.objects.values_list("location", flat=True).distinct()
     query = request.GET.get("q", "")
+    page_number = request.GET.get("page", 1)
 
     if hostel_type == "latest":
         hostels_qs = Hostel.objects.filter(
             created_at__gte=three_days_ago, available_vacants__gt=0
         )
-        page_title = "All Latest Hostels"
+        base_title = "All Latest Hostels"
     else:
         hostels_qs = Hostel.objects.filter(
             created_at__lt=three_days_ago, available_vacants__gt=0
         )
-        page_title = "All More Hostels"
+        base_title = "All More Hostels"
 
     if query:
         search_filter = Q()
@@ -113,11 +109,9 @@ def all_hostel_view(request):
                 | Q(location__icontains=word)
                 | Q(description__icontains=word)
             )
-
             for choice_key, choice_display in categories:
                 if word.lower() in choice_display.lower():
                     word_filter |= Q(category=choice_key)
-
             search_filter &= word_filter
 
         if price_numbers:
@@ -131,17 +125,29 @@ def all_hostel_view(request):
 
         hostels_qs = hostels_qs.filter(search_filter)
 
-    hostels = hostels_qs.order_by("-created_at")
+    hostels_qs = hostels_qs.order_by("-created_at")
+    total_results = hostels_qs.count()
+
+    # Pagination
+    paginator = Paginator(hostels_qs, 10)  # Show 10 hostels per page
+
+    try:
+        hostels = paginator.page(page_number)
+    except PageNotAnInteger:
+        hostels = paginator.page(1)
+    except EmptyPage:
+        hostels = paginator.page(paginator.num_pages)
+
+    # Append count to page title
+    page_title = f"{base_title}"
 
     context = {
         "hostels": hostels,
-        "categories": categories,
-        "locations": locations,
         "query": query,
         "hostel_type": hostel_type,
         "page_title": page_title,
+        "total_results": total_results,
     }
-
     return render(request, "core/all_hostels.html", context)
 
 
