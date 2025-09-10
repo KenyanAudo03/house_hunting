@@ -50,24 +50,35 @@ class Hostel(models.Model):
     ]
 
     slug = models.SlugField(unique=True, blank=False, null=False, max_length=255)
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    address = models.CharField(max_length=255)
+    name = models.CharField(max_length=100, blank=False, null=False)
+    description = models.TextField(blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
     location = models.CharField(
-        max_length=100, help_text="e.g. Gate A, Bondo town, etc."
+        max_length=100,
+        blank=False,
+        null=False,
+        help_text="e.g. Gate A, Bondo town, etc.",
     )
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    video = models.FileField(upload_to="hostel_videos/", null=True, blank=True)
-    pricing = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.CharField(
+        max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True
+    )
+    video = models.FileField(upload_to="hostel_videos/", blank=True, null=True)
+    pricing = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=False, null=False
+    )
     billing_cycle = models.CharField(
         max_length=20,
         choices=BILLING_CYCLE_CHOICES,
         default="month",
+        blank=True,
+        null=True,
         help_text="How often the rent is paid",
     )
     available_vacants = models.IntegerField(default=0)
     phone = models.CharField(
         max_length=20,
+        blank=True,
+        null=True,
         help_text="Contact phone number for this hostel (e.g. +2547XXXXXXXX)",
     )
     amenities = models.ManyToManyField("Amenity", blank=True)
