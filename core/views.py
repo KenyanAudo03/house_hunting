@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Hostel, PropertyListing
+from .models import Hostel, PropertyListing, HostelInquiry
 import re
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.http import require_http_methods
 import json
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 
 def home(request):
@@ -147,6 +150,69 @@ def all_hostel_view(request):
         "total_results": total_results,
     }
     return render(request, "core/all_hostels.html", context)
+
+
+def hostel_detail(request, slug):
+    hostel = get_object_or_404(Hostel, slug=slug)
+
+    # Determine hostel type from query parameter (fallback to category)
+    hostel_type_param = request.GET.get("type", "")
+    if hostel_type_param == "latest":
+        page_title = "Latest Hostels"
+    elif hostel_type_param == "single":
+        page_title = "Single Room Hostels"
+    elif hostel_type_param == "bedsitter_bedroom":
+        page_title = "Bedsitters & Bedrooms"
+    else:
+        page_title = f"Hostels in {hostel.location}"
+
+    # Submit inquiry form via AJAX
+    if request.method == "POST":
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            try:
+                full_name = request.POST.get("full_name")
+                email = request.POST.get("email")
+                phone = request.POST.get("phone")
+                message = request.POST.get("message")
+
+                if not all([full_name, email, message]):
+                    return JsonResponse(
+                        {
+                            "success": False,
+                            "error": "Please fill in all required fields",
+                        }
+                    )
+
+                inquiry = HostelInquiry.objects.create(
+                    hostel=hostel,
+                    full_name=full_name,
+                    email=email,
+                    phone=phone or "",
+                    message=message,
+                )
+
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message": "Your inquiry has been sent successfully!",
+                    }
+                )
+
+            except Exception:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "error": "An error occurred while sending your message",
+                    }
+                )
+
+    context = {
+        "hostel": hostel,
+        "page_title": page_title,
+        "hostel_type": hostel_type_param or hostel.category,
+    }
+
+    return render(request, "core/hostel_detail.html", context)
 
 
 @csrf_exempt
