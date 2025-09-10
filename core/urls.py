@@ -9,6 +9,7 @@ urlpatterns = [
         name="submit_property_listing",
     ),
     path("all-hostels/", views.all_hostel_view, name="all_hostels"),
+    path("hostels/<slug:slug>/", views.hostel_detail, name="hostel_detail"),
     path("about", views.about, name="about"),
     path("contact", views.contact, name="contact"),
     path("privacy_policies", views.privacy_policy, name="privacy_policy"),
