@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize carousel for latest hostels
   initializeCarousel("latest");
-  initializeCarousel("more");
+  initializeCarousel("single");
+  initializeCarousel("bedsitter");
 
   function initializeCarousel(prefix) {
     const cardsContainer = document.getElementById(`${prefix}-hostelCards`);
@@ -22,33 +23,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     let currentIndex = 0;
-    let cardsPerView = 4; // Desktop default
+    let cardsPerView = 4;
     let resizeTimeout;
-
-    function forceCSSUpdate() {
-      cardsContainer.style.opacity = "0";
-      cards.forEach((card) => {
-        card.offsetHeight;
-      });
-      setTimeout(() => {
-        cardsContainer.style.opacity = "1";
-        updateCarousel();
-      }, 10);
-    }
 
     function getCardWidth() {
       if (cards.length > 0) {
         const cardStyle = window.getComputedStyle(cards[0]);
-        const cardWidth = parseFloat(cardStyle.width);
-        return cardWidth;
+        return parseFloat(cardStyle.width);
       }
-      return 280; // fallback
+      return 280;
     }
 
     function updateCardsPerView() {
       const screenWidth = window.innerWidth;
       if (screenWidth <= 480) {
-        cardsPerView = 2;
+        cardsPerView = 1;
       } else if (screenWidth <= 768) {
         cardsPerView = 2;
       } else if (screenWidth <= 1024) {
@@ -68,18 +57,15 @@ document.addEventListener("DOMContentLoaded", function () {
       if (nextBtn) nextBtn.disabled = currentIndex >= totalCards - cardsPerView;
 
       if (carouselControls) {
-        if (totalCards <= cardsPerView) {
-          carouselControls.style.display = "none";
-        } else {
-          carouselControls.style.display = "flex";
-        }
+        carouselControls.style.display =
+          totalCards <= cardsPerView ? "none" : "flex";
       }
     }
 
     if (prevBtn) {
       prevBtn.addEventListener("click", function () {
         if (currentIndex > 0) {
-          currentIndex = Math.max(0, currentIndex - cardsPerView);
+          currentIndex = Math.max(0, currentIndex - 1);
           updateCarousel();
         }
       });
@@ -89,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nextBtn.addEventListener("click", function () {
         const maxIndex = Math.max(0, totalCards - cardsPerView);
         if (currentIndex < maxIndex) {
-          currentIndex = Math.min(maxIndex, currentIndex + cardsPerView);
+          currentIndex = Math.min(maxIndex, currentIndex + 1);
           updateCarousel();
         }
       });
@@ -98,14 +84,19 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", function () {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(function () {
+        const oldCardsPerView = cardsPerView;
         updateCardsPerView();
 
-        const maxIndex = Math.max(0, totalCards - cardsPerView);
-        if (currentIndex > maxIndex) {
-          currentIndex = maxIndex;
+        if (oldCardsPerView !== cardsPerView) {
+          const maxIndex = Math.max(0, totalCards - cardsPerView);
+          currentIndex = Math.min(currentIndex, maxIndex);
         }
 
-        forceCSSUpdate();
+        cardsContainer.style.opacity = "0";
+        setTimeout(() => {
+          cardsContainer.style.opacity = "1";
+          updateCarousel();
+        }, 10);
       }, 150);
     });
 
