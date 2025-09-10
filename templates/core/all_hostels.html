@@ -51,22 +51,25 @@
                   </div>
 
                   <div class="contact-icons">
-                    <a 
-                      href="tel:{{ hostel.phone }}" 
-                      class="phone-link" 
-                      onclick="event.stopPropagation();"
-                    >
-                      <i class="bx bx-phone"></i>
-                    </a>
-                    <a 
-                      href="https://wa.me/{{ hostel.phone }}" 
-                      class="whatsapp-link" 
-                      target="_blank" 
-                      onclick="event.stopPropagation();"
-                    >
-                      <i class="bx bxl-whatsapp"></i>
-                    </a>
-                  </div>
+                    <!-- Default to my number if hostel has no phone -->
+                      {% with phone_number=hostel.phone|default:"+254703853259" %}
+                        <a 
+                          href="tel:{{ phone_number }}" 
+                          class="phone-link" 
+                          onclick="event.stopPropagation();"
+                        >
+                          <i class="bx bx-phone"></i>
+                        </a>
+                        <a 
+                          href="https://wa.me/{{ phone_number }}" 
+                          class="whatsapp-link" 
+                          target="_blank" 
+                          onclick="event.stopPropagation();"
+                        >
+                          <i class="bx bxl-whatsapp"></i>
+                        </a>
+                      {% endwith %}
+                    </div>
                 </div>
               </div>
             </a>
