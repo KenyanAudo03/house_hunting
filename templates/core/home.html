@@ -99,7 +99,7 @@ Student Housing - JoouStay{% endblock %} {% block content %}
       {% include 'core/partials/single-hostels.html' %}
     </div>
 
-    <div class="category-section" style="margin-top: 30px;">
+    <div class="category-section" style="margin-top: 30px">
       <div class="section-title">
         <h4 class="section-title-tag">
           Bedsitters & Bedrooms {% if has_more_bedsitter_bedroom %}
@@ -132,5 +132,7 @@ Student Housing - JoouStay{% endblock %} {% block content %}
   </section>
 </div>
 
+<!-- Messages eg. Login and Logout -->
+{% include 'core/partials/messages.html' %}
 <script src="{% static 'js/core/home.js' %}"></script>
 {% endblock %}
