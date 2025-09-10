@@ -30,7 +30,7 @@
   </head>
   <body>
     <header>
-      <!-- Customized logo using css -->
+      <!-- Logo -->
       <a href="/">
         <div class="logo" aria-label="JoouStay logo">
           <div class="icon" aria-hidden="true"><span class="hut"></span></div>
@@ -43,12 +43,14 @@
         </div>
       </a>
 
+      <!-- Main navigation -->
       <nav class="nav-menu">
         <a
           href="/"
-          class="{% if request.path == '/' or request.path == '/all-hostels/' %}active{% endif %}"
-          >Houses</a
+          class="{% if request.path == '/' or request.path == '/all-hostels/' or '/hostels/' in request.path %}active{% endif %}"
         >
+          Houses
+        </a>
         <a href="#">Roomies</a>
         <a
           href="{% url 'about' %}"
@@ -62,6 +64,7 @@
         >
       </nav>
 
+      <!-- Authentication links -->
       <div class="auth-links">
         {% if user.is_authenticated %}
         <div class="user-profile-dropdown">
@@ -114,7 +117,7 @@
       </button>
     </header>
 
-    <!-- Sidebar for devices with 768px and below screen width -->
+    <!-- Sidebar for mobile -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <button class="sidebar-close" id="sidebarClose">
@@ -136,11 +139,14 @@
         <li>
           <a
             href="/"
-            class="{% if request.path == '/' or request.path == '/all-hostels/' %}active{% endif %}"
-            >Houses</a
+            class="{% if request.path == '/' or request.path == '/all-hostels/' or '/hostels/' in request.path %}active{% endif %}"
           >
+            Houses
+          </a>
         </li>
-        <li><a href="#">Roomies</a></li>
+        <li>
+          <a href="#">Roomies</a>
+        </li>
         <li>
           <a
             href="{% url 'about' %}"
@@ -181,8 +187,9 @@
           {% endif %}
           <div class="sidebar-profile-text">
             <span class="sidebar-username"
-              >{{ user.get_full_name|title|truncatechars:20|default:user.username }}
-            </span>
+              >{{
+              user.get_full_name|title|truncatechars:20|default:user.username }}</span
+            >
             <span class="sidebar-email">{{ user.email }}</span>
           </div>
         </div>
