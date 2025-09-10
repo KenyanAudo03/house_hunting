@@ -340,5 +340,8 @@
 
       .page-title {
           font-size: 18px;
+          gap: 4px;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 6px;
       }
   }
