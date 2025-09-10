@@ -10,11 +10,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Seeding database...")
 
-        # Possible choices for required fields
+        # Categories and billing cycles to randomly assign to hostels
         categories = ["single", "bedsitter", "one_bedroom", "two_bedroom"]
         billing_cycles = ["month", "two_months", "semester"]
 
-        # Sample hostel records
+        # Sample hostel details (without category/description, will randomize those later)
         hostels_data = [
             {
                 "name": "Sunset Hostel",
@@ -88,7 +88,21 @@ class Command(BaseCommand):
             },
         ]
 
-        # Sample review text
+        # Sample descriptions to make each hostel unique
+        descriptions = [
+            "A cozy hostel with a welcoming vibe, perfect for students and young professionals.",
+            "Spacious rooms with modern amenities and easy access to public transport.",
+            "Located in a vibrant area with restaurants, shops, and entertainment nearby.",
+            "Affordable accommodation with clean facilities and reliable security.",
+            "Ideal for long-term stays, offering comfort and convenience at a fair price.",
+            "Surrounded by greenery and a quiet environment, great for studying and relaxing.",
+            "Popular among backpackers and travelers looking for budget-friendly stays.",
+            "Well-maintained with friendly management always ready to assist.",
+            "Offers both private and shared spaces to suit different lifestyles.",
+            "Perfect blend of affordability, accessibility, and comfort.",
+        ]
+
+        # Sample review comments to attach to each hostel
         review_comments = [
             "Great place to stay! Clean and friendly staff.",
             "Excellent location and very comfortable rooms.",
@@ -104,10 +118,11 @@ class Command(BaseCommand):
 
         hostels = []
 
-        # Create hostels with random category & billing cycle
+        # Create hostel records
         for data in hostels_data:
-            category = random.choice(categories)
-            billing_cycle = random.choice(billing_cycles)
+            category = random.choice(categories)  # Random category
+            billing_cycle = random.choice(billing_cycles)  # Random billing cycle
+            description = random.choice(descriptions)  # Random description
 
             hostel = Hostel.objects.create(
                 name=data["name"],
@@ -117,22 +132,21 @@ class Command(BaseCommand):
                 available_vacants=data["available_vacants"],
                 category=category,
                 billing_cycle=billing_cycle,
+                description=description,
             )
             hostels.append(hostel)
-            self.stdout.write(
-                f"Created hostel: {hostel.name} ({category}, {billing_cycle})"
-            )
+            self.stdout.write(f"Created hostel: {hostel.name}")
 
-        # Create random reviews for each hostel
+        # Add reviews for each hostel
         for hostel in hostels:
             num_reviews = random.randint(3, 8)
             for _ in range(num_reviews):
-                rating = random.randint(3, 5)
+                rating = random.randint(3, 5)  # Mostly positive ratings
                 comment = random.choice(review_comments)
                 Review.objects.create(hostel=hostel, rating=rating, comment=comment)
             self.stdout.write(f"Created {num_reviews} reviews for {hostel.name}")
 
-        # Create placeholder image entries
+        # Add sample images (just db entries, no actual image files)
         for hostel in hostels:
             num_images = random.randint(1, 4)
             for i in range(num_images):
@@ -141,8 +155,8 @@ class Command(BaseCommand):
                 )
             self.stdout.write(f"Created {num_images} image entries for {hostel.name}")
 
-        # Done
+        # Done!
         self.stdout.write(self.style.SUCCESS("Database seeded successfully!"))
         self.stdout.write(
-            f"Created {len(hostels)} hostels with categories, billing cycles, reviews, and images."
+            f"Created {len(hostels)} hostels with descriptions, categories, billing cycles, reviews, and images."
         )
