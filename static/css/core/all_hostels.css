@@ -1,0 +1,334 @@
+  .hostels {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      padding-bottom: 40px;
+  }
+
+  .page-title {
+      font-size: 15px;
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--border);
+  }
+
+  .page-title a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+  }
+
+  .page-title i {
+      font-size: 16px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+  }
+
+  .side-side {
+      display: flex;
+      gap: 30px;
+  }
+
+  .hostel-container {
+      flex: 2;
+  }
+
+  .how-it-works {
+      flex: 1.3;
+  }
+
+  .hostel-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .house-card {
+      display: flex;
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 150px;
+  }
+
+  .house-image-container {
+      width: 200px;
+      height: 100%;
+      flex-shrink: 0;
+  }
+
+  .house-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+  }
+
+  .house-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      padding: 15px;
+      position: relative;
+  }
+
+  .house-details {
+      flex: 1;
+  }
+
+  .house-price {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+  }
+
+  .house-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--brand);
+      margin: 0 0 8px 0;
+  }
+
+  .house-location {
+      font-size: 14px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 0 8px 0;
+  }
+
+  .available-units {
+      font-size: 14px;
+      color: var(--brand);
+      margin: 0;
+  }
+
+  .contact-icons {
+      display: flex;
+      gap: 10px;
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+  }
+
+  .contact-icons a.whatsapp-link,
+  .contact-icons a.phone-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+      border: 2px solid;
+  }
+
+  .whatsapp-link {
+      background-color: #e8f5e8;
+      border-color: #25d366;
+      color: #25d366;
+  }
+
+  .phone-link {
+      background-color: #e8f4fd;
+      border-color: #3498db;
+      color: #3498db;
+  }
+
+  .contact-icons i {
+      font-size: 18px;
+  }
+
+  .no-hostels {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+  }
+
+  .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 30px 0;
+      padding: 20px 0;
+  }
+
+  .pagination a,
+  .pagination span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+  }
+
+  .pagination a {
+      background-color: var(--ink);
+      border: 1px solid var(--muted);
+      color: var(--brand);
+  }
+
+  .pagination a:hover {
+      background-color: var(--brand);
+      color: var(--ink);
+      border-color: var(--brand);
+  }
+
+  .pagination .current {
+      background-color: var(--brand);
+      color: var(--ink);
+      border: 1px solid var(--brand);
+  }
+
+  .pagination .disabled {
+      background-color: var(--ink);
+      color: var(--muted);
+      border: 1px solid var(--muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+  }
+
+  .pagination i {
+      font-size: 16px;
+  }
+
+  .results-info {
+      text-align: center;
+      color: var(--muted);
+      margin: 20px 0;
+      font-size: 14px;
+  }
+
+  .container {
+      padding: 30px 0;
+  }
+
+  .header {
+      margin-bottom: 50px;
+      text-align: center;
+  }
+
+  .main-title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 20px;
+  }
+
+  .subtitle {
+      font-size: 1.125rem;
+      color: #64748b;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+  }
+
+  .brand {
+      color: #228b22;
+      font-weight: 600;
+  }
+
+  .process-container {
+      display: none;
+  }
+
+  .vertical-layout {
+      display: block;
+      margin-top: 10px;
+  }
+
+  .vertical-step {
+      display: flex;
+      align-items: flex-start;
+      text-align: left;
+      margin-bottom: 40px;
+      padding: 0 20px;
+      position: relative;
+  }
+
+  .vertical-step:last-child {
+      margin-bottom: 0;
+  }
+
+  .vertical-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+  }
+
+  .vertical-icon {
+      font-size: 2rem;
+      color: #228b22;
+  }
+
+  .vertical-content {
+      flex: 1;
+      padding-top: 4px;
+  }
+
+  .vertical-connector {
+      position: absolute;
+      left: 53px;
+      top: 70px;
+      height: 50px;
+      width: 2px;
+      background: #e2e8f0;
+      z-index: 1;
+  }
+
+  .vertical-step:last-child .vertical-connector {
+      display: none;
+  }
+
+  .main-title {
+      font-size: 2.2rem;
+  }
+
+  .step-title {
+      font-size: 1.125rem;
+  }
+
+  @media (max-width: 900px) {
+      .side-side {
+          flex-direction: column;
+      }
+  }
+
+  @media (max-width: 780px) {
+      .hostels {
+          margin: 0;
+          padding: 10px;
+      }
+  }
+
+  @media (max-width: 600px) {
+      .house-image-container {
+          width: 180px;
+      }
+
+      .page-title {
+          font-size: 18px;
+      }
+  }
