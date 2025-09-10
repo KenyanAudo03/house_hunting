@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class Amenity(models.Model):
@@ -47,7 +48,7 @@ class Hostel(models.Model):
         ("two_months", "Every Two Months"),
         ("semester", "Per Semester"),
     ]
-
+    slug = models.SlugField(unique=True, blank=False, null=False, max_length=255)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     address = models.CharField(max_length=255)
@@ -76,6 +77,17 @@ class Hostel(models.Model):
         if reviews:
             return sum(r.rating for r in reviews) / len(reviews)
         return 0.0
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(f"{self.name}-{self.location}")
+            slug = base_slug
+            counter = 1
+            while Hostel.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class PropertyListing(models.Model):
