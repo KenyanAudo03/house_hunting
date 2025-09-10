@@ -87,6 +87,9 @@
       font-size: 18px;
       font-weight: bold;
       margin: 0 0 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 
   .house-name {
@@ -94,7 +97,11 @@
       font-weight: 600;
       color: var(--brand);
       margin: 0 0 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
+
 
   .house-location {
       font-size: 14px;
@@ -103,6 +110,9 @@
       align-items: center;
       gap: 4px;
       margin: 0 0 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 
   .available-units {

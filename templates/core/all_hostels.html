@@ -13,7 +13,8 @@
     <div class="hostel-container">
       {% if hostels %}
       <div class="results-info">
-        Showing {{ hostels.start_index }} - {{ hostels.end_index }} of {{ total_results }} hostels
+        Showing {{ hostels.start_index }} - {{ hostels.end_index }} of 
+        {{ total_results }} hostels
       </div>
 
       <div class="hostel-cards">
@@ -33,7 +34,7 @@
                 <p class="house-price">KSh {{ hostel.pricing|format_price }}</p>
                 <h4 class="house-name">{{ hostel.name }}</h4>
                 <p class="house-location">
-                  <i class="bx bx-map"></i> {{ hostel.location }}
+                  <i class="bxr bx-location"></i> {{ hostel.location }}
                 </p>
                 <p class="available-units">
                   {{ hostel.available_vacants }} units
@@ -64,6 +65,7 @@
 
       {% if hostels.has_other_pages %}
       <div class="pagination">
+        <!-- Previous button -->
         {% if hostels.has_previous %}
         <a
           href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ hostels.previous_page_number }}"
@@ -74,30 +76,52 @@
         <span class="disabled">
           <i class="bx bx-chevron-left"></i>
         </span>
-        {% endif %} {% for page_num in hostels.paginator.page_range %} 
-        {% if page_num == hostels.number %}
-        <span class="current">{{ page_num }}</span>
-        {% elif page_num > hostels.number|add:'-3' and page_num < hostels.number|add:'3' %}
-        <a
-          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ page_num }}"
-          >{{ page_num }}</a
-        >
-        {% elif page_num == 1 %}
-        <a
-          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page=1"
-          >1</a
-        >
-        {% if hostels.number > 4 %}
-        <span class="disabled">...</span>
-        {% endif %} {% elif page_num == hostels.paginator.num_pages %} 
-        {% if hostels.number < hostels.paginator.num_pages|add:'-3' %}
-        <span class="disabled">...</span>
         {% endif %}
+
+        <!-- Page numbers - Always show exactly 3 numbers -->
+        {% with current=hostels.number total=hostels.paginator.num_pages %} 
+        {% if current == 1 %}
+        <!-- Show: 1, 2, 3 -->
+        <span class="current">1</span>
+        {% if total >= 2 %}
         <a
-          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ hostels.paginator.num_pages }}"
-          >{{ hostels.paginator.num_pages }}</a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page=2"
+          >2</a
         >
-        {% endif %} {% endfor %} {% if hostels.has_next %}
+        {% endif %} {% if total >= 3 %}
+        <a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page=3"
+          >3</a
+        >
+        {% endif %} {% elif current == total %}
+        <!-- Show: last-2, last-1, last -->
+        {% if total >= 3 %}
+        <a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ total|add:'-2' }}"
+          >{{ total|add:'-2' }}</a
+        >
+        {% endif %} {% if total >= 2 %}
+        <a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ total|add:'-1' }}"
+          >{{ total|add:'-1' }}</a
+        >
+        {% endif %}
+        <span class="current">{{ total }}</span>
+        {% else %}
+        <!-- Show: current-1, current, current+1 -->
+        <a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ current|add:'-1' }}"
+          >{{ current|add:'-1' }}</a
+        >
+        <span class="current">{{ current }}</span>
+        <a
+          href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ current|add:'1' }}"
+          >{{ current|add:'1' }}</a
+        >
+        {% endif %} {% endwith %}
+
+        <!-- Next button -->
+        {% if hostels.has_next %}
         <a
           href="?{% if query %}q={{ query }}&{% endif %}{% if hostel_type %}type={{ hostel_type }}&{% endif %}page={{ hostels.next_page_number }}"
         >
