@@ -215,6 +215,8 @@
       <h3 style="margin-bottom: 20px">Contact about Hostel</h3>
 
       <div class="contact-buttons">
+        <!-- Default to my number if hostel has no phone -->
+        {% with phone_number=hostel.phone|default:"+254703853259" %}
         <a href="tel:{{ hostel.phone }}" class="phone-link">
           <i class="bx bx-phone"></i> Call
         </a>
@@ -225,6 +227,7 @@
         >
           <i class="bx bxl-whatsapp"></i> WhatsApp
         </a>
+        {% endwith %}
       </div>
 
       <div class="contact-card">
