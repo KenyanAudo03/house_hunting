@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Email Confirmation Sent{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
+
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Check Your Email</h2>
+
+    <div
+      class="message message-success"
+      style="text-align: center; margin-bottom: 30px; margin-top: 20px"
+    >
+      <svg
+        width="48"
+        height="48"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        style="margin-bottom: 15px; color: #155724"
+      >
+        <path
+          d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
+        />
+      </svg>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5">
+        We've sent a confirmation email to the address you provided during signup.
+      </p>
+    </div>
+
+    <div
+      style="
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+      "
+    >
+      <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6">
+        Please check your inbox and click the link to finalize your signup. 
+        If you do not see the email in your main inbox, check your spam folder. 
+        If you still haven't received it, you can try logging in to trigger a new verification email or contact the site administrator.
+      </p>
+    </div>
+
+    <div class="links">
+      <div>
+        <span class="text-muted">Already verified?</span>
+        <a href="{% url 'account_login' %}">Sign In</a>
+      </div>
+      <div style="margin-top: 10px">
+        <span class="text-muted">Don't have an account?</span>
+        <a href="{% url 'account_signup' %}">Sign Up</a>
+      </div>
+      <div style="margin-top: 15px">
+        <a href="{% url 'account_login' %}" style="font-size: 13px">
+          Try logging in to resend confirmation email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
