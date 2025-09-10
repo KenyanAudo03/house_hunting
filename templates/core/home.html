@@ -12,11 +12,9 @@ Student Housing - JoouStay{% endblock %} {% block content %}
 <div class="hero">
   <div class="hero-content">
     <h1 class="hero-title">JoouStay</h1>
-
     <p class="hero-subtitle">
       Search for student hostels and housing options close to JOOUST campus.
     </p>
-
     <div class="search-container">
       <form class="search-form" method="GET" action="{% url 'home' %}">
         <div class="search-input-group">
@@ -39,19 +37,17 @@ Student Housing - JoouStay{% endblock %} {% block content %}
 </div>
 
 <div class="hostels">
-  <h3 class="house-listing-title">Vacant Listing</h3>
-  <!-- Latest Hostels/Houses -->
+  <h2 class="house-listing-title">Vacant Listings</h2>
+
   <section class="latest-houses">
     <div class="section-title">
-      <h2 class="section-title-tag">
+      <h3 class="section-title-tag">
         Latest Listings {% if has_more_latest %}
         <a href="{% url 'all_hostels' %}?type=latest" class="see-all-link"
           >See all</a
         >
         {% endif %}
-      </h2>
-
-      <!-- Show buttons only when there are latest hostels -->
+      </h3>
       {% if latest_hostels %}
       <div class="prev-next" id="latest-carousel-controls">
         <button class="prev-btn" id="latest-prevBtn">
@@ -63,46 +59,74 @@ Student Housing - JoouStay{% endblock %} {% block content %}
       </div>
       {% endif %}
     </div>
-    <!-- Latest Hostels List -->
+
+    <!-- Latest Hostels -->
     {% include 'core/partials/latest-hostels.html' %}
   </section>
 
-  <!-- List a house/hostel -->
   <section class="list-hostel">
     <h3 class="house-listing-title">Want to list a house/hostel?</h3>
 
-    <!-- House Listing Details -->
+    <!-- List House/Hostels -->
     {% include 'core/partials/house-listing-info.html' %}
   </section>
 
-  <section class="more-houses">
-    <h3 class="house-listing-title">More Houses to Explore</h3>
-    <div class="section-title" style="margin-top: 30px">
-      <h2 class="section-title-tag">
-        More Listings {% if has_more_more %}
-        <a href="{% url 'all_hostels' %}?type=latest" class="see-all-link"
-          >See all</a
-        >
-        {% endif %}
-      </h2>
+  <section class="categorized-houses">
+    <h3 class="house-listing-title">Categorized Listings</h3>
 
-      <!-- Show buttons only when there are more hostels -->
-      {% if more_hostels %}
-      <div class="prev-next" id="more-carousel-controls">
-        <button class="prev-btn" id="more-prevBtn">
-          <i class="bx bx-chevron-left"></i>
-        </button>
-        <button class="next-btn" id="more-nextBtn">
-          <i class="bx bx-chevron-right"></i>
-        </button>
+    <div class="category-section">
+      <div class="section-title">
+        <h4 class="section-title-tag">
+          Single Rooms {% if has_more_single %}
+          <a href="{% url 'all_hostels' %}?type=single" class="see-all-link"
+            >See all</a
+          >
+          {% endif %}
+        </h4>
+        {% if single_hostels %}
+        <div class="prev-next" id="single-carousel-controls">
+          <button class="prev-btn" id="single-prevBtn">
+            <i class="bx bx-chevron-left"></i>
+          </button>
+          <button class="next-btn" id="single-nextBtn">
+            <i class="bx bx-chevron-right"></i>
+          </button>
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
+
+      <!-- Single Rooms -->
+      {% include 'core/partials/single-hostels.html' %}
     </div>
-    <!-- More Hostels List -->
-    {% include 'core/partials/more-hostels.html' %}
+
+    <div class="category-section" style="margin-top: 20px;">
+      <div class="section-title">
+        <h4 class="section-title-tag">
+          Bedsitters & Bedrooms {% if has_more_bedsitter_bedroom %}
+          <a
+            href="{% url 'all_hostels' %}?type=bedsitter_bedroom"
+            class="see-all-link"
+            >See all</a
+          >
+          {% endif %}
+        </h4>
+        {% if bedsitter_bedroom_hostels %}
+        <div class="prev-next" id="bedsitter-carousel-controls">
+          <button class="prev-btn" id="bedsitter-prevBtn">
+            <i class="bx bx-chevron-left"></i>
+          </button>
+          <button class="next-btn" id="bedsitter-nextBtn">
+            <i class="bx bx-chevron-right"></i>
+          </button>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Bedsitter & Bedrooms -->
+      {% include 'core/partials/bedsitter-bedroom-hostels.html' %}
+    </div>
   </section>
 
-  <!-- How JoouStay Works -->
   <section class="how-it-works">
     {% include 'core/partials/how-it-works.html' %}
   </section>
