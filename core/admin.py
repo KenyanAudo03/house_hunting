@@ -1,12 +1,18 @@
 from django.contrib import admin
 from .models import Hostel, HostelImage, Review, Amenity, PropertyListing
 
+from django.contrib import admin
+from django.utils.text import slugify
+from .models import Hostel
+
 @admin.register(Hostel)
 class HostelAdmin(admin.ModelAdmin):
     list_display = ('name', 'location', 'category', 'pricing', 'available_vacants', 'average_rating')
     search_fields = ('name', 'address', 'location')
     list_filter = ('category', 'location')
     filter_horizontal = ('amenities',)
+    exclude = ('slug',)
+
 
 @admin.register(HostelImage)
 class HostelImageAdmin(admin.ModelAdmin):
