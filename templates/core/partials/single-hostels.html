@@ -2,7 +2,10 @@
 <div class="carousel-container">
   <div class="house-cards" id="single-hostelCards">
     {% for hostel in single_hostels %}
-    <a href="{% url 'hostel_detail' hostel.slug %}" style="text-decoration: none; color: inherit">
+    <a
+      href="{% url 'hostel_detail' hostel.slug %}?type=single"
+      style="text-decoration: none; color: inherit"
+    >
       <div class="house-card">
         <img
           src="{{ hostel.images.first.image.url }}"

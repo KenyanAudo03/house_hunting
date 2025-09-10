@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ hostel.name }}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/core/all_hostels.css' %}" />
+<div class="hostels">
+  <h1 class="page-title">
+    <a href="/"><i class="bx bx-home-alt"></i></a>
+    <i class="bx bx-chevron-right"></i>
+    <a href="{% url 'all_hostels' %}?type={{ hostel_type }}{% if query %}&q={{ query }}{% endif %}">{{ page_title }}</a>
+    <i class="bx bx-chevron-right"></i>
+    {{ hostel.name }}
+  </h1>
+  
+  <!-- Rest of your hostel detail content -->
+</div>
+{% endblock %}
