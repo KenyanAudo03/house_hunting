@@ -48,6 +48,7 @@ class Hostel(models.Model):
         ("two_months", "Every Two Months"),
         ("semester", "Per Semester"),
     ]
+
     slug = models.SlugField(unique=True, blank=False, null=False, max_length=255)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -65,6 +66,10 @@ class Hostel(models.Model):
         help_text="How often the rent is paid",
     )
     available_vacants = models.IntegerField(default=0)
+    phone = models.CharField(
+        max_length=20,
+        help_text="Contact phone number for this hostel (e.g. +2547XXXXXXXX)",
+    )
     amenities = models.ManyToManyField("Amenity", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

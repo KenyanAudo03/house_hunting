@@ -13,6 +13,18 @@ class Command(BaseCommand):
         # Categories and billing cycles to randomly assign to hostels
         categories = ["single", "bedsitter", "one_bedroom", "two_bedroom"]
         billing_cycles = ["month", "two_months", "semester"]
+        phone_numbers = [
+            "+254700111222",
+            "+254701222333",
+            "+254702333444",
+            "+254703444555",
+            "+254704555666",
+            "+254705666777",
+            "+254706777888",
+            "+254707888999",
+            "+254708999000",
+            "+254709000111",
+        ]
 
         # Sample hostel details (without category/description, will randomize those later)
         hostels_data = [
@@ -119,7 +131,7 @@ class Command(BaseCommand):
         hostels = []
 
         # Create hostel records
-        for data in hostels_data:
+        for index, data in hostels_data:
             category = random.choice(categories)  # Random category
             billing_cycle = random.choice(billing_cycles)  # Random billing cycle
             description = random.choice(descriptions)  # Random description
@@ -133,6 +145,7 @@ class Command(BaseCommand):
                 category=category,
                 billing_cycle=billing_cycle,
                 description=description,
+                phone=phone_numbers[index % len(phone_numbers)],
             )
             hostels.append(hostel)
             self.stdout.write(f"Created hostel: {hostel.name}")
