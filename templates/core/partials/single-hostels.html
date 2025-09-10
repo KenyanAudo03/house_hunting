@@ -1,8 +1,7 @@
-{% load price_filters %}
-{% if more_hostels %}
+{% load price_filters %} {% if single_hostels %}
 <div class="carousel-container">
-  <div class="house-cards" id="more-hostelCards">
-    {% for hostel in more_hostels %}
+  <div class="house-cards" id="single-hostelCards">
+    {% for hostel in single_hostels %}
     <a href="#" style="text-decoration: none; color: inherit">
       <div class="house-card">
         <img
@@ -15,7 +14,7 @@
           <p class="house-price">
             Ksh {{ hostel.pricing|format_price }} / {{ hostel.billing_cycle }}
           </p>
-          <h4 class="house-name">{{ hostel.name }}</h4>
+          <h5 class="house-name">{{ hostel.name }}</h5>
           <p class="house-location">
             <i class="bxr bx-location"></i> {{ hostel.location }}
           </p>
@@ -27,6 +26,10 @@
 </div>
 {% else %}
 <div class="no-hostels">
-  <p>No more hostels found.</p>
+  <h5>No Single Rooms Available</h5>
+  <p>
+    Currently no single room hostels are available. Please check back later or
+    explore other categories.
+  </p>
 </div>
 {% endif %}

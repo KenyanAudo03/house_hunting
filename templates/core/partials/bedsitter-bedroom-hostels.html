@@ -1,8 +1,8 @@
-{% if latest_hostels %}
+{% load price_filters %} {% if bedsitter_bedroom_hostels %}
 <div class="carousel-container">
-  <div class="house-cards" id="hostelCards">
-    {% for hostel in latest_hostels %}
-    <a href="#" style="text-decoration: none; color: inherit;">
+  <div class="house-cards" id="bedsitter-hostelCards">
+    {% for hostel in bedsitter_bedroom_hostels %}
+    <a href="#" style="text-decoration: none; color: inherit">
       <div class="house-card">
         <img
           src="{{ hostel.images.first.image.url }}"
@@ -12,9 +12,9 @@
         />
         <div class="house-details">
           <p class="house-price">
-            Ksh {{ hostel.pricing }} / {{ hostel.billing_cycle }}
+            Ksh {{ hostel.pricing|format_price }} / {{ hostel.billing_cycle }}
           </p>
-          <h4 class="house-name">{{ hostel.name }}</h4>
+          <h5 class="house-name">{{ hostel.name }}</h5>
           <p class="house-location">
             <i class="bxr bx-location"></i> {{ hostel.location }}
           </p>
@@ -26,6 +26,10 @@
 </div>
 {% else %}
 <div class="no-hostels">
-  <p>No hostels found.</p>
+  <h5>No Bedsitters or Bedrooms Available</h5>
+  <p>
+    Currently no bedsitter or bedroom hostels are available. Please check back
+    later or explore single rooms.
+  </p>
 </div>
 {% endif %}

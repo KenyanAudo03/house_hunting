@@ -1,5 +1,4 @@
-{% load price_filters %}
-{% if latest_hostels %}
+{% load price_filters %} {% if latest_hostels %}
 <div class="carousel-container">
   <div class="house-cards" id="latest-hostelCards">
     {% for hostel in latest_hostels %}
@@ -26,5 +25,11 @@
   </div>
 </div>
 {% else %}
-<div class="no-hostels"><p>No hostels found.</p></div>
+<div class="no-hostels">
+  <h4>No New Hostels Found</h4>
+  <p>
+    No hostels have been added in the last 5 days. Check out our other
+    categories below!
+  </p>
+</div>
 {% endif %}
