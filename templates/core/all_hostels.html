@@ -19,7 +19,7 @@
 
       <div class="hostel-cards">
         {% for hostel in hostels %}
-        <a href="#" style="text-decoration: none; color: inherit">
+        <a href="{% url 'hostel_detail' hostel.slug %}" style="text-decoration: none; color: inherit">
           <div class="house-card">
             <div class="house-image-container">
               <img
