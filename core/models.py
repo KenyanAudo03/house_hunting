@@ -35,6 +35,28 @@ class Review(models.Model):
         return f"Review for {self.hostel.name} - {self.rating} stars"
 
 
+class HostelInquiry(models.Model):
+    hostel = models.ForeignKey(
+        "Hostel",
+        on_delete=models.CASCADE,
+        related_name="inquiries",
+        help_text="The hostel this inquiry is about",
+    )
+    full_name = models.CharField(max_length=100, blank=False, null=False)
+    email = models.EmailField(blank=False, null=False)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    message = models.TextField(blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Hostel Inquiry"
+        verbose_name_plural = "Hostel Inquiries"
+
+    def __str__(self):
+        return f"Inquiry by {self.full_name} for {self.hostel.name}"
+
+
 class Hostel(models.Model):
     CATEGORY_CHOICES = [
         ("single", "Single Room"),
