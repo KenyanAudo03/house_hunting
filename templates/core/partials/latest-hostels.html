@@ -1,3 +1,4 @@
+{% load price_filters %}
 {% if latest_hostels %}
 <div class="carousel-container">
   <div class="house-cards" id="latest-hostelCards">
@@ -12,7 +13,7 @@
         />
         <div class="house-details">
           <p class="house-price">
-            Ksh {{ hostel.pricing }} / {{ hostel.billing_cycle }}
+            Ksh {{ hostel.pricing|format_price }} / {{ hostel.billing_cycle }}
           </p>
           <h4 class="house-name">{{ hostel.name }}</h4>
           <p class="house-location">
