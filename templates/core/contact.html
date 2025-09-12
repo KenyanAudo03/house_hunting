@@ -1,8 +1,6 @@
 {% extends "base.html" %} {% load static %} {% block title %} Contact JoouStay
 {% endblock %} {% block content %}
-<!-- Use styles from about.css. Avoid duplicating or extra CSS. -->
 <link rel="stylesheet" href="{% static 'css/core/about.css' %}" />
-
 <link rel="stylesheet" href="{% static 'css/core/contact.css' %}" />
 
 <section class="hero-section">
@@ -16,9 +14,8 @@
   </div>
 </section>
 
-<!-- Contact Methods Section -->
 <section class="content-section">
-  <div class="container">
+  <div class="container" >
     <h2 class="section-title">Contact Information</h2>
     <p class="section-subtitle">
       Choose the method that works best for you. We're committed to responding
@@ -98,7 +95,6 @@
   </div>
 </section>
 
-<!-- Contact Form Section -->
 <section class="mission-section">
   <div class="container">
     <div class="mission-content">
@@ -161,7 +157,6 @@
         </div>
       </form>
 
-      <!-- Success Overlay -->
       <div class="success-overlay" id="successOverlay">
         <div class="success-message">
           <div class="success-checkmark">✓</div>
@@ -176,7 +171,6 @@
   </div>
 </section>
 
-<!-- FAQ Section -->
 <section class="content-section">
   <div class="container">
     <h2 class="section-title">Frequently Asked Questions</h2>
@@ -199,7 +193,7 @@
       <div class="feature-card">
         <h3 class="feature-title">What fees do I pay?</h3>
         <p class="feature-description">
-          You’ll pay rent to the landlord, plus a small service fee to JoouStay
+          You'll pay rent to the landlord, plus a small service fee to JoouStay
           for helping you secure housing and guiding the process.
         </p>
       </div>
@@ -218,7 +212,7 @@
         </h3>
         <p class="feature-description">
           If you need to cancel, contact our support team by call or email.
-          We’ll assist you with the cancellation and explain any conditions that
+          We'll assist you with the cancellation and explain any conditions that
           may apply.
         </p>
       </div>
@@ -226,7 +220,6 @@
   </div>
 </section>
 
-<!-- Call to Action -->
 <section class="cta-section">
   <div class="container">
     <h2 class="cta-title">Still Have Questions?</h2>
