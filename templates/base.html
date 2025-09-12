@@ -93,14 +93,14 @@
             <a href="#"><i class="bx bx-heart"></i>Favorites</a>
             <a href="#"><i class="bx bx-user"></i>Profile</a>
             <a href="#"><i class="bx bx-group"></i>Roomie Profile</a>
-            <a href="{% url 'account_logout' %}"
+            <a href="{% url 'account_logout' %}?next={{ request.path }}"
               ><i class="bx bx-log-out"></i>Logout</a
             >
           </div>
         </div>
         {% else %}
         <a
-          href="{% url 'account_login' %}"
+          href="{% url 'account_login' %}?next={{ request.path }}"
           class="{% if request.path == '/accounts/login/' %}active{% endif %}"
           >Login</a
         >
@@ -196,7 +196,7 @@
       </a>
       {% else %}
       <div class="sidebar-auth">
-        <a href="{% url 'account_login' %}">Login</a>
+        <a href="{% url 'account_login' %?next={{ request.path }}}">Login</a>
         <a href="{% url 'account_signup' %}">Sign Up</a>
       </div>
       {% endif %}
