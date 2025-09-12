@@ -36,7 +36,7 @@
           questions.
         </p>
         <div style="margin-top: 15px; font-weight: 600; color: var(--accent)">
-          +254 700 123 456
+          +254 703 853 259
         </div>
         <div style="font-size: 0.9rem; color: var(--muted); margin-top: 5px">
           Mon - Fri: 8:00 AM - 8:00 PM<br />
@@ -160,6 +160,18 @@
           </button>
         </div>
       </form>
+
+      <!-- Success Overlay -->
+      <div class="success-overlay" id="successOverlay">
+        <div class="success-message">
+          <div class="success-checkmark">✓</div>
+          <h3>Message Sent!</h3>
+          <p>
+            Thank you for reaching out. Your message has been sent successfully
+            and our team will get back to you shortly.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -223,11 +235,12 @@
       you find the perfect student accommodation that fits your needs and
       budget.
     </p>
-    <a href="tel:+254700123456" class="cta-button">
+    <a href="tel:+254703853259" class="cta-button">
       <i class="bx bx-phone"></i>
       Call Us Now
     </a>
   </div>
 </section>
 
+<script src="{% static 'js/core/contact.js' %}"></script>
 {% endblock %}
