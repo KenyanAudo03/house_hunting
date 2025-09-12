@@ -267,7 +267,7 @@ def leave_review(request, token):
 
     if invitation.used:
         return render(
-            request, "core/already_reviewed.html", {"hostel": invitation.hostel}
+            request, "core/review/already_reviewed.html", {"hostel": invitation.hostel}
         )
 
     if request.method == "POST":
