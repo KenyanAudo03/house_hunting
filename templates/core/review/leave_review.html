@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Leave a Review - {{ hostel.name }}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/core/review/leave-review.css' %}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <h1>
+          Leave a Review for <span class="hostel-name">{{ hostel.name }}</span>
+        </h1>
+        <p class="subtitle">
+          Your feedback helps other JOOUST students know more about this place, including safety, comfort, and availability.
+        </p>
+      </div>
+
+      <div class="form-container">
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="user-info">
+            <div class="user-info-header">
+              <i class="fas fa-user"></i>
+              Your Information
+            </div>
+            <div class="user-details">
+              <div class="user-detail-item">
+                <i class="fas fa-user-circle"></i>
+                <span class="user-detail-label">Name:</span>
+                <span>{{ invitation.full_name }}</span>
+              </div>
+              {% if invitation.email %}
+              <div class="user-detail-item">
+                <i class="fas fa-envelope"></i>
+                <span class="user-detail-label">Email:</span>
+                <span>{{ invitation.email }}</span>
+              </div>
+              {% elif invitation.phone %}
+              <div class="user-detail-item">
+                <i class="fas fa-phone"></i>
+                <span class="user-detail-label">Phone:</span>
+                <span>{{ invitation.phone }}</span>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="rating-container">
+              <label class="rating-label">
+                <i class="fas fa-star"></i>
+                How would you rate your overall experience?
+              </label>
+              <div class="rating-wrapper rating">
+                <input type="radio" id="rating-5" name="rating" value="5" />
+                <label for="rating-5" class="rating-option">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <span>Excellent</span>
+                </label>
+
+                <input type="radio" id="rating-4" name="rating" value="4" />
+                <label for="rating-4" class="rating-option">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                  <span>Good</span>
+                </label>
+
+                <input type="radio" id="rating-3" name="rating" value="3" />
+                <label for="rating-3" class="rating-option">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                  <span>Average</span>
+                </label>
+
+                <input type="radio" id="rating-2" name="rating" value="2" />
+                <label for="rating-2" class="rating-option">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                  <span>Poor</span>
+                </label>
+
+                <input type="radio" id="rating-1" name="rating" value="1" />
+                <label for="rating-1" class="rating-option">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                  <span>Terrible</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="comment">
+              <i class="fas fa-comment-alt"></i>
+              Share your experience (optional)
+            </label>
+            <textarea
+              name="comment"
+              id="comment"
+              placeholder="Tell other JOOUST students about safety, location, rent value, or anything else that stood out..."
+              maxlength="1000"
+              oninput="updateCharacterCount(this)"
+            ></textarea>
+            <div class="character-count" id="charCount">
+              0 / 1000 characters
+            </div>
+          </div>
+
+          <button type="submit" class="submit-button">
+            <i class="fas fa-paper-plane"></i>
+            Submit Review
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function updateCharacterCount(textarea) {
+        const count = textarea.value.length;
+        const maxLength = textarea.getAttribute("maxlength");
+        const charCountElement = document.getElementById("charCount");
+        charCountElement.textContent = `${count} / ${maxLength} characters`;
+
+        if (count > maxLength * 0.9) {
+          charCountElement.style.color = "#ef4444";
+        } else if (count > maxLength * 0.7) {
+          charCountElement.style.color = "#f59e0b";
+        } else {
+          charCountElement.style.color = "#9ca3af";
+        }
+      }
+
+      document.querySelectorAll('input[name="rating"]').forEach((input) => {
+        input.addEventListener("change", function () {
+          const label = this.nextElementSibling;
+          label.style.animation = "none";
+          setTimeout(() => {
+            label.style.animation =
+              "bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+          }, 10);
+        });
+      });
+    </script>
+  </body>
+</html>

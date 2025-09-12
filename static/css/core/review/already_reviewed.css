@@ -1,0 +1,221 @@
+   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+   :root {
+       --brand: #10b981;
+       --brand-light: #34d399;
+       --brand-dark: #059669;
+       --accent: #fbbf24;
+       --ink: #f8fafc;
+       --text-primary: #1f2937;
+       --text-secondary: #6b7280;
+       --text-muted: #9ca3af;
+       --bg: #f9fafb;
+       --card-bg: #ffffff;
+       --border: #e5e7eb;
+       --border-light: #f3f4f6;
+       --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+           0 10px 10px -5px rgba(0, 0, 0, 0.04);
+       --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+       --radius: 16px;
+       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+
+   * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+   }
+
+   body {
+       font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+           Roboto, sans-serif;
+       background: #f9f9f9;
+       min-height: 100vh;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       padding: 20px;
+       color: var(--text-primary);
+       font-weight: 400;
+       line-height: 1.6;
+   }
+
+   .container {
+       background: var(--card-bg);
+       padding: 60px 50px;
+       border-radius: var(--radius);
+       box-shadow: var(--shadow-lg);
+       border: 1px solid var(--border);
+       text-align: center;
+       max-width: 500px;
+       width: 100%;
+       position: relative;
+       overflow: hidden;
+   }
+
+   .checkmark {
+       width: 100px;
+       height: 100px;
+       border-radius: 50%;
+       background: linear-gradient(135deg, var(--brand), var(--brand-light));
+       margin: 0 auto 30px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       font-size: 2.5rem;
+       color: white;
+       position: relative;
+       box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+   }
+
+   .checkmark::before {
+       content: "";
+       position: absolute;
+       inset: -3px;
+       border-radius: 50%;
+       background: linear-gradient(135deg,
+               var(--brand),
+               var(--brand-light),
+               var(--accent));
+       z-index: -1;
+       opacity: 0.2;
+   }
+
+   .checkmark i {
+       font-weight: 900;
+   }
+
+   h1 {
+       font-size: 32px;
+       font-weight: 700;
+       margin-bottom: 16px;
+       color: var(--text-primary);
+       letter-spacing: -0.025em;
+   }
+
+   .subtitle {
+       font-size: 18px;
+       color: var(--text-secondary);
+       margin-bottom: 12px;
+       font-weight: 500;
+   }
+
+   .hostel-name {
+       color: var(--brand-dark);
+       font-weight: 600;
+       text-decoration: none;
+       position: relative;
+   }
+
+   .description {
+       color: var(--text-muted);
+       font-size: 15px;
+       line-height: 1.7;
+       margin-bottom: 30px;
+   }
+
+   .action-buttons {
+       display: flex;
+       gap: 12px;
+       justify-content: center;
+       flex-wrap: wrap;
+   }
+
+   .btn {
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       padding: 12px 24px;
+       border-radius: 12px;
+       text-decoration: none;
+       font-weight: 500;
+       font-size: 14px;
+       transition: var(--transition);
+       border: none;
+       cursor: pointer;
+       position: relative;
+       overflow: hidden;
+   }
+
+   .btn-primary {
+       background: linear-gradient(135deg, var(--brand), var(--brand-light));
+       color: white;
+       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+   }
+
+   .btn-primary:hover {
+       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+   }
+
+   .btn-secondary {
+       background: var(--ink);
+       color: var(--text-secondary);
+       border: 1px solid var(--border);
+   }
+
+   .btn-secondary:hover {
+       background: var(--border-light);
+   }
+
+   .decorative-elements {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       pointer-events: none;
+       overflow: hidden;
+   }
+
+   .decorative-elements::before,
+   .decorative-elements::after {
+       content: "";
+       position: absolute;
+       width: 100px;
+       height: 100px;
+       border-radius: 50%;
+       background: linear-gradient(135deg, var(--brand), var(--accent));
+       opacity: 0.05;
+   }
+
+   .decorative-elements::before {
+       top: -50px;
+       right: -50px;
+   }
+
+   .decorative-elements::after {
+       bottom: -50px;
+       left: -50px;
+   }
+
+
+
+   @media (max-width: 600px) {
+       .container {
+           margin: 20px;
+           padding: 40px 30px;
+       }
+
+       h1 {
+           font-size: 28px;
+       }
+
+       .subtitle {
+           font-size: 16px;
+       }
+
+       .checkmark {
+           width: 80px;
+           height: 80px;
+           font-size: 2rem;
+       }
+
+       .action-buttons {
+           flex-direction: column;
+       }
+
+       .btn {
+           width: 100%;
+           justify-content: center;
+       }
+   }

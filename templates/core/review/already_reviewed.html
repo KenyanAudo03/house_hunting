@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Review Submitted - {{ hostel.name }}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/core/review/already_reviewed.css' %}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="decorative-elements"></div>
+
+      <div class="checkmark">
+        <i class="fas fa-check"></i>
+      </div>
+
+      <h1>Review Submitted!</h1>
+
+      <p class="subtitle">
+        Thank you for reviewing
+        <span class="hostel-name"></span>
+      </p>
+
+      <p class="description">
+        Your feedback has been recorded and will help other JOOUST students
+        choose the right place to stay. We appreciate you sharing your
+        experience.
+      </p>
+
+      <div class="action-buttons">
+        <a href="/" class="btn btn-primary">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+        <a
+          href="{% url 'hostel_detail' hostel.slug %}"
+          class="btn btn-secondary"
+        >
+          <i class="fas fa-building"></i>
+          View Hostel
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
