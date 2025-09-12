@@ -482,6 +482,7 @@
     .phone-link:hover {
         background: #0056b3;
         box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        color: #fff;
     }
 
     .whatsapp-link {
@@ -492,6 +493,7 @@
     .whatsapp-link:hover {
         background: #128c7e;
         box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        color: #fff;
     }
 
     .contact-card {
