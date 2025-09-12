@@ -181,7 +181,7 @@
 
             <!-- List of individual reviews -->
             <div class="reviews-list">
-              {% for review in hostel.reviews.all %}
+              {% for review in hostel.reviews.all|dictsortreversed:"created_at" %}
               <div class="review-item">
                 <div class="review-header">
                   <div class="review-stars">
