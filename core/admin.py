@@ -56,10 +56,27 @@ class AmenityAdmin(admin.ModelAdmin):
 
 @admin.register(PropertyListing)
 class PropertyListingAdmin(admin.ModelAdmin):
-    list_display = ("name", "contact", "role", "area", "rent", "hostel", "created_at")
+    list_display = (
+        "name",
+        "contact_link",
+        "role",
+        "area",
+        "rent",
+        "hostel",
+        "created_at",
+    )
     list_filter = ("role", "created_at")
     search_fields = ("name", "contact", "hostel", "area")
     ordering = ("-created_at",)
+
+    def contact_link(self, obj):
+        if obj.contact and "@" in obj.contact:  # looks like an email
+            return format_html('<a href="mailto:{}">{}</a>', obj.contact, obj.contact)
+        elif obj.contact:  # assume it's a phone number
+            return format_html('<a href="tel:{}">{}</a>', obj.contact, obj.contact)
+        return "-"
+
+    contact_link.short_description = "Contact"
 
     def has_change_permission(self, request, obj=None):
         # Prevent editing while still allowing delete
@@ -68,7 +85,7 @@ class PropertyListingAdmin(admin.ModelAdmin):
 
 @admin.register(HostelInquiry)
 class HostelInquiryAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", "hostel", "created_at")
+    list_display = ("full_name", "email_link", "phone_link", "hostel", "created_at")
     list_filter = ("created_at", "hostel")
     search_fields = ("full_name", "email", "hostel__name", "message")
     readonly_fields = ("created_at",)
@@ -79,8 +96,19 @@ class HostelInquiryAdmin(admin.ModelAdmin):
         ("Inquiry Details", {"fields": ("hostel", "message", "created_at")}),
     )
 
+    def email_link(self, obj):
+        return format_html('<a href="mailto:{}">{}</a>', obj.email, obj.email)
+
+    email_link.short_description = "Email"
+
+    def phone_link(self, obj):
+        if obj.phone:
+            return format_html('<a href="tel:{}">{}</a>', obj.phone, obj.phone)
+        return "-"
+
+    phone_link.short_description = "Phone"
+
     def has_change_permission(self, request, obj=None):
-        # Prevent editing while still allowing delete
         return False
 
 
