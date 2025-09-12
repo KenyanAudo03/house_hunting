@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Hostel, PropertyListing, HostelInquiry
+from .models import Hostel, PropertyListing, HostelInquiry, ReviewInvitation, Review
+from .forms import ReviewForm
+from django.http import HttpResponse
 import re
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.http import require_http_methods
 import json
-from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -258,6 +259,40 @@ def submit_property_listing(request):
             },
             status=500,
         )
+
+
+# House Review
+def leave_review(request, token):
+    invitation = get_object_or_404(ReviewInvitation, token=token)
+
+    if invitation.used:
+        return render(
+            request, "core/already_reviewed.html", {"hostel": invitation.hostel}
+        )
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            Review.objects.create(
+                hostel=invitation.hostel,
+                rating=form.cleaned_data["rating"],
+                comment=form.cleaned_data["comment"],
+            )
+            invitation.used = True
+            invitation.save()
+            return render(
+                request,
+                "core/review/already_reviewed.html",
+                {"hostel": invitation.hostel},
+            )
+    else:
+        form = ReviewForm()
+
+    return render(
+        request,
+        "core/review/leave_review.html",
+        {"form": form, "hostel": invitation.hostel, "invitation": invitation},
+    )
 
 
 def about(request):
