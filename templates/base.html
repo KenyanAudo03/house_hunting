@@ -187,8 +187,7 @@
           {% endif %}
           <div class="sidebar-profile-text">
             <span class="sidebar-username"
-              >{{
-              user.get_full_name|title|truncatechars:20|default:user.username }}</span
+              >{{ user.get_full_name|title|truncatechars:20|default:user.username }}</span
             >
             <span class="sidebar-email">{{ user.email }}</span>
           </div>
@@ -196,7 +195,7 @@
       </a>
       {% else %}
       <div class="sidebar-auth">
-        <a href="{% url 'account_login' %?next={{ request.path }}}">Login</a>
+        <a href="{% url 'account_login' %}?next={{ request.path }}">Login</a>
         <a href="{% url 'account_signup' %}">Sign Up</a>
       </div>
       {% endif %}
