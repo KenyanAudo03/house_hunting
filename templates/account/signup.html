@@ -37,12 +37,6 @@
     <form method="post" action="{% url 'account_signup' %}">
       {% csrf_token %}
 
-      <div class="form-messages">
-        {% if form.non_field_errors %} {% for error in form.non_field_errors %}
-        <div class="message message-error">{{ error }}</div>
-        {% endfor %} {% endif %}
-      </div>
-
       <div class="name-row">
         <div class="name-field">
           {{ form.first_name.label_tag }} {{ form.first_name }} 

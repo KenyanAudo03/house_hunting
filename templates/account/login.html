@@ -37,12 +37,6 @@
     <!-- Login using Email and Password -->
     <form method="post">
       {% csrf_token %}
-      <div class="form-messages">
-        {% if form.non_field_errors %} {% for error in form.non_field_errors %}
-        <div class="message message-error">{{ error }}</div>
-        {% endfor %} {% endif %}
-      </div>
-
       <div class="form-group">{{ form.login.label_tag }} {{ form.login }}</div>
 
       <div class="form-group">
