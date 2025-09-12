@@ -26,7 +26,7 @@ class Command(BaseCommand):
             "+254709000111",
         ]
 
-        # Sample hostel details (without category/description, will randomize those later)
+        # Sample hostel details
         hostels_data = [
             {
                 "name": "Sunset Hostel",
@@ -100,7 +100,6 @@ class Command(BaseCommand):
             },
         ]
 
-        # Sample descriptions to make each hostel unique
         descriptions = [
             "A cozy hostel with a welcoming vibe, perfect for students and young professionals.",
             "Spacious rooms with modern amenities and easy access to public transport.",
@@ -114,7 +113,6 @@ class Command(BaseCommand):
             "Perfect blend of affordability, accessibility, and comfort.",
         ]
 
-        # Sample review comments to attach to each hostel
         review_comments = [
             "Great place to stay! Clean and friendly staff.",
             "Excellent location and very comfortable rooms.",
@@ -131,10 +129,10 @@ class Command(BaseCommand):
         hostels = []
 
         # Create hostel records
-        for index, data in hostels_data:
-            category = random.choice(categories)  # Random category
-            billing_cycle = random.choice(billing_cycles)  # Random billing cycle
-            description = random.choice(descriptions)  # Random description
+        for index, data in enumerate(hostels_data):
+            category = random.choice(categories)
+            billing_cycle = random.choice(billing_cycles)
+            description = random.choice(descriptions)
 
             hostel = Hostel.objects.create(
                 name=data["name"],
@@ -150,25 +148,25 @@ class Command(BaseCommand):
             hostels.append(hostel)
             self.stdout.write(f"Created hostel: {hostel.name}")
 
-        # Add reviews for each hostel
+        # Add reviews
         for hostel in hostels:
             num_reviews = random.randint(3, 8)
             for _ in range(num_reviews):
-                rating = random.randint(3, 5)  # Mostly positive ratings
+                rating = random.randint(3, 5)
                 comment = random.choice(review_comments)
                 Review.objects.create(hostel=hostel, rating=rating, comment=comment)
             self.stdout.write(f"Created {num_reviews} reviews for {hostel.name}")
 
-        # Add sample images (just db entries, no actual image files)
+        # Add images
         for hostel in hostels:
             num_images = random.randint(1, 4)
             for i in range(num_images):
                 HostelImage.objects.create(
-                    hostel=hostel, image=f"hostel_images/sample_{hostel.id}_{i+1}.jpg"
+                    hostel=hostel,
+                    image=f"hostel_images/sample_{hostel.id}_{i+1}.jpg",
                 )
             self.stdout.write(f"Created {num_images} image entries for {hostel.name}")
 
-        # Done!
         self.stdout.write(self.style.SUCCESS("Database seeded successfully!"))
         self.stdout.write(
             f"Created {len(hostels)} hostels with descriptions, categories, billing cycles, reviews, and images."
