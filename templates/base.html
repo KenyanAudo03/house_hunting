@@ -284,6 +284,11 @@
       </div>
     </footer>
 
+    <!-- Messages eg. Login and Logout -->
+      {% include 'core/partials/messages.html' %}
+      <script src="{% static 'js/core/home.js' %}"></script><!-- Messages eg. Login and Logout -->
+      {% include 'core/partials/messages.html' %}
+
     <script src="{% static 'js/base.js' %}"></script>
 
     {% block extra_js %} {% endblock %}
