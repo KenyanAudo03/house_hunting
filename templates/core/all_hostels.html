@@ -51,25 +51,36 @@
                   </div>
 
                   <div class="contact-icons">
-                    <!-- Default to my number if hostel has no phone -->
-                      {% with phone_number=hostel.phone|default:"+254703853259" %}
-                        <a 
-                          href="tel:{{ phone_number }}" 
-                          class="phone-link" 
-                          onclick="event.stopPropagation();"
-                        >
-                          <i class="bx bx-phone"></i>
-                        </a>
-                        <a 
-                          href="https://wa.me/{{ phone_number }}" 
-                          class="whatsapp-link" 
-                          target="_blank" 
-                          onclick="event.stopPropagation();"
-                        >
-                          <i class="bx bxl-whatsapp"></i>
-                        </a>
-                      {% endwith %}
-                    </div>
+                        <!-- Default to my number if hostel has no phone -->
+                        {% with phone_number=hostel.phone|default:"+254703853259" %}
+                          <a 
+                            href="tel:{{ phone_number }}" 
+                            class="phone-link" 
+                            onclick="event.stopPropagation();"
+                          >
+                            <i class="bx bx-phone"></i>
+                          </a>
+                          {% if user.is_authenticated %}
+                            <a 
+                              href="https://wa.me/{{ phone_number }}?text={{ 'Hey, I am '|add:user.get_full_name|add:'. I found this hostel ('|add:hostel.name|add:' at '|add:hostel.location|add:') on JoouStay and I am interested in renting it. Here is the link: '|add:request.build_absolute_uri|urlencode }}"
+                              class="whatsapp-link" 
+                              target="_blank" 
+                              onclick="event.stopPropagation();"
+                            >
+                              <i class="bx bxl-whatsapp"></i>
+                            </a>
+                          {% else %}
+                            <a 
+                              href="https://wa.me/{{ phone_number }}?text={{ 'Hey, I am a student. I found this hostel ('|add:hostel.name|add:' at '|add:hostel.location|add:') on JoouStay and I am interested in renting it. Here is the link: '|add:request.build_absolute_uri|urlencode }}"
+                              class="whatsapp-link" 
+                              target="_blank" 
+                              onclick="event.stopPropagation();"
+                            >
+                              <i class="bx bxl-whatsapp"></i>
+                            </a>
+                          {% endif %}
+                        {% endwith %}
+                     </div>
                 </div>
               </div>
             </a>
