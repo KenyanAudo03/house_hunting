@@ -215,20 +215,30 @@
       <h3 style="margin-bottom: 20px">Contact about Hostel</h3>
 
       <div class="contact-buttons">
-        <!-- Default to my number if hostel has no phone -->
-        {% with phone_number=hostel.phone|default:"+254703853259" %}
-        <a href="tel:{{ hostel.phone }}" class="phone-link">
-          <i class="bx bx-phone"></i> Call
-        </a>
-        <a
-          href="https://wa.me/{{ hostel.phone }}"
-          target="_blank"
-          class="whatsapp-link"
-        >
-          <i class="bx bxl-whatsapp"></i> WhatsApp
-        </a>
-        {% endwith %}
-      </div>
+          {% with phone_number=hostel.phone|default:"+254703853259" %}
+            <a href="tel:{{ phone_number }}" class="phone-link">
+              <i class="bx bx-phone"></i> Call
+            </a>
+
+            {% if user.is_authenticated %}
+              <a
+                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am "|add:user.get_full_name|add:" from Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here’s the link: "|add:request.build_absolute_uri|urlencode }}"
+                target="_blank"
+                class="whatsapp-link"
+              >
+                <i class="bx bxl-whatsapp"></i> WhatsApp
+              </a>
+            {% else %}
+              <a
+                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am a student at Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here’s the link: "|add:request.build_absolute_uri|urlencode }}"
+                target="_blank"
+                class="whatsapp-link"
+              >
+                <i class="bx bxl-whatsapp"></i> WhatsApp
+              </a>
+            {% endif %}
+          {% endwith %}
+       </div>
 
       <div class="contact-card">
         <h3>Send us a message</h3>
