@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
+import uuid
+from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 
 class Amenity(models.Model):
@@ -33,6 +36,57 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review for {self.hostel.name} - {self.rating} stars"
+
+
+class ReviewInvitation(models.Model):
+    hostel = models.ForeignKey(
+        "Hostel", on_delete=models.CASCADE, related_name="review_invitations"
+    )
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    link = models.URLField(max_length=500, blank=True, null=True)
+    used = models.BooleanField(default=False)
+
+    def clean(self):
+        """Validate that hostel has available vacants"""
+        if self._state.adding and self.hostel and self.hostel.available_vacants <= 0:
+            raise ValidationError(
+                f"Cannot create invitation: {self.hostel.name} has no available slots."
+            )
+
+    def save(self, *args, **kwargs):
+        is_new = self._state.adding
+
+        # Run validation
+        self.full_clean()
+
+        super().save(*args, **kwargs)
+
+        if is_new and self.hostel.available_vacants > 0:
+            # Update available vacants
+            self.hostel.available_vacants -= 1
+            self.hostel.save()
+
+    def set_link(self, request):
+        """Set the full absolute URL using the request"""
+        if not self.link:
+            self.link = self.get_review_link(request)
+            self.save(update_fields=["link"])
+
+    def get_review_link(self, request=None):
+        """Get the review link - returns stored link or generates new one"""
+        if self.link:
+            return self.link
+        path = reverse("leave_review", args=[str(self.token)])
+        if request:
+            return request.build_absolute_uri(path)
+        return path
+
+    def __str__(self):
+        return f"Review invitation for {self.full_name} - {self.hostel.name}"
 
 
 class HostelInquiry(models.Model):
