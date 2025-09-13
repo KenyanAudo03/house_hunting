@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>{% block title %}User Page{% endblock %}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="{% url 'users:dashboard' %}">Dashboard</a>
+        <a href="{% url 'users:profile' %}">Profile</a>
+        <a href="{% url 'users:favorites' %}">Favorites</a>
+        <a href="{% url 'users:roomie_profile' %}">Roomie Profile</a>
+        <a href="{% url 'account_logout' %}">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      {% block content %}
+      <!-- Page-specific content goes here -->
+      {% endblock %}
+    </main>
+  </body>
+</html>
