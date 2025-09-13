@@ -535,8 +535,6 @@
       }
 
       main {
-          flex: 1;
-          padding: 1.5rem;
           overflow-y: auto;
       }
 
@@ -568,8 +566,8 @@
           }
 
           main {
-              padding: 2.5rem;
-              max-width: 1400px;
+              padding: 0 40px;
+              max-width: 100%;
               margin: 0 auto;
               width: 100%;
           }
@@ -624,7 +622,7 @@
 
       @media (max-width: 640px) {
           main {
-              padding: 1rem;
+              padding: 0 10px;
           }
 
           .sidebar {
