@@ -1,29 +1,44 @@
-# accounts/admin.py
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import Profile
 
 
-# Create an inline for Profile
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = "Profile Information"
-    fields = ("profile_picture", "google_avatar_url", "bio")
-
-
-# Extend the existing UserAdmin to include Profile inline
-class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline,)
-
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
-
-
-admin.site.unregister(User)
-
-# Register the new UserAdmin with Profile inline
-admin.site.register(User, CustomUserAdmin)
+# Optional: display fields for the list view
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "phone_number",
+        "whatsapp_number",
+        "gender",
+        "county",
+        "town",
+        "area_of_stay",
+    )
+    search_fields = (
+        "user__username",
+        "phone_number",
+        "whatsapp_number",
+        "county",
+        "town",
+    )
+    list_filter = ("gender", "county", "town")
+    ordering = ("user__username",)
+    fieldsets = (
+        (
+            "Basic Info",
+            {"fields": ("user", "profile_picture", "google_avatar_url", "bio")},
+        ),
+        (
+            "Contact",
+            {
+                "fields": ("phone_number", "whatsapp_number"),
+            },
+        ),
+        (
+            "Location & Personal",
+            {
+                "fields": ("gender", "county", "town", "area_of_stay", "date_of_birth"),
+            },
+        ),
+    )
