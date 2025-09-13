@@ -10,22 +10,237 @@
       type="image/x-icon"
       href="{% static 'images/favicon.ico' %}"
     />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/users/base.css' %}" />
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="{% url 'users:dashboard' %}">Dashboard</a>
-        <a href="{% url 'users:profile' %}">Profile</a>
-        <a href="{% url 'users:favorites' %}">Favorites</a>
-        <a href="{% url 'users:roomie_profile' %}">Roomie Profile</a>
-        <a href="{% url 'account_logout' %}">Logout</a>
-      </nav>
-    </header>
+    
+    <div class="overlay" id="overlay"></div>
 
-    <main>
-      {% block content %}
-      <!-- Page-specific content goes here -->
-      {% endblock %}
-    </main>
+    <nav class="desktop-navbar">
+      <a href="{% url 'users:dashboard' %}" class="desktop-nav-brand">
+        <div class="logo" aria-label="JoouStay logo">
+          <div class="icon" aria-hidden="true"><span class="hut"></span></div>
+          <div class="wordmark">
+            <div class="brandline">
+              <span class="name">Joou</span><span class="accent">Stay</span>
+            </div>
+            <div class="tagline">User portal</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="desktop-nav-links">
+        <a
+          href="{% url 'users:dashboard' %}"
+          class="{% if request.path == '/users/dashboard/' %}active{% endif %}"
+          >Dashboard</a
+        >
+        <a
+          href="{% url 'users:profile' %}"
+          class="{% if request.path == '/users/profile/' %}active{% endif %}"
+          >Profile</a
+        >
+        <a
+          href="{% url 'users:favorites' %}"
+          class="{% if request.path == '/users/favorites/' %}active{% endif %}"
+          >Favorites</a
+        >
+        <a
+          href="{% url 'users:roomie_profile' %}"
+          class="{% if request.path == '/users/roomie-profile/' %}active{% endif %}"
+          >Roomie Profile</a
+        >
+      </div>
+
+      <div class="desktop-profile" id="desktopProfile">
+        {% if user.profile.profile_picture %}
+        <img
+          src="{{ user.profile.profile_picture.url }}"
+          alt="{{ user.get_full_name|default:user.username }}"
+        />
+        {% elif user.profile.google_avatar_url %}
+        <img
+          src="{{ user.profile.google_avatar_url }}"
+          alt="{{ user.get_full_name|default:user.username }}"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/default_images/default_user.png' %}"
+          alt="default"
+        />
+        {% endif %}
+        <div class="desktop-profile-info">
+          <span class="desktop-profile-name"
+            >{{ user.get_full_name|title|default:user.username }}</span
+          >
+        </div>
+        <i class="bx bx-chevron-down"></i>
+
+        <div class="profile-dropdown">
+          <a href="{% url 'users:profile' %}">
+            <i class="bx bx-user"></i>
+            View Profile
+          </a>
+          <a href="/">
+            <i class="bx bx-home"></i>
+            Homepage
+          </a>
+          <a href="{% url 'account_logout' %}">
+            <i class="bx bx-log-out"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+
+
+    <!-- Sidebar Links for small screens -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="sidebar-close" id="sidebarClose">
+          <i class="bx bx-x"></i>
+        </button>
+        <div class="sidebar-profile">
+          {% if user.profile.profile_picture %}
+          <img
+            src="{{ user.profile.profile_picture.url }}"
+            alt="{{ user.get_full_name|default:user.username }}"
+          />
+          {% elif user.profile.google_avatar_url %}
+          <img
+            src="{{ user.profile.google_avatar_url }}"
+            alt="{{ user.get_full_name|default:user.username }}"
+          />
+          {% else %}
+          <img
+            src="{% static 'images/default_images/default_user.png' %}"
+            alt="default"
+          />
+          {% endif %}
+          <div class="sidebar-user-info">
+            <h3>{{ user.get_full_name|title|default:user.username }}</h3>
+            <span>Welcome back!</span>
+          </div>
+        </div>
+
+        <div class="sidebar-stats">
+          <div class="stat-item">
+            <span class="stat-number">24</span>
+            <span class="stat-label">Listings</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">12</span>
+            <span class="stat-label">Favorites</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a
+            href="{% url 'users:dashboard' %}"
+            class="{% if request.path == '/users/dashboard/' %}active{% endif %}"
+          >
+            <i class="bx bxs-dashboard"></i>
+            Dashboard
+          </a>
+          <a
+            href="{% url 'users:profile' %}"
+            class="{% if request.path == '/users/profile/' %}active{% endif %}"
+          >
+            <i class="bx bx-user"></i>
+            Profile
+          </a>
+          <a
+            href="{% url 'users:favorites' %}"
+            class="{% if request.path == '/users/favorites/' %}active{% endif %}"
+          >
+            <i class="bx bx-heart"></i>
+            Favorites
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Roommate</div>
+          <a
+            href="{% url 'users:roomie_profile' %}"
+            class="{% if request.path == '/users/roomie-profile/' %}active{% endif %}"
+          >
+            <i class="bx bx-group"></i>
+            Roomie Profile
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Home</div>
+          <a href="/">
+            <i class="bx bx-home"></i>
+            Homepage
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="{% url 'account_logout' %}">
+          <i class="bx bx-log-out"></i>
+          Logout
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="mobile-header">
+        <a href="{% url 'users:dashboard' %}" class="mobile-brand">
+          <div class="logo" aria-label="JoouStay logo">
+            <div class="icon" aria-hidden="true"><span class="hut"></span></div>
+            <div class="wordmark">
+              <div class="brandline">
+                <span class="name">Joou</span><span class="accent">Stay</span>
+              </div>
+              <div class="tagline">User portal</div>
+            </div>
+          </div>
+        </a>
+
+        <div class="mobile-profile">
+          {% if user.profile.profile_picture %}
+          <img
+            src="{{ user.profile.profile_picture.url }}"
+            alt="{{ user.get_full_name|default:user.username }}"
+          />
+          {% elif user.profile.google_avatar_url %}
+          <img
+            src="{{ user.profile.google_avatar_url }}"
+            alt="{{ user.get_full_name|default:user.username }}"
+          />
+          {% else %}
+          <img
+            src="{% static 'images/default_images/default_user.png' %}"
+            alt="default"
+          />
+          {% endif %}
+          <span class="mobile-profile-name"
+            >{{ user.get_full_name|title|default:user.username }}</span
+          >
+        </div>
+
+        <button class="nav-toggle" id="navToggle">
+          <i class="bx bx-menu-alt-right"></i>
+        </button>
+      </header>
+
+      <main class="fade-in">{% block content %} {% endblock %}</main>
+
+      <!-- Django Messages eg Login -->
+      {% include 'core/partials/messages.html' %}
+    </div>
+
+    <script src="{% static 'js/users/base.js' %}"></script>
   </body>
 </html>
