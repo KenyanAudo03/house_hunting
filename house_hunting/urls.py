@@ -13,10 +13,11 @@ urlpatterns = [
         "accounts/confirm-email/<key>/",
         CustomConfirmEmailView.as_view(),
         name="account_confirm_email",
-    ),
+    ), # Custom email confirmation view to auto-login after confirmation
     path("accounts/", include("allauth.urls")),
     path("", include("core.urls")),
     path("contact/", include("contact.urls")),
+    path("users/", include("users.urls")), # Keep user account urls separately
 ]
 
 

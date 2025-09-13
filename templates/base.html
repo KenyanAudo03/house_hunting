@@ -89,10 +89,10 @@
             <i class="bx bx-chevron-down"></i>
           </div>
           <div class="profile-dropdown" id="profileDropdown">
-            <a href="#"><i class="bx bxs-dashboard"></i>Dashboard</a>
-            <a href="#"><i class="bx bx-heart"></i>Favorites</a>
-            <a href="#"><i class="bx bx-user"></i>Profile</a>
-            <a href="#"><i class="bx bx-group"></i>Roomie Profile</a>
+            <a href="{% url 'users:dashboard'  %}"><i class="bx bxs-dashboard"></i>Dashboard</a>
+            <a href="{% url 'users:favorites'  %}"><i class="bx bx-heart"></i>Favorites</a>
+            <a href="{% url 'users:profile'  %}"><i class="bx bx-user"></i>Profile</a>
+            <a href="{% url 'users:roomie_profile'  %}"><i class="bx bx-group"></i>Roomie Profile</a>
             <a href="{% url 'account_logout' %}?next={{ request.path }}"
               ><i class="bx bx-log-out"></i>Logout</a
             >
@@ -164,7 +164,7 @@
       </ul>
 
       {% if user.is_authenticated %}
-      <a href="#" class="sidebar-user-profile">
+      <a href="{% url 'users:dashboard'  %}" class="sidebar-user-profile">
         <div class="sidebar-profile-info">
           {% if user.profile.profile_picture %}
           <img
