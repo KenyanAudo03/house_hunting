@@ -37,22 +37,22 @@
       <div class="desktop-nav-links">
         <a
           href="{% url 'users:dashboard' %}"
-          class="{% if request.path == '/users/dashboard/' %}active{% endif %}"
+          class="{% if request.path == '/users/dashboard' %}active{% endif %}"
           >Dashboard</a
         >
         <a
           href="{% url 'users:profile' %}"
-          class="{% if request.path == '/users/profile/' %}active{% endif %}"
+          class="{% if request.path == '/users/profile' %}active{% endif %}"
           >Profile</a
         >
         <a
           href="{% url 'users:favorites' %}"
-          class="{% if request.path == '/users/favorites/' %}active{% endif %}"
+          class="{% if request.path == '/users/favorites' %}active{% endif %}"
           >Favorites</a
         >
         <a
           href="{% url 'users:roomie_profile' %}"
-          class="{% if request.path == '/users/roomie-profile/' %}active{% endif %}"
+          class="{% if request.path == '/users/roomie-profile' %}active{% endif %}"
           >Roomie Profile</a
         >
       </div>
@@ -145,21 +145,21 @@
           <div class="nav-section-title">Main</div>
           <a
             href="{% url 'users:dashboard' %}"
-            class="{% if request.path == '/users/dashboard/' %}active{% endif %}"
+            class="{% if request.path == '/users/dashboard' %}active{% endif %}"
           >
             <i class="bx bxs-dashboard"></i>
             Dashboard
           </a>
           <a
             href="{% url 'users:profile' %}"
-            class="{% if request.path == '/users/profile/' %}active{% endif %}"
+            class="{% if request.path == '/users/profile' %}active{% endif %}"
           >
             <i class="bx bx-user"></i>
             Profile
           </a>
           <a
             href="{% url 'users:favorites' %}"
-            class="{% if request.path == '/users/favorites/' %}active{% endif %}"
+            class="{% if request.path == '/users/favorites' %}active{% endif %}"
           >
             <i class="bx bx-heart"></i>
             Favorites
@@ -170,7 +170,7 @@
           <div class="nav-section-title">Roommate</div>
           <a
             href="{% url 'users:roomie_profile' %}"
-            class="{% if request.path == '/users/roomie-profile/' %}active{% endif %}"
+            class="{% if request.path == '/users/roomie-profile' %}active{% endif %}"
           >
             <i class="bx bx-group"></i>
             Roomie Profile
