@@ -1,7 +1,263 @@
 {% extends 'users/base.html' %}
-
 {% block title %}Your Profile{% endblock %}
-
+{% load static %}
 {% block content %}
+<style>
+:root {
+    --brand: #228b22;
+    --accent: #ffd700;
+    --ink: #f1f5f9;
+    --muted: #94a3b8;
+    --card-bg: #1e293b;
+    --border: #334155;
+    --header-height: 70px;
+}
 
+.profile-container {
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--ink);
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, var(--brand), #1e7b1e);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(34, 139, 34, 0.3);
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--accent);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.profile-name {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-username {
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.profile-bio {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+.edit-btn {
+    background: var(--accent);
+    color: #000;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.edit-btn:hover {
+    background: #ffed4e;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.profile-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.profile-section {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: var(--brand);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-field:last-child {
+    border-bottom: none;
+}
+
+.field-label {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.field-value {
+    color: var(--ink);
+    font-weight: 500;
+    text-align: right;
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.field-value.empty {
+    color: var(--muted);
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px 0;
+    }
+    
+    .profile-header {
+        padding: 2rem 1rem;
+    }
+    
+    .profile-name {
+        font-size: 2rem;
+    }
+    
+    .profile-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .field-value {
+        text-align: left;
+        max-width: 100%;
+    }
+}
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        {% if user.profile.profile_picture %}
+            <img class="profile-avatar" src="{{ user.profile.profile_picture.url }}" alt="{{ user.get_full_name|default:user.username }}">
+        {% elif user.profile.google_avatar_url %}
+            <img class="profile-avatar" src="{{ user.profile.google_avatar_url }}" alt="{{ user.get_full_name|default:user.username }}">
+        {% else %}
+            <img class="profile-avatar" src="{% static 'images/default_images/default_user.png' %}" alt="default">
+        {% endif %}
+        
+        <h1 class="profile-name">{{ user.get_full_name|title|default:user.username }}</h1>
+        <p class="profile-username">@{{ user.username }}</p>
+        <p class="profile-bio">{{ user.profile.bio|default:"Welcome to my profile! I'm excited to be part of this community." }}</p>
+        <a href="#" class="edit-btn">Edit Profile</a>
+    </div>
+
+    <div class="profile-sections">
+        <div class="profile-section">
+            <h2 class="section-title">Account Information</h2>
+            <div class="profile-field">
+                <span class="field-label">Email Address</span>
+                <span class="field-value">{{ user.email }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Member Since</span>
+                <span class="field-value">{{ user.date_joined|date:"F j, Y" }}</span>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Personal Information</h2>
+            <div class="profile-field">
+                <span class="field-label">Date of Birth</span>
+                <span class="field-value {% if not user.profile.date_of_birth %}empty{% endif %}">
+                    {{ user.profile.date_of_birth|date:"F j, Y"|default:"Not provided" }}
+                </span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Gender</span>
+                <span class="field-value {% if not user.profile.gender %}empty{% endif %}">
+                    {{ user.profile.gender|default:"Not provided" }}
+                </span>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Contact Details</h2>
+            <div class="profile-field">
+                <span class="field-label">Phone Number</span>
+                <span class="field-value {% if not user.profile.phone_number %}empty{% endif %}">
+                    {{ user.profile.phone_number|default:"Not provided" }}
+                </span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">WhatsApp</span>
+                <span class="field-value {% if not user.profile.whatsapp_number %}empty{% endif %}">
+                    {{ user.profile.whatsapp_number|default:"Not provided" }}
+                </span>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Location Details</h2>
+            <div class="profile-field">
+                <span class="field-label">County</span>
+                <span class="field-value {% if not user.profile.county %}empty{% endif %}">
+                    {{ user.profile.county|default:"Not provided" }}
+                </span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Town</span>
+                <span class="field-value {% if not user.profile.town %}empty{% endif %}">
+                    {{ user.profile.town|default:"Not provided" }}
+                </span>
+            </div>
+            <div class="profile-field">
+                <span class="field-label">Area of Stay</span>
+                <span class="field-value {% if not user.profile.area_of_stay %}empty{% endif %}">
+                    {{ user.profile.area_of_stay|default:"Not provided" }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
