@@ -32,6 +32,16 @@
       flex-shrink: 0;
   }
 
+  .add-favorites {
+      color: #666;
+      font-size: 14px;
+      margin: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100dvh - 195px);
+  }
+
   .compare-selector {
       margin-bottom: 20px;
       flex-shrink: 0;
@@ -170,11 +180,6 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-  }
-
-  .hostel-container {
-      flex: 2;
-      min-height: 100vh;
   }
 
   .hostel-checkbox-container {
