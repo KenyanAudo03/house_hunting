@@ -1,18 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Email Confirmation Sent{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Email Confirmation
+Sent{% endblock %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
 
 <div class="login-container">
   <div class="login-card">
     <h2 class="login-title">Check Your Email</h2>
 
-    <div
-      class="message message-success"
-      style="text-align: center; margin-bottom: 30px; margin-top: 20px"
-    >
+    <div style="text-align: center; margin-bottom: 30px; margin-top: 20px">
       <svg
         width="48"
         height="48"
@@ -25,7 +19,8 @@
         />
       </svg>
       <p style="margin: 0; font-size: 16px; line-height: 1.5">
-        We've sent a confirmation email to the address you provided during signup.
+        We've sent a confirmation email to the address you provided during
+        signup.
       </p>
     </div>
 
@@ -40,9 +35,10 @@
       "
     >
       <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6">
-        Please check your inbox and click the link to finalize your signup. 
-        If you do not see the email in your main inbox, check your spam folder. 
-        If you still haven't received it, you can try logging in to trigger a new verification email or contact the site administrator.
+        Please check your inbox and click the link to finalize your signup. If
+        you do not see the email in your main inbox, check your spam folder. If
+        you still haven't received it, you can try logging in to trigger a new
+        verification email or contact the site administrator.
       </p>
     </div>
 
