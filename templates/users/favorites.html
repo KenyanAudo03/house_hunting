@@ -116,6 +116,7 @@
       {% endif %}
     </div>
 
+    {% if hostels and hostels|length >= 2 %}
     <div class="compare-hostels">
       <h3 class="compare-title">Compare Hostels</h3>
       
@@ -136,6 +137,7 @@
         <!-- Comparison results will be loaded here -->
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
 
