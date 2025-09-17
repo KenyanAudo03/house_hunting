@@ -295,21 +295,22 @@ def check_email(request):
 def edit_location(request):
     if request.method == "POST":
         profile = request.user.profile
-        city = clean_text(request.POST.get("city"))
-        country = clean_text(request.POST.get("country"))
+        county = clean_text(request.POST.get("county"))
+        town = clean_text(request.POST.get("town"))
+        area_of_stay = clean_text(request.POST.get("area_of_stay"))
 
-        if city is None or country is None:
+        if county is None or town is None or area_of_stay is None:
             messages.error(request, "Invalid characters in location.")
             return redirect("users:profile")
 
-        if city:
-            profile.city = city
-        if country:
-            profile.country = country
-
+        profile.county = county
+        profile.town = town
+        profile.area_of_stay = area_of_stay
         profile.save()
+
         messages.success(request, "Location updated successfully!")
         return redirect("users:profile")
+
     return render(request, "users/profile.html")
 
 

@@ -3,9 +3,7 @@
   <div class="modal">
     <div class="modal-header">
       <h3 class="modal-title">Edit Location</h3>
-      <button class="modal-close" onclick="closeModal('editLocationModal')">
-        &times;
-      </button>
+      <button class="modal-close" onclick="closeModal('editLocationModal')">&times;</button>
     </div>
     <form action="{% url 'users:edit_location' %}" method="post">
       {% csrf_token %}
@@ -54,13 +52,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="closeModal('editLocationModal')"
-        >
-          Cancel
-        </button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('editLocationModal')">Cancel</button>
         <button type="submit" class="btn btn-primary">Save Changes</button>
       </div>
     </form>
