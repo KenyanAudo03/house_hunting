@@ -110,9 +110,7 @@
         <h3 class="profile-sidebar-title">Contact</h3>
         <div class="contact-field">
           <span class="field-label">Email</span>
-          <span
-            class="field-value {% if not user.email %}empty{% endif %}"
-          >
+          <span class="field-value {% if not user.email %}empty{% endif %}">
             {{ user.email|default:"Not provided" }}
           </span>
         </div>
@@ -170,23 +168,33 @@
       <!-- Password -->
       <div class="profile-sidebar-card">
         <h3 class="profile-sidebar-title">Password</h3>
-        {% if has_password %}
+        {% if has_usable_password %}
         <div class="contact-field">
           <span class="field-label">Update Password</span>
           <span class="field-value">
-            <button class="passsword-button">Update</button>
+            <button
+              type="button"
+              class="passsword-button"
+              onclick="openModal('editPasswordModal')"
+            >
+              Update
+            </button>
           </span>
         </div>
-
         {% else %}
         <div class="contact-field">
           <span class="field-label">Set Password</span>
           <span class="field-value">
-            <button class="passsword-button">Set</button>
+            <button
+              type="button"
+              class="passsword-button"
+              onclick="openModal('editPasswordModal')"
+            >
+              Set
+            </button>
           </span>
-          </div>
+        </div>
         {% endif %}
-
       </div>
     </div>
   </div>
@@ -223,14 +231,14 @@
 </form>
 
 <!-- Include all modals -->
-{% include 'users/partials/edit/edit-name.html' %}
+{% include 'users/partials/edit/edit-name.html' %} 
 {% include 'users/partials/edit/edit-bio.html' %}
-{% include 'users/partials/edit/edit-personal-info.html' %}
-{% include 'users/partials/edit/edit-contact-info.html' %}
-{% include 'users/partials/edit/edit-location.html' %}
-{% include 'users/partials/danger-zone/delete-acc.html' %}
+{% include 'users/partials/edit/edit-personal-info.html' %} 
+{% include 'users/partials/edit/edit-contact-info.html' %} 
+{% include 'users/partials/edit/edit-location.html' %} 
+{% include 'users/partials/edit/change-passworld.html' %} 
+{% include 'users/partials/danger-zone/delete-acc.html' %} 
 {% include 'users/partials/danger-zone/deactivate-acc.html' %}
-
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{% static 'js/users/profile.js' %}"></script>
