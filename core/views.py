@@ -14,6 +14,7 @@ import json
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.urls import reverse
 
 
 def home(request):
@@ -68,6 +69,10 @@ def all_hostel_view(request):
     query = request.GET.get("q", "")
     page_number = request.GET.get("page", 1)
 
+    # Redirect to favorites view instead of handling here
+    if hostel_type == "favorites":
+        return redirect("users:favorites")
+
     now = timezone.now()
     five_days_ago = now - timedelta(days=5)
 
@@ -112,7 +117,7 @@ def all_hostel_view(request):
                 | Q(description__icontains=word)
             )
 
-            if word.isdigit():  # Match numeric query to price range
+            if word.isdigit():  # numeric → price range
                 price_value = int(word)
                 word_filter |= Q(
                     pricing__gte=price_value - 500, pricing__lte=price_value + 500
@@ -157,16 +162,23 @@ def all_hostel_view(request):
 def hostel_detail(request, slug):
     hostel = get_object_or_404(Hostel, slug=slug)
 
-    # Determine hostel type from query parameter (fallback to category)
+    # Determine hostel type + where "back" should go
     hostel_type_param = request.GET.get("type", "")
     if hostel_type_param == "latest":
         page_title = "Latest Hostels"
+        back_url = reverse("all_hostels") + "?type=latest"
     elif hostel_type_param == "single":
         page_title = "Single Room Hostels"
+        back_url = reverse("all_hostels") + "?type=single"
     elif hostel_type_param == "bedsitter_bedroom":
         page_title = "Bedsitters & Bedrooms"
+        back_url = reverse("all_hostels") + "?type=bedsitter_bedroom"
+    elif hostel_type_param == "favorites":
+        page_title = "My Favorite Hostels"
+        back_url = reverse("users:favorites")  # favorites page
     else:
         page_title = f"Hostels in {hostel.location}"
+        back_url = reverse("all_hostels")
 
     # Submit inquiry form via AJAX
     if request.method == "POST":
@@ -185,7 +197,7 @@ def hostel_detail(request, slug):
                         }
                     )
 
-                inquiry = HostelInquiry.objects.create(
+                HostelInquiry.objects.create(
                     hostel=hostel,
                     full_name=full_name,
                     email=email,
@@ -199,7 +211,6 @@ def hostel_detail(request, slug):
                         "message": "Your inquiry has been sent successfully!",
                     }
                 )
-
             except Exception:
                 return JsonResponse(
                     {
@@ -207,6 +218,8 @@ def hostel_detail(request, slug):
                         "error": "An error occurred while sending your message",
                     }
                 )
+
+    # Favorite state
     is_favorited = False
     if request.user.is_authenticated:
         is_favorited = Favorite.objects.filter(
@@ -218,8 +231,8 @@ def hostel_detail(request, slug):
         "page_title": page_title,
         "hostel_type": hostel_type_param or hostel.category,
         "is_favorited": is_favorited,
+        "back_url": back_url,
     }
-
     return render(request, "core/hostel_detail.html", context)
 
 
