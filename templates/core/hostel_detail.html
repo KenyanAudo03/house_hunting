@@ -8,10 +8,7 @@
   <h1 class="page-title">
     <a href="/"><i class="bx bx-home-alt"></i></a>
     <i class="bx bx-chevron-right"></i>
-    <a
-      href="{% url 'all_hostels' %}?type={{ hostel_type }}{% if query %}&q={{ query }}{% endif %}"
-      >{{ page_title }}</a
-    >
+    <a href="{{ back_url }}">{{ page_title }}</a>
     <i class="bx bx-chevron-right"></i>
     <span class="hostel-name">{{ hostel.name }}</span>
   </h1>
