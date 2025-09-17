@@ -241,6 +241,16 @@
     flex-direction: column;
 }
 
+.passsword-button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #1a202c;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+}
+
 /* Danger zone */
 .danger-section {
     background: white;
