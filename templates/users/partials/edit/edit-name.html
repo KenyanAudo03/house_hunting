@@ -1,0 +1,69 @@
+<!-- Edit Name Modal -->
+<div class="modal-overlay" id="editNameModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Profile</h3>
+      <button class="modal-close" onclick="closeModal('editNameModal')">
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:edit_user_name' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="first_name"
+            name="first_name"
+            value="{{ user.first_name|default:'' }}"
+            placeholder="First Name"
+            maxlength="150"
+          />
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="last_name"
+            name="last_name"
+            value="{{ user.last_name|default:'' }}"
+            placeholder="Last Name"
+            maxlength="150"
+          />
+        </div>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            value="{{ user.username }}"
+            placeholder="Username"
+            maxlength="150"
+            pattern="[a-zA-Z0-9_@.+-]+"
+            title="Username can only contain letters, numbers, and @/./+/-/_ characters"
+          />
+          <span
+            id="username-error"
+            class="error-message"
+            style="display: none"
+          ></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('editNameModal')"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>

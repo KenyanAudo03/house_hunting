@@ -1,0 +1,31 @@
+<!-- Edit Personal Info Modal -->
+<div class="modal-overlay" id="editPersonalModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Personal Information</h3>
+            <button class="modal-close" onclick="closeModal('editPersonalModal')">&times;</button>
+        </div>
+        <form action="{% url 'users:edit_personal_info' %}" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" id="gender" name="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male" {% if user.profile.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if user.profile.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if user.profile.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" class="form-control date-input" id="date_of_birth" name="date_of_birth" value="{{ user.profile.date_of_birth|date:'Y-m-d'|default:'' }}" max="{{ today|date:'Y-m-d' }}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editPersonalModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+<!-- Edit Location Modal -->
+<div class="modal-overlay" id="editLocationModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Location</h3>
+      <button class="modal-close" onclick="closeModal('editLocationModal')">
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:edit_location' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="county">County</label>
+          <input
+            type="text"
+            class="form-control"
+            id="county"
+            name="county"
+            value="{{ user.profile.county|default:'' }}"
+            placeholder="County"
+            maxlength="100"
+            pattern="[a-zA-Z\s-']+"
+            title="County name should only contain letters, spaces, hyphens, and apostrophes"
+          />
+        </div>
+        <div class="form-group">
+          <label for="town">Town</label>
+          <input
+            type="text"
+            class="form-control"
+            id="town"
+            name="town"
+            value="{{ user.profile.town|default:'' }}"
+            placeholder="Town"
+            maxlength="100"
+            pattern="[a-zA-Z\s-']+"
+            title="Town name should only contain letters, spaces, hyphens, and apostrophes"
+          />
+        </div>
+        <div class="form-group">
+          <label for="area_of_stay">Area of Stay</label>
+          <input
+            type="text"
+            class="form-control"
+            id="area_of_stay"
+            name="area_of_stay"
+            value="{{ user.profile.area_of_stay|default:'' }}"
+            placeholder="Area of Stay"
+            maxlength="100"
+            pattern="[a-zA-Z0-9\s-']+"
+            title="Area should only contain letters, numbers, spaces, hyphens, and apostrophes"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('editLocationModal')"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>

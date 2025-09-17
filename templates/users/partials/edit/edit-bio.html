@@ -1,0 +1,39 @@
+<!-- Edit Bio Modal -->
+<div class="modal-overlay" id="editBioModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit Bio</h3>
+      <button class="modal-close" onclick="closeModal('editBioModal')">
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:edit_bio' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="bio">About You</label>
+          <textarea
+            class="form-control"
+            id="bio"
+            name="bio"
+            rows="7"
+            placeholder="Tell us about yourself..."
+            maxlength="1000"
+          >
+{{ user.profile.bio|default:'' }}</textarea
+          >
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('editBioModal')"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
