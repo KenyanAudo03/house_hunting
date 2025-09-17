@@ -24,6 +24,9 @@ from .sanitizer import (
     clean_bio,
     clean_email,
 )
+from django.views.decorators.http import require_POST
+from core.models import Hostel
+from accounts.models import Favorite
 
 
 @login_required
@@ -415,6 +418,24 @@ def delete_account(request):
 @login_required
 def favorites(request):
     return render(request, "users/favorites.html")
+
+
+@login_required
+@require_POST
+def toggle_favorite(request, hostel_id):
+    try:
+        hostel = Hostel.objects.get(pk=hostel_id)
+    except Hostel.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Hostel not found"}, status=404)
+
+    favorite, created = Favorite.objects.get_or_create(user=request.user, hostel=hostel)
+
+    if not created:
+        # Already exists → remove
+        favorite.delete()
+        return JsonResponse({"success": True, "favorited": False})
+
+    return JsonResponse({"success": True, "favorited": True})
 
 
 @login_required

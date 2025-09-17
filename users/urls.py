@@ -7,6 +7,11 @@ urlpatterns = [
     path("dashboard", views.dashboard, name="dashboard"),
     path("profile", views.profile, name="profile"),
     path("favorites", views.favorites, name="favorites"),
+    path(
+        "favorites/<int:hostel_id>/toggle/",
+        views.toggle_favorite,
+        name="toggle_favorite",
+    ),  # Add Hostel to favorites
     path("roomie-profile", views.roomie_profile, name="roomie_profile"),
     path(
         "edit-profile-picture/", views.edit_profile_picture, name="edit_profile_picture"
