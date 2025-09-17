@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Account Inactive
+{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
+
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Account Inactive</h2>
+
+    <div style="text-align: center; margin-bottom: 30px; margin-top: 20px">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="48"
+        height="48"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        style="margin-bottom: 15px; color: #721c24"
+      >
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.71c.889 0 
+             1.438-.99.98-1.767L8.982 1.566z"
+        />
+        <path d="M7.001 6h2v4h-2z" fill="white" />
+        <circle cx="8" cy="12.5" r="1" fill="white" />
+      </svg>
+
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #721c24">
+        Your account is inactive. Please contact the administrator at
+        <a href="mailto:admin@jooustay.co.ke">admin@jooustay.co.ke</a>
+        to reactivate your account.
+      </p>
+    </div>
+
+    <div class="links" style="text-align: center">
+      <a href="{% url 'account_login' %}">Back to Sign In</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
