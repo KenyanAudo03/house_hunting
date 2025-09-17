@@ -109,6 +109,14 @@
         ></i>
         <h3 class="profile-sidebar-title">Contact</h3>
         <div class="contact-field">
+          <span class="field-label">Email</span>
+          <span
+            class="field-value {% if not user.email %}empty{% endif %}"
+          >
+            {{ user.email|default:"Not provided" }}
+          </span>
+        </div>
+        <div class="contact-field">
           <span class="field-label">Phone</span>
           <span
             class="field-value {% if not user.profile.phone_number %}empty{% endif %}"
@@ -157,6 +165,28 @@
             {{ user.profile.area_of_stay|default:"Not provided" }}
           </span>
         </div>
+      </div>
+
+      <!-- Password -->
+      <div class="profile-sidebar-card">
+        <h3 class="profile-sidebar-title">Password</h3>
+        {% if has_password %}
+        <div class="contact-field">
+          <span class="field-label">Update Password</span>
+          <span class="field-value">
+            <button class="passsword-button">Update</button>
+          </span>
+        </div>
+
+        {% else %}
+        <div class="contact-field">
+          <span class="field-label">Set Password</span>
+          <span class="field-value">
+            <button class="passsword-button">Set</button>
+          </span>
+          </div>
+        {% endif %}
+
       </div>
     </div>
   </div>
