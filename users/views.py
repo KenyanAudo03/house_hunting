@@ -417,7 +417,15 @@ def delete_account(request):
 
 @login_required
 def favorites(request):
-    return render(request, "users/favorites.html")
+    # Get all the hostels this user has favorited
+    user_favorites = Favorite.objects.filter(user=request.user).select_related("hostel")
+    hostels = [fav.hostel for fav in user_favorites]
+
+    context = {
+        "favorites": user_favorites,
+        "hostels": hostels,
+    }
+    return render(request, "users/favorites.html", context)
 
 
 @login_required
