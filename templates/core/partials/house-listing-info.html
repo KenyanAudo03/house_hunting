@@ -32,6 +32,7 @@
         name="name"
         required
         placeholder="Full name"
+        value="{{ request.user.get_full_name }}"
       />
 
       <div class="input-row">
@@ -43,6 +44,7 @@
             name="contact"
             required
             placeholder="0712345678"
+            value="{{ request.user.profile.phone_number }}"
           />
         </div>
         <div>
