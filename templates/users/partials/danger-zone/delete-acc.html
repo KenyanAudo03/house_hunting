@@ -1,0 +1,42 @@
+<!-- Delete Account Modal -->
+<div class="modal-overlay danger-modal" id="deleteAccountModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Delete Account</h3>
+      <button class="modal-close" onclick="closeModal('deleteAccountModal')">
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:delete_account' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <p class="danger-text">
+          This action cannot be undone. Your account and all associated data
+          will be permanently deleted.
+        </p>
+        <div class="form-group">
+          <label for="delete_password">Enter your password to confirm</label>
+          <input
+            type="password"
+            class="form-control"
+            id="delete_password"
+            name="password"
+            required
+            placeholder="Password"
+            minlength="8"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('deleteAccountModal')"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+      </div>
+    </form>
+  </div>
+</div>

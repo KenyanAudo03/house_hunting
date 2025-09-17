@@ -1,0 +1,34 @@
+<!-- Deactivate Account Modal -->
+<div class="modal-overlay danger-modal" id="deactivateAccountModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Deactivate Account</h3>
+      <button
+        class="modal-close"
+        onclick="closeModal('deactivateAccountModal')"
+      >
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:deactivate_account' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <p class="danger-text">
+          Your account will be temporarily disabled. You will need to contact
+          the administrator to reactivate it.
+        </p>
+        <p>Are you sure you want to deactivate your account?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('deactivateAccountModal')"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-danger">Deactivate Account</button>
+      </div>
+    </form>
+  </div>
+</div>
