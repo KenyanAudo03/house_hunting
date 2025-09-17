@@ -1,11 +1,11 @@
-// Detect mobile device
+// Check if user is on mobile device
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 }
 
-// Sanitize input (prevent XSS) - only for submission, not real-time
+// Sanitize input by escaping dangerous HTML characters
 function sanitizeInput(input) {
   return input.replace(/[<>'"&]/g, function (match) {
     switch (match) {
@@ -25,12 +25,10 @@ function sanitizeInput(input) {
   });
 }
 
-// Check if input contains potentially dangerous characters
 function containsDangerousChars(input) {
   return /[<>"'&]/.test(input);
 }
 
-// Check if any form has dangerous characters
 function formHasDangerousChars(form) {
   const inputs = form.querySelectorAll(
     'input[type="text"], input[type="tel"], textarea'
@@ -40,7 +38,7 @@ function formHasDangerousChars(form) {
   );
 }
 
-// Update save button state
+// Update save button state based on form validation
 function updateSaveButtonState(form) {
   const saveButtons = form.querySelectorAll(
     'button[type="submit"], input[type="submit"]'
@@ -63,7 +61,7 @@ function updateSaveButtonState(form) {
   });
 }
 
-// Update character count for bio
+// Update character count for textarea with validation
 function updateCharCount(textarea, maxLength = 500) {
   const currentLength = textarea.value.length;
   const remaining = maxLength - currentLength;
@@ -106,7 +104,183 @@ function updateCharCount(textarea, maxLength = 500) {
   }
 }
 
-// Open modal + init date picker
+// Show upload progress modal overlay
+function showUploadProgress() {
+  const existingOverlay = document.getElementById("upload-progress-overlay");
+  if (existingOverlay) existingOverlay.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "upload-progress-overlay";
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8); display: flex; flex-direction: column;
+    justify-content: center; align-items: center; z-index: 10000; font-family: inherit;
+  `;
+
+  const progressContainer = document.createElement("div");
+  progressContainer.style.cssText = `
+    background: white; padding: 30px; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); text-align: center;
+    min-width: 300px; max-width: 400px;
+  `;
+
+  const uploadIcon = document.createElement("div");
+  uploadIcon.innerHTML =
+    '<i class="bx bx-cloud-upload" style="font-size: 48px; color: #4CAF50; margin-bottom: 16px;"></i>';
+
+  const statusText = document.createElement("div");
+  statusText.id = "upload-status-text";
+  statusText.style.cssText =
+    "font-size: 16px; font-weight: 500; color: #333; margin-bottom: 20px;";
+  statusText.textContent = "Uploading your profile picture...";
+
+  const progressBarContainer = document.createElement("div");
+  progressBarContainer.style.cssText = `
+    width: 100%; height: 8px; background: #e0e0e0;
+    border-radius: 4px; overflow: hidden; margin-bottom: 16px;
+  `;
+
+  const progressBar = document.createElement("div");
+  progressBar.id = "upload-progress-bar";
+  progressBar.style.cssText = `
+    height: 100%; width: 0%; background: linear-gradient(90deg, #4CAF50, #45a049);
+    border-radius: 4px; transition: width 0.3s ease;
+  `;
+
+  const progressPercent = document.createElement("div");
+  progressPercent.id = "upload-progress-percent";
+  progressPercent.style.cssText =
+    "font-size: 14px; color: #666; font-weight: 500;";
+  progressPercent.textContent = "0%";
+
+  progressBarContainer.appendChild(progressBar);
+  progressContainer.appendChild(uploadIcon);
+  progressContainer.appendChild(statusText);
+  progressContainer.appendChild(progressBarContainer);
+  progressContainer.appendChild(progressPercent);
+  overlay.appendChild(progressContainer);
+  document.body.appendChild(overlay);
+
+  return overlay;
+}
+
+function hideUploadProgress() {
+  const overlay = document.getElementById("upload-progress-overlay");
+  if (overlay) {
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 300);
+  }
+}
+
+function updateProgress(percent) {
+  const progressBar = document.getElementById("upload-progress-bar");
+  const progressPercent = document.getElementById("upload-progress-percent");
+
+  if (progressBar) progressBar.style.width = percent + "%";
+  if (progressPercent) progressPercent.textContent = Math.round(percent) + "%";
+}
+
+function showUploadSuccess() {
+  const statusText = document.getElementById("upload-status-text");
+  const uploadIcon = document.querySelector("#upload-progress-overlay i");
+
+  if (statusText) {
+    statusText.textContent = "Profile picture updated successfully!";
+    statusText.style.color = "#4CAF50";
+  }
+
+  if (uploadIcon) uploadIcon.className = "bx bx-check-circle";
+
+  updateProgress(100);
+  setTimeout(() => hideUploadProgress(), 1500);
+}
+
+function showUploadError(message = "Upload failed. Please try again.") {
+  const statusText = document.getElementById("upload-status-text");
+  const uploadIcon = document.querySelector("#upload-progress-overlay i");
+
+  if (statusText) {
+    statusText.textContent = message;
+    statusText.style.color = "#f44336";
+  }
+
+  if (uploadIcon) {
+    uploadIcon.className = "bx bx-error-circle";
+    uploadIcon.style.color = "#f44336";
+  }
+
+  setTimeout(() => hideUploadProgress(), 3000);
+}
+
+// Handle profile picture upload with validation and progress
+function submitProfilePicture() {
+  const fileInput = document.getElementById("file-input");
+  const file = fileInput.files[0];
+
+  if (!file) return;
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+  const maxSize = 5 * 1024 * 1024;
+
+  if (!allowedTypes.includes(file.type)) {
+    alert("Please select a valid image file (JPEG, PNG, GIF, WebP)");
+    fileInput.value = "";
+    return;
+  }
+
+  if (file.size > maxSize) {
+    alert("File size must be less than 5MB");
+    fileInput.value = "";
+    return;
+  }
+
+  showUploadProgress();
+
+  const formData = new FormData();
+  formData.append("profile_picture", file);
+  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  const xhr = new XMLHttpRequest();
+
+  xhr.upload.addEventListener("progress", function (e) {
+    if (e.lengthComputable) {
+      const percentComplete = (e.loaded / e.total) * 100;
+      updateProgress(percentComplete);
+    }
+  });
+
+  xhr.addEventListener("load", function () {
+    if (xhr.status === 200) {
+      showUploadSuccess();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      showUploadError("Server error. Please try again.");
+    }
+  });
+
+  xhr.addEventListener("error", () => {
+    showUploadError("Network error. Please check your connection.");
+  });
+
+  xhr.addEventListener("timeout", () => {
+    showUploadError("Upload timeout. Please try again.");
+  });
+
+  xhr.open("POST", document.getElementById("profilePictureForm").action, true);
+  xhr.setRequestHeader("X-CSRFToken", csrfToken);
+  xhr.timeout = 30000;
+  xhr.send(formData);
+  fileInput.value = "";
+}
+
+// Open modal and initialize date picker for personal info modal
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   modal.classList.add("active");
@@ -130,7 +304,7 @@ function openModal(modalId) {
   }
 }
 
-// Close modal + destroy date picker
+// Close modal and clean up error states
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   modal.classList.remove("active");
@@ -150,32 +324,7 @@ function closeModal(modalId) {
   }
 }
 
-// Validate and submit profile picture
-function submitProfilePicture() {
-  const fileInput = document.getElementById("file-input");
-  const file = fileInput.files[0];
-
-  if (file) {
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-
-    if (!allowedTypes.includes(file.type)) {
-      alert("Please select a valid image file (JPEG, PNG, GIF)");
-      fileInput.value = "";
-      return;
-    }
-
-    if (file.size > maxSize) {
-      alert("File size must be less than 5MB");
-      fileInput.value = "";
-      return;
-    }
-
-    document.getElementById("profilePictureForm").submit();
-  }
-}
-
-// Check username availability
+// Check if username is available via AJAX
 function checkUsername() {
   const username = document.getElementById("username").value;
   const currentUsername = "{{ user.username }}";
@@ -209,12 +358,10 @@ function checkUsername() {
         errorElement.style.display = "none";
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+    .catch((error) => console.error("Error:", error));
 }
 
-// Check email availability
+// Check if email is available via AJAX
 function checkEmail() {
   const email = document.getElementById("email").value;
   const currentEmail = "{{ user.email }}";
@@ -249,12 +396,10 @@ function checkEmail() {
         errorElement.style.display = "none";
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+    .catch((error) => console.error("Error:", error));
 }
 
-// Validate form inputs - prevent submission if dangerous chars or bio too long
+// Validate form on submit with comprehensive checks
 function validateForm(event) {
   const form = event.target;
   const inputs = form.querySelectorAll(
@@ -332,7 +477,7 @@ function validateForm(event) {
   }
 }
 
-// Show warning for potentially dangerous characters
+// Show visual warning for inputs with dangerous characters
 function showSecurityWarning(input) {
   const form = input.closest("form");
 
@@ -344,22 +489,16 @@ function showSecurityWarning(input) {
     input.title = "";
   }
 
-  if (form) {
-    updateSaveButtonState(form);
-  }
+  if (form) updateSaveButtonState(form);
 }
 
-// DOM ready
+// Initialize event listeners when DOM is ready
 document.addEventListener("DOMContentLoaded", function () {
   const usernameInput = document.getElementById("username");
-  if (usernameInput) {
-    usernameInput.addEventListener("input", checkUsername);
-  }
+  if (usernameInput) usernameInput.addEventListener("input", checkUsername);
 
   const emailInput = document.getElementById("email");
-  if (emailInput) {
-    emailInput.addEventListener("input", checkEmail);
-  }
+  if (emailInput) emailInput.addEventListener("input", checkEmail);
 
   const allForms = document.querySelectorAll("form");
   allForms.forEach((form) => {
@@ -389,7 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Close modal on overlay click
+// Close modal when clicking overlay
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("modal-overlay")) {
     e.target.classList.remove("active");
@@ -397,12 +536,10 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// Close modal on ESC key
+// Close modal on Escape key
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     const activeModal = document.querySelector(".modal-overlay.active");
-    if (activeModal) {
-      closeModal(activeModal.id);
-    }
+    if (activeModal) closeModal(activeModal.id);
   }
 });

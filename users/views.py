@@ -16,6 +16,7 @@ import json
 import re
 from allauth.account.models import EmailAddress
 from accounts.models import EmailChangeRequest
+import os
 from .sanitizer import (
     clean_text,
     clean_username,
@@ -44,11 +45,26 @@ def profile(request):
 def edit_profile_picture(request):
     if request.method == "POST":
         profile = request.user.profile
+
         if "profile_picture" in request.FILES:
-            profile.picture = request.FILES["profile_picture"]
+            new_image = request.FILES["profile_picture"]
+
+            if profile.profile_picture and hasattr(profile.profile_picture, "path"):
+                try:
+                    if os.path.isfile(profile.profile_picture.path):
+                        os.remove(profile.profile_picture.path)
+                except:
+                    pass
+
+            if profile.google_avatar_url:
+                profile.google_avatar_url = None
+
+            profile.profile_picture = new_image
             profile.save()
             messages.success(request, "Profile picture updated successfully!")
+
         return redirect("users:profile")
+
     return render(request, "users/profile.html")
 
 
