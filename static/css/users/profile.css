@@ -353,6 +353,21 @@
   overflow: auto;
   position: relative;
   animation: modalSlideIn 0.3s ease-out;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent; /* thumb and track color */
+}
+
+.modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
 }
 
 @keyframes modalSlideIn {
