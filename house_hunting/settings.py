@@ -10,7 +10,6 @@ SECRET_KEY = "django-insecure-7$7fc5ahqt8o2j%tj*s6ak94qo6(4d=(0$mey336zb1&9v(-08
 
 DEBUG = True
 
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -26,7 +25,7 @@ INSTALLED_APPS = [
     "core",
     "contact",
     "accounts",
-    "users", # Keep user account urls separately
+    "users",  # Keep user account urls separately
 ]
 
 MIDDLEWARE = [
