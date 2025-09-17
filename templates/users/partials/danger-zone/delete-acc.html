@@ -7,7 +7,11 @@
         &times;
       </button>
     </div>
-    <form action="{% url 'users:delete_account' %}" method="post">
+    <form
+      action="{% url 'users:delete_account' %}"
+      method="post"
+      autocomplete="off"
+    >
       {% csrf_token %}
       <div class="modal-body">
         <p class="danger-text">
@@ -23,7 +27,7 @@
             name="password"
             required
             placeholder="Password"
-            minlength="8"
+            autocomplete="new-password"
           />
         </div>
       </div>
