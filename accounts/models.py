@@ -6,6 +6,7 @@ from allauth.account.models import EmailAddress
 import uuid
 from django.utils import timezone
 from datetime import timedelta
+from core.models import Hostel
 
 
 class Profile(models.Model):
@@ -50,7 +51,7 @@ class EmailChangeRequest(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.expires_at:
-            self.expires_at = timezone.now() + timedelta(days=1)  # Expire in 24 hours
+            self.expires_at = timezone.now() + timedelta(days=1)
         super().save(*args, **kwargs)
 
     def is_expired(self):
@@ -70,3 +71,28 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
             instance.profile
         except Profile.DoesNotExist:
             Profile.objects.create(user=instance)
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="favorites",
+        help_text="The user who favorited this hostel",
+    )
+    hostel = models.ForeignKey(
+        Hostel,
+        on_delete=models.CASCADE,
+        related_name="favorited_by",
+        help_text="The hostel that was favorited",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "hostel")
+        ordering = ["-created_at"]
+        verbose_name = "Favorite"
+        verbose_name_plural = "Favorites"
+
+    def __str__(self):
+        return f"{self.user.username} favorited {self.hostel.name}"
