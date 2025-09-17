@@ -1,7 +1,144 @@
 {% extends 'users/base.html' %}
+{% load static %}
+{% load price_filters %}
 
-{% block title %}favorite Hostels{% endblock %}
+{% block title %}My Favorite Hostels{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/core/all_hostels.css' %}" />
+<link rel="stylesheet" href="{% static 'css/users/favorites.css' %}">
+
+
+<div class="hostels">
+  <h1 class="page-title">My Favorite Hostels</h1>
+
+  <div class="side-side">
+    <div class="hostel-container">
+      {% if hostels %}
+        <div class="results-info">
+          Showing {{ hostels.start_index }} - {{ hostels.end_index }} of {{ hostels.paginator.count }} hostels
+          <span style="margin-left: 15px; color: #666; font-size: 14px;">
+            Select 2 hostels to compare
+          </span>
+        </div>
+
+        <div class="hostel-cards">
+          {% for hostel in hostels %}
+            <div class="house-card" data-hostel-id="{{ hostel.id }}">
+              <div class="hostel-checkbox-container">
+                <input type="checkbox" class="hostel-checkbox" value="{{ hostel.id }}" data-hostel-name="{{ hostel.name }}" id="checkbox-{{ hostel.id }}">
+                <div class="checkbox-custom"></div>
+              </div>
+              
+              <a 
+                href="{% url 'hostel_detail' hostel.slug %}?type=favorites" 
+                style="text-decoration: none; color: inherit"
+                class="hostel-link"
+              >
+                <div class="house-image-container">
+                  <img
+                    src="{{ hostel.images.first.image.url }}"
+                    alt="{{ hostel.name }}"
+                    class="house-image"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div class="house-content">
+                  <div class="house-details">
+                    <p class="house-price">KSh {{ hostel.pricing|format_price }}</p>
+                    <h4 class="house-name">{{ hostel.name }}</h4>
+                    <p class="house-location">
+                      <i class="bxr bx-location"></i> {{ hostel.location }}
+                    </p>
+                    <p class="available-units">
+                      {{ hostel.available_vacants }} units
+                    </p>
+                  </div>
+
+                  <div class="contact-icons">
+                    {% with phone_number=hostel.phone|default:"+254703853259" %}
+                      <a 
+                        href="tel:{{ phone_number }}" 
+                        class="phone-link" 
+                        onclick="event.stopPropagation();"
+                      >
+                        <i class="bx bx-phone"></i>
+                      </a>
+                      {% if user.is_authenticated %}
+                        <a 
+                          href="https://wa.me/{{ phone_number }}?text={{ 'Hey, I am '|add:user.get_full_name|add:'. I found this hostel ('|add:hostel.name|add:' at '|add:hostel.location|add:') on JoouStay and I am interested in renting it. Here is the link: '|add:request.build_absolute_uri|urlencode }}"
+                          class="whatsapp-link" 
+                          target="_blank" 
+                          onclick="event.stopPropagation();"
+                        >
+                          <i class="bx bxl-whatsapp"></i>
+                        </a>
+                      {% else %}
+                        <a 
+                          href="https://wa.me/{{ phone_number }}?text={{ 'Hey, I am a student. I found this hostel ('|add:hostel.name|add:' at '|add:hostel.location|add:') on JoouStay and I am interested in renting it. Here is the link: '|add:request.build_absolute_uri|urlencode }}"
+                          class="whatsapp-link" 
+                          target="_blank" 
+                          onclick="event.stopPropagation();"
+                        >
+                          <i class="bx bxl-whatsapp"></i>
+                        </a>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if hostels.has_other_pages %}
+          <div class="pagination">
+            {% if hostels.has_previous %}
+              <a href="?page={{ hostels.previous_page_number }}"><i class="bx bx-chevron-left"></i></a>
+            {% else %}
+              <span class="disabled"><i class="bx bx-chevron-left"></i></span>
+            {% endif %}
+
+            <span class="current">Page {{ hostels.number }} of {{ hostels.paginator.num_pages }}</span>
+
+            {% if hostels.has_next %}
+              <a href="?page={{ hostels.next_page_number }}"><i class="bx bx-chevron-right"></i></a>
+            {% else %}
+              <span class="disabled"><i class="bx bx-chevron-right"></i></span>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="no-hostels">
+          <p>You haven't favorited any hostels yet.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="compare-hostels">
+      <h3 class="compare-title">Compare Hostels</h3>
+      
+      <div class="compare-selector">
+        <label>Select 2 hostels to compare:</label>
+        <div id="selectedHostels">
+          <p style="color: #666; font-size: 14px; text-align: center; margin: 20px 0;">
+            Use the checkboxes on hostel cards to select hostels for comparison
+          </p>
+        </div>
+        
+        <button class="compare-btn" id="compareBtn" disabled>
+          Compare Selected Hostels
+        </button>
+      </div>
+      
+      <div class="comparison-results" id="comparisonResults">
+        <!-- Comparison results will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/users/compare-hostels.js' %}"></script>
 
 {% endblock %}
