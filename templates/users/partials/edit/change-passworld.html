@@ -1,0 +1,173 @@
+<!-- Edit Password Modal -->
+<div class="modal-overlay" id="editPasswordModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {% if user.has_usable_password %}Update Password{% else %}Set Password{% endif %}
+      </h3>
+      <button class="modal-close" onclick="closeModal('editPasswordModal')">
+        &times;
+      </button>
+    </div>
+    <form action="{% url 'users:edit_password' %}" method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        {% if user.has_usable_password %}
+        <div class="form-group password-group">
+          <label for="current_password">Current Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              class="form-control"
+              id="current_password"
+              name="current_password"
+            />
+            <i
+              class="bx bx-show toggle-password"
+              style="display: none"
+              onclick="togglePassword('current_password', this)"
+            ></i>
+          </div>
+        </div>
+        {% endif %}
+        <div class="form-group password-group">
+          <label for="new_password">New Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              class="form-control"
+              id="new_password"
+              name="new_password"
+            />
+            <i
+              class="bx bx-show toggle-password"
+              style="display: none"
+              onclick="togglePassword('new_password', this)"
+            ></i>
+          </div>
+        </div>
+        <div class="form-group password-group">
+          <label for="confirm_password">Confirm Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              class="form-control"
+              id="confirm_password"
+              name="confirm_password"
+            />
+            <i
+              class="bx bx-show toggle-password"
+              style="display: none"
+              onclick="togglePassword('confirm_password', this)"
+            ></i>
+          </div>
+          <span
+            id="password-error"
+            class="error-message"
+            style="display: none"
+          ></span>
+        </div>
+        <div id="password-strength" class="strength-bar"></div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal('editPasswordModal')"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="password-submit"
+          disabled
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.replace("bx-show", "bx-hide");
+    } else {
+      input.type = "password";
+      icon.classList.replace("bx-hide", "bx-show");
+    }
+  }
+
+  function handlePasswordInput(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.parentNode.querySelector(".toggle-password");
+    icon.style.display = input.value.length > 0 ? "block" : "none";
+    updatePasswordForm();
+  }
+
+  function updatePasswordForm() {
+    const newPassword = document.getElementById("new_password").value;
+    const confirmPassword = document.getElementById("confirm_password").value;
+    const errorSpan = document.getElementById("password-error");
+    const strengthBar = document.getElementById("password-strength");
+    const submitBtn = document.getElementById("password-submit");
+
+    // Show strength bar if new password exists
+    if (newPassword.length > 0) {
+      strengthBar.style.display = "block";
+      const score = getPasswordStrength(newPassword);
+      strengthBar.className = "strength-bar";
+      if (score <= 2) strengthBar.classList.add("weak");
+      else if (score === 3) strengthBar.classList.add("medium");
+      else strengthBar.classList.add("strong");
+    } else {
+      strengthBar.style.display = "none";
+      strengthBar.className = "strength-bar";
+    }
+
+    // Confirm password validation
+    if (confirmPassword.length > 0 && newPassword !== confirmPassword) {
+      errorSpan.style.display = "block";
+      errorSpan.textContent = "Passwords do not match";
+    } else {
+      errorSpan.style.display = "none";
+    }
+
+    // Enable submit if password meets requirements and matches
+    submitBtn.disabled = !(
+      isValidPassword(newPassword) && newPassword === confirmPassword
+    );
+  }
+
+  // Password requirements: uppercase, lowercase, 8+ chars, number or special
+  function isValidPassword(password) {
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasLength = password.length >= 8;
+    const hasNumOrSpecial = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
+      password
+    );
+    return hasUpper && hasLower && hasLength && hasNumOrSpecial;
+  }
+
+  // Simple strength metric
+  function getPasswordStrength(password) {
+    let score = 0;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score++;
+    if (password.length >= 8) score++;
+    return score;
+  }
+
+  // Event listeners
+  document
+    .querySelectorAll("#current_password, #new_password, #confirm_password")
+    .forEach((input) => {
+      input.addEventListener("input", () => handlePasswordInput(input.id));
+    });
+</script>
