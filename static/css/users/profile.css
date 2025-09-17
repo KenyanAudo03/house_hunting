@@ -1,0 +1,580 @@
+.profile-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.profile-main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+}
+
+/* Main profile card */
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.profile-background {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(34, 139, 34, 0.9), rgba(30, 123, 30, 0.9)),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23228b22"/><path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="%231e7b1e" opacity="0.7"/><circle cx="80" cy="60" r="20" fill="white" opacity="0.3"/><circle cx="320" cy="80" r="15" fill="white" opacity="0.2"/><circle cx="200" cy="40" r="10" fill="white" opacity="0.4"/></svg>') center/cover;
+    position: relative;
+}
+
+.profile-content {
+    padding: 80px 32px 32px;
+    position: relative;
+}
+
+.profile-avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: -75px;
+    left: 32px;
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6px solid white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+}
+
+.camera-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #ffd700;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 3px solid white;
+    transition: all 0.3s ease;
+}
+
+.camera-overlay:hover {
+    background: #e6c200;
+}
+
+.camera-overlay i {
+    color: white;
+    font-size: 18px;
+}
+
+.profile-info {
+    margin-left: 0;
+    margin-top: 16px;
+}
+
+.profile-info h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1a202c;
+    margin-bottom: 4px;
+}
+
+.profile-username {
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.date-joined {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 24px;
+}
+
+/* Bio section */
+.bio-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-top: 24px;
+    position: relative;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.profile-card .edit-icon {
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.edit-icon:hover {
+    background: #f8f9fa;
+    color: #495057;
+}
+
+.profile-card .edit-icon:hover {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.bio-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 16px;
+}
+
+.bio-text {
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* Personal details section */
+.personal-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-top: 24px;
+    position: relative;
+}
+
+.personal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 24px;
+}
+
+.personal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.personal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.field-value {
+    color: #1a202c;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.field-value.empty {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* Sidebar */
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-sidebar-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: relative;
+}
+
+.profile-sidebar-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 16px;
+}
+
+.contact-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.contact-field:last-child {
+    border-bottom: none;
+}
+
+.profile-left-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Danger zone */
+.danger-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 8px 32px rgba(220, 38, 38, 0.1);
+    border: 1px solid #fecaca;
+}
+
+.danger-title {
+    color: #dc2626;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.danger-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.danger-btn {
+    background: transparent;
+    border: 2px solid #dc2626;
+    color: #dc2626;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.danger-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: auto;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0;
+}
+
+.modal-close {
+    background: #f8f9fa;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6c757d;
+    padding: 8px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.modal-body {
+    padding: 24px 32px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 24px 32px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: #ffd700;
+    color: #1a202c;
+}
+
+.btn-primary:hover {
+    background: #e6c200;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+.danger-text {
+    color: #dc2626;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 14px;
+    margin-top: 8px;
+    display: block;
+}
+
+#file-input {
+    display: none;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Flatpickr theme customization */
+.flatpickr-calendar {
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.flatpickr-day.selected {
+    background: #ffd700;
+    border-color: #ffd700;
+    color: #1a202c;
+}
+
+.flatpickr-day.selected:hover {
+    background: #e6c200;
+    border-color: #e6c200;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px 5px;
+        gap: 16px;
+    }
+
+    .profile-main-content {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .profile-avatar-container {
+        width: 120px;
+        height: 120px;
+        top: -60px;
+        left: 16px;
+    }
+
+    .camera-overlay {
+        width: 35px;
+        height: 35px;
+    }
+
+    .camera-overlay i {
+        font-size: 16px;
+    }
+
+    .profile-content {
+        padding: 70px 16px 24px;
+    }
+
+    .profile-info h1 {
+        font-size: 24px;
+    }
+
+    .personal-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .personal-section {
+        padding: 24px 16px;
+    }
+
+    .danger-buttons {
+        flex-direction: column;
+    }
+
+    .bio-section,
+    .personal-section {
+        padding: 24px 16px;
+    }
+
+    .modal {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-info h1 {
+        font-size: 20px;
+    }
+
+    .profile-avatar-container {
+        width: 100px;
+        height: 100px;
+        top: -50px;
+    }
+
+    .camera-overlay {
+        width: 30px;
+        height: 30px;
+    }
+
+    .camera-overlay i {
+        font-size: 14px;
+    }
+
+    .profile-content {
+        padding: 60px 16px 20px;
+    }
+
+    .danger-section {
+        padding: 20px 16px;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 16px;
+    }
+}

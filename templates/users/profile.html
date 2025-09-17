@@ -1,450 +1,208 @@
-{% extends 'users/base.html' %}
-{% block title %}Your Profile{% endblock %}
-{% load static %}
-{% block content %}
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<style>
-.profile-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 32px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-}
+{% extends 'users/base.html' %} {% block title %}Your Profile{% endblock %} 
+{% load static %} {% block content %}
+<link
+  href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
 
-.profile-main-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 32px;
-}
-
-.profile-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.profile-background {
-    height: 200px;
-    background: linear-gradient(135deg, rgba(34, 139, 34, 0.9), rgba(30, 123, 30, 0.9)), 
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23228b22"/><path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="%231e7b1e" opacity="0.7"/><circle cx="80" cy="60" r="20" fill="white" opacity="0.3"/><circle cx="320" cy="80" r="15" fill="white" opacity="0.2"/><circle cx="200" cy="40" r="10" fill="white" opacity="0.4"/></svg>') center/cover;
-    position: relative;
-}
-
-.profile-content {
-    padding: 80px 32px 32px;
-    position: relative;
-}
-
-.profile-avatar-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    top: -75px;
-    left: 32px;
-}
-
-.profile-avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 6px solid white;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    object-fit: cover;
-}
-
-.camera-overlay {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: #007bff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 3px solid white;
-    transition: all 0.3s ease;
-}
-
-.camera-overlay:hover {
-    background: #0056b3;
-}
-
-.camera-overlay i {
-    color: white;
-    font-size: 18px;
-}
-
-.profile-info {
-    margin-left: 0;
-    margin-top: 16px;
-}
-
-.profile-info h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1a202c;
-    margin-bottom: 8px;
-}
-
-.date-joined {
-    color: #64748b;
-    font-size: 15px;
-    margin-bottom: 24px;
-}
-
-.bio-section {
-    background: white;
-    border-radius: 16px;
-    padding: 24px 32px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    margin-top: 24px;
-    position: relative;
-}
-
-.edit-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: #6c757d;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    font-size: 18px;
-    z-index: 10;
-}
-
-.profile-card .edit-icon {
-    color: white;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.edit-icon:hover {
-    background: #f8f9fa;
-    color: #495057;
-}
-
-.profile-card .edit-icon:hover {
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-}
-
-.bio-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1a202c;
-    margin-bottom: 16px;
-}
-
-.bio-text {
-    color: #64748b;
-    line-height: 1.6;
-    font-size: 15px;
-}
-
-.personal-section {
-    background: white;
-    border-radius: 16px;
-    padding: 24px 32px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    margin-top: 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    position: relative;
-}
-
-.personal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.field-label {
-    color: #64748b;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.field-value {
-    color: #1a202c;
-    font-weight: 500;
-    font-size: 15px;
-}
-
-.field-value.empty {
-    color: #94a3b8;
-    font-style: italic;
-}
-
-.profile-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.profile-sidebar-card {
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    height: fit-content;
-    position: relative;
-}
-
-.profile-sidebar-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1a202c;
-    margin-bottom: 16px;
-}
-
-.contact-field {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.contact-field:last-child {
-    border-bottom: none;
-}
-
-.profile-left-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.danger-section {
-    background: white;
-    border-radius: 16px;
-    padding: 24px 32px;
-    box-shadow: 0 8px 32px rgba(220, 38, 38, 0.1);
-    border: 1px solid #fecaca;
-}
-
-.danger-title {
-    color: #dc2626;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 16px;
-}
-
-.danger-buttons {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-
-.danger-btn {
-    background: transparent;
-    border: 2px solid #dc2626;
-    color: #dc2626;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.danger-btn:hover {
-    background: #dc2626;
-    color: white;
-}
-
-@media (max-width: 768px) {
-    .profile-container {
-        padding: 10px 5px;
-        gap: 16px;
-    }
-
-    .profile-main-content {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .profile-avatar-container {
-        width: 120px;
-        height: 120px;
-        top: -60px;
-        left: 16px;
-    }
-
-    .camera-overlay {
-        width: 35px;
-        height: 35px;
-    }
-
-    .camera-overlay i {
-        font-size: 16px;
-    }
-
-    .profile-content {
-        padding: 70px 16px 24px;
-    }
-
-    .profile-info h1 {
-        font-size: 24px;
-    }
-
-    .personal-section {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 24px 16px;
-    }
-
-    .danger-buttons {
-        flex-direction: column;
-    }
-
-    .bio-section, .personal-section {
-        padding: 24px 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .profile-info h1 {
-        font-size: 20px;
-    }
-    
-    .profile-avatar-container {
-        width: 100px;
-        height: 100px;
-        top: -50px;
-    }
-
-    .camera-overlay {
-        width: 30px;
-        height: 30px;
-    }
-
-    .camera-overlay i {
-        font-size: 14px;
-    }
-
-    .profile-content {
-        padding: 60px 16px 20px;
-    }
-
-    .danger-section {
-        padding: 20px 16px;
-    }
-}
-</style>
-
+<link rel="stylesheet" href="{% static 'css/users/profile.css' %}" />
 <div class="profile-container">
-    <div class="profile-main-content">
-        <div class="profile-left-column">
-            <div class="profile-card">
-                <i class='bx bx-edit-alt edit-icon'></i>
-                <div class="profile-background"></div>
-                <div class="profile-content">
-                    <div class="profile-avatar-container">
-                        {% if user.profile.profile_picture %}
-                            <img class="profile-avatar" src="{{ user.profile.profile_picture.url }}" alt="{{ user.get_full_name|default:user.username }}">
-                        {% elif user.profile.google_avatar_url %}
-                            <img class="profile-avatar" src="{{ user.profile.google_avatar_url }}" alt="{{ user.get_full_name|default:user.username }}">
-                        {% else %}
-                            <img class="profile-avatar" src="{% static 'images/default_images/default_user.png' %}" alt="default">
-                        {% endif %}
-                        <div class="camera-overlay">
-                            <i class='bx bx-camera'></i>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-info">
-                        <h1>{{ user.get_full_name|title|default:user.username }}</h1>
-                        <p class="date-joined">Member since {{ user.date_joined|date:"F j, Y" }}</p>
-                    </div>
-                </div>
+  <div class="profile-main-content">
+    <div class="profile-left-column">
+      <!-- Main profile card with avatar and basic info -->
+      <div class="profile-card">
+        <i
+          class="bx bx-edit-alt edit-icon"
+          onclick="openModal('editNameModal')"
+        ></i>
+        <div class="profile-background"></div>
+        <div class="profile-content">
+          <div class="profile-avatar-container">
+            {% if user.profile.profile_picture %}
+            <img
+              class="profile-avatar"
+              src="{{ user.profile.profile_picture.url }}"
+              alt="{{ user.get_full_name|default:user.username }}"
+            />
+            {% elif user.profile.google_avatar_url %}
+            <img
+              class="profile-avatar"
+              src="{{ user.profile.google_avatar_url }}"
+              alt="{{ user.get_full_name|default:user.username }}"
+            />
+            {% else %}
+            <img
+              class="profile-avatar"
+              src="{% static 'images/default_images/default_user.png' %}"
+              alt="default"
+            />
+            {% endif %}
+            <div
+              class="camera-overlay"
+              onclick="document.getElementById('file-input').click()"
+            >
+              <i class="bx bx-camera"></i>
             </div>
+          </div>
 
-            <div class="bio-section">
-                <i class='bx bx-edit-alt edit-icon'></i>
-                <h2 class="bio-title">About</h2>
-                <p class="bio-text">{{ user.profile.bio|default:"Welcome to my profile! I'm excited to be part of JoouStay." }}</p>
-            </div>
-
-            <div class="personal-section">
-                <i class='bx bx-edit-alt edit-icon'></i>
-                <div class="personal-field">
-                    <span class="field-label">Gender</span>
-                    <span class="field-value {% if not user.profile.gender %}empty{% endif %}">
-                        {{ user.profile.gender|default:"Not provided" }}
-                    </span>
-                </div>
-                <div class="personal-field">
-                    <span class="field-label">Date of Birth</span>
-                    <span class="field-value {% if not user.profile.date_of_birth %}empty{% endif %}">
-                        {{ user.profile.date_of_birth|date:"F j, Y"|default:"Not provided" }}
-                    </span>
-                </div>
-            </div>
+          <div class="profile-info">
+            <h1>{{ user.get_full_name|title|default:user.username }}</h1>
+            <p class="profile-username">@{{ user.username }}</p>
+            <p class="date-joined">
+              Member since {{ user.date_joined|date:"F j, Y" }}
+            </p>
+          </div>
         </div>
+      </div>
 
-        <div class="profile-sidebar">
-            <div class="profile-sidebar-card">
-                <i class='bx bx-edit-alt edit-icon'></i>
-                <h3 class="profile-sidebar-title">Contact</h3>
-                <div class="contact-field">
-                    <span class="field-label">Phone</span>
-                    <span class="field-value {% if not user.profile.phone_number %}empty{% endif %}">
-                        {{ user.profile.phone_number|default:"Not provided" }}
-                    </span>
-                </div>
-                <div class="contact-field">
-                    <span class="field-label">WhatsApp</span>
-                    <span class="field-value {% if not user.profile.whatsapp_number %}empty{% endif %}">
-                        {{ user.profile.whatsapp_number|default:"Not provided" }}
-                    </span>
-                </div>
-            </div>
+      <!-- About/Bio section -->
+      <div class="bio-section">
+        <i
+          class="bx bx-edit-alt edit-icon"
+          onclick="openModal('editBioModal')"
+        ></i>
+        <h2 class="bio-title">About</h2>
+        <p class="bio-text">
+          {{ user.profile.bio|default:"Welcome to my profile! I'm excited to be part of JoouStay." }}
+        </p>
+      </div>
 
-            <div class="profile-sidebar-card">
-                <i class='bx bx-edit-alt edit-icon'></i>
-                <h3 class="profile-sidebar-title">Location</h3>
-                <div class="contact-field">
-                    <span class="field-label">County</span>
-                    <span class="field-value {% if not user.profile.county %}empty{% endif %}">
-                        {{ user.profile.county|default:"Not provided" }}
-                    </span>
-                </div>
-                <div class="contact-field">
-                    <span class="field-label">Town</span>
-                    <span class="field-value {% if not user.profile.town %}empty{% endif %}">
-                        {{ user.profile.town|default:"Not provided" }}
-                    </span>
-                </div>
-                <div class="contact-field">
-                    <span class="field-label">Area of Stay</span>
-                    <span class="field-value {% if not user.profile.area_of_stay %}empty{% endif %}">
-                        {{ user.profile.area_of_stay|default:"Not provided" }}
-                    </span>
-                </div>
-            </div>
+      <!-- Personal details section -->
+      <div class="personal-section">
+        <i
+          class="bx bx-edit-alt edit-icon"
+          onclick="openModal('editPersonalModal')"
+        ></i>
+        <h2 class="personal-title">Personal Details</h2>
+        <div class="personal-grid">
+          <div class="personal-field">
+            <span class="field-label">Gender</span>
+            <span
+              class="field-value {% if not user.profile.gender %}empty{% endif %}"
+            >
+              {{ user.profile.gender|default:"Not provided" }}
+            </span>
+          </div>
+          <div class="personal-field">
+            <span class="field-label">Date of Birth</span>
+            <span
+              class="field-value {% if not user.profile.date_of_birth %}empty{% endif %}"
+            >
+              {{ user.profile.date_of_birth|date:"F j, Y"|default:"Not provided" }}
+            </span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="danger-section">
-        <h2 class="danger-title">Danger Zone</h2>
-        <div class="danger-buttons">
-            <a href="#" class="danger-btn">Delete Account</a>
-            <a href="#" class="danger-btn">Deactivate Account</a>
+    <!-- Sidebar with contact and location -->
+    <div class="profile-sidebar">
+      <!-- Contact information card -->
+      <div class="profile-sidebar-card">
+        <i
+          class="bx bx-edit-alt edit-icon"
+          onclick="openModal('editContactModal')"
+        ></i>
+        <h3 class="profile-sidebar-title">Contact</h3>
+        <div class="contact-field">
+          <span class="field-label">Phone</span>
+          <span
+            class="field-value {% if not user.profile.phone_number %}empty{% endif %}"
+          >
+            {{ user.profile.phone_number|default:"Not provided" }}
+          </span>
         </div>
+        <div class="contact-field">
+          <span class="field-label">WhatsApp</span>
+          <span
+            class="field-value {% if not user.profile.whatsapp_number %}empty{% endif %}"
+          >
+            {{ user.profile.whatsapp_number|default:"Not provided" }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Location information card -->
+      <div class="profile-sidebar-card">
+        <i
+          class="bx bx-edit-alt edit-icon"
+          onclick="openModal('editLocationModal')"
+        ></i>
+        <h3 class="profile-sidebar-title">Location</h3>
+        <div class="contact-field">
+          <span class="field-label">County</span>
+          <span
+            class="field-value {% if not user.profile.county %}empty{% endif %}"
+          >
+            {{ user.profile.county|default:"Not provided" }}
+          </span>
+        </div>
+        <div class="contact-field">
+          <span class="field-label">Town</span>
+          <span
+            class="field-value {% if not user.profile.town %}empty{% endif %}"
+          >
+            {{ user.profile.town|default:"Not provided" }}
+          </span>
+        </div>
+        <div class="contact-field">
+          <span class="field-label">Area of Stay</span>
+          <span
+            class="field-value {% if not user.profile.area_of_stay %}empty{% endif %}"
+          >
+            {{ user.profile.area_of_stay|default:"Not provided" }}
+          </span>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Danger zone for account deletion/deactivation -->
+  <div class="danger-section">
+    <h2 class="danger-title">Danger Zone</h2>
+    <div class="danger-buttons">
+      <button class="danger-btn" onclick="openModal('deleteAccountModal')">
+        Delete Account
+      </button>
+      <button class="danger-btn" onclick="openModal('deactivateAccountModal')">
+        Deactivate Account
+      </button>
+    </div>
+  </div>
 </div>
+
+<form
+  id="profilePictureForm"
+  action="{% url 'users:edit_profile_picture' %}"
+  method="post"
+  enctype="multipart/form-data"
+  style="display: none"
+>
+  {% csrf_token %}
+  <input
+    type="file"
+    id="file-input"
+    name="profile_picture"
+    accept="image/*"
+    onchange="submitProfilePicture()"
+  />
+</form>
+
+<!-- Include all modals -->
+{% include 'users/partials/edit/edit-name.html' %}
+{% include 'users/partials/edit/edit-bio.html' %}
+{% include 'users/partials/edit/edit-personal-info.html' %}
+{% include 'users/partials/edit/edit-contact-info.html' %}
+{% include 'users/partials/edit/edit-location.html' %}
+{% include 'users/partials/danger-zone/delete-acc.html' %}
+{% include 'users/partials/danger-zone/deactivate-acc.html' %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{% static 'js/users/profile.js' %}"></script>
+
 {% endblock %}
