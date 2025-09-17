@@ -24,13 +24,10 @@
 
 .profile-background {
   height: 200px;
-  background: linear-gradient(
-      135deg,
+  background: linear-gradient(135deg,
       rgba(34, 139, 34, 0.9),
-      rgba(30, 123, 30, 0.9)
-    ),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23228b22"/><path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="%231e7b1e" opacity="0.7"/><circle cx="80" cy="60" r="20" fill="white" opacity="0.3"/><circle cx="320" cy="80" r="15" fill="white" opacity="0.2"/><circle cx="200" cy="40" r="10" fill="white" opacity="0.4"/></svg>')
-      center/cover;
+      rgba(30, 123, 30, 0.9)),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23228b22"/><path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="%231e7b1e" opacity="0.7"/><circle cx="80" cy="60" r="20" fill="white" opacity="0.3"/><circle cx="320" cy="80" r="15" fill="white" opacity="0.2"/><circle cx="200" cy="40" r="10" fill="white" opacity="0.4"/></svg>') center/cover;
   position: relative;
 }
 
@@ -251,13 +248,15 @@
   outline: none;
   background-color: transparent;
   color: #1a202c;
-  font-weight: 500;
+  font-weight: 550;
   font-size: 15px;
   cursor: pointer;
 }
+
 .password-wrapper {
   position: relative;
 }
+
 .password-wrapper .toggle-password {
   position: absolute;
   right: 10px;
@@ -267,6 +266,7 @@
   font-size: 18px;
   color: #666;
 }
+
 .strength-bar {
   height: 5px;
   width: 100%;
@@ -274,15 +274,19 @@
   margin-top: 5px;
   display: none;
 }
+
 .strength-bar.weak {
   background: #ff4d4f;
 }
+
 .strength-bar.medium {
   background: #ffa500;
 }
+
 .strength-bar.strong {
   background: #4caf50;
 }
+
 /* Danger zone */
 .danger-section {
   background: white;
@@ -354,7 +358,8 @@
   position: relative;
   animation: modalSlideIn 0.3s ease-out;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.3) transparent; /* thumb and track color */
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  /* thumb and track color */
 }
 
 .modal::-webkit-scrollbar {
