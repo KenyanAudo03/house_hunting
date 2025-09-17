@@ -8,4 +8,21 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     path("favorites", views.favorites, name="favorites"),
     path("roomie-profile", views.roomie_profile, name="roomie_profile"),
+    path(
+        "edit-profile-picture/", views.edit_profile_picture, name="edit_profile_picture"
+    ),
+    path("edit-name/", views.edit_user_name, name="edit_user_name"),
+    path("check-username/", views.check_username, name="check_username"),
+    path("check-email/", views.check_email, name="check_email"),
+    path("edit-bio/", views.edit_bio, name="edit_bio"),
+    path("edit-personal-info/", views.edit_personal_info, name="edit_personal_info"),
+    path("edit-contact/", views.edit_contact, name="edit_contact"),
+    path(
+        "verify-email-change/<uuid:token>/",
+        views.verify_email_change,
+        name="verify_email_change",
+    ),
+    path("edit-location/", views.edit_location, name="edit_location"),
+    path("deactivate-account/", views.deactivate_account, name="deactivate_account"),
+    path("delete-account/", views.delete_account, name="delete_account"),
 ]
