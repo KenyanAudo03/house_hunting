@@ -28,6 +28,7 @@ from django.views.decorators.http import require_POST
 from core.models import Hostel
 from accounts.models import Favorite
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .utils import determine_price_winner, generate_recommendation
 
 
 @login_required
@@ -459,3 +460,94 @@ def toggle_favorite(request, hostel_id):
 @login_required
 def roomie_profile(request):
     return render(request, "users/roomie_profile.html")
+
+
+@login_required
+@require_POST
+def compare_hostels(request):
+    """
+    Compare two hostels and return detailed comparison data with recommendation
+    """
+    try:
+        data = json.loads(request.body)
+        hostel1_id = data.get("hostel1_id")
+        hostel2_id = data.get("hostel2_id")
+
+        if not hostel1_id or not hostel2_id:
+            return JsonResponse({"error": "Both hostel IDs are required"}, status=400)
+
+        # Get the hostels
+        hostel1 = get_object_or_404(Hostel, id=hostel1_id)
+        hostel2 = get_object_or_404(Hostel, id=hostel2_id)
+
+        # Prepare comparison data
+        comparison_data = {
+            "hostel1": {
+                "name": hostel1.name,
+                "pricing": float(hostel1.pricing),
+                "billing_cycle": hostel1.get_billing_cycle_display(),
+                "category": (
+                    hostel1.get_category_display()
+                    if hostel1.category
+                    else "Not specified"
+                ),
+                "rating": round(hostel1.average_rating, 1),
+                "available_vacants": hostel1.available_vacants,
+                "location": hostel1.location,
+                "amenities": [amenity.name for amenity in hostel1.amenities.all()],
+            },
+            "hostel2": {
+                "name": hostel2.name,
+                "pricing": float(hostel2.pricing),
+                "billing_cycle": hostel2.get_billing_cycle_display(),
+                "category": (
+                    hostel2.get_category_display()
+                    if hostel2.category
+                    else "Not specified"
+                ),
+                "rating": round(hostel2.average_rating, 1),
+                "available_vacants": hostel2.available_vacants,
+                "location": hostel2.location,
+                "amenities": [amenity.name for amenity in hostel2.amenities.all()],
+            },
+        }
+
+        # Determine winners for each category
+        price_winner = determine_price_winner(hostel1, hostel2)
+        rating_winner = (
+            1
+            if hostel1.average_rating > hostel2.average_rating
+            else (2 if hostel2.average_rating > hostel1.average_rating else 0)
+        )
+        amenity_winner = (
+            1
+            if len(comparison_data["hostel1"]["amenities"])
+            > len(comparison_data["hostel2"]["amenities"])
+            else (
+                2
+                if len(comparison_data["hostel2"]["amenities"])
+                > len(comparison_data["hostel1"]["amenities"])
+                else 0
+            )
+        )
+
+        # Generate recommendation
+        recommendation = generate_recommendation(
+            hostel1, hostel2, price_winner, rating_winner, amenity_winner
+        )
+
+        comparison_data.update(
+            {
+                "price_winner": price_winner,
+                "rating_winner": rating_winner,
+                "amenity_winner": amenity_winner,
+                "recommendation": recommendation,
+            }
+        )
+
+        return JsonResponse(comparison_data)
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

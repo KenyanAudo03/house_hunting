@@ -12,6 +12,7 @@ urlpatterns = [
         views.toggle_favorite,
         name="toggle_favorite",
     ),  # Add Hostel to favorites
+    path("compare-hostels/", views.compare_hostels, name="compare_hostels"),
     path("roomie-profile", views.roomie_profile, name="roomie_profile"),
     path(
         "edit-profile-picture/", views.edit_profile_picture, name="edit_profile_picture"
