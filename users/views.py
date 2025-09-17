@@ -27,6 +27,7 @@ from .sanitizer import (
 from django.views.decorators.http import require_POST
 from core.models import Hostel
 from accounts.models import Favorite
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 @login_required
@@ -421,9 +422,19 @@ def favorites(request):
     user_favorites = Favorite.objects.filter(user=request.user).select_related("hostel")
     hostels = [fav.hostel for fav in user_favorites]
 
+    # Pagination
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(hostels, 10)  # 10 per page
+    try:
+        hostels_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        hostels_page = paginator.page(1)
+    except EmptyPage:
+        hostels_page = paginator.page(paginator.num_pages)
+
     context = {
         "favorites": user_favorites,
-        "hostels": hostels,
+        "hostels": hostels_page,
     }
     return render(request, "users/favorites.html", context)
 
@@ -439,7 +450,6 @@ def toggle_favorite(request, hostel_id):
     favorite, created = Favorite.objects.get_or_create(user=request.user, hostel=hostel)
 
     if not created:
-        # Already exists → remove
         favorite.delete()
         return JsonResponse({"success": True, "favorited": False})
 
