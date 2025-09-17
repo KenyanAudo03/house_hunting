@@ -23,6 +23,7 @@ urlpatterns = [
         name="verify_email_change",
     ),
     path("edit-location/", views.edit_location, name="edit_location"),
+    path("edit-password/", views.edit_password, name="edit_password"),
     path("deactivate-account/", views.deactivate_account, name="deactivate_account"),
     path("delete-account/", views.delete_account, name="delete_account"),
 ]
