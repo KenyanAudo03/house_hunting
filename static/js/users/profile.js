@@ -83,7 +83,6 @@ function updateCharCount(textarea, maxLength = 500) {
     )} characters over limit</span>`;
     countElement.style.color = "#ff6b6b";
     textarea.style.borderColor = "#ff6b6b";
-    // Disable save buttons when over limit
     const form = textarea.closest("form");
     if (form) {
       const saveButtons = form.querySelectorAll(
@@ -100,7 +99,6 @@ function updateCharCount(textarea, maxLength = 500) {
     countElement.textContent = `${remaining} characters remaining`;
     countElement.style.color = remaining < 50 ? "#ff6b6b" : "#666";
     textarea.style.borderColor = "";
-    // Re-enable save buttons if no other issues
     const form = textarea.closest("form");
     if (form && !formHasDangerousChars(form)) {
       updateSaveButtonState(form);
@@ -138,7 +136,11 @@ function closeModal(modalId) {
   modal.classList.remove("active");
   document.body.classList.remove("modal-open");
 
-  document.getElementById("username-error").style.display = "none";
+  const usernameError = document.getElementById("username-error");
+  if (usernameError) usernameError.style.display = "none";
+
+  const emailError = document.getElementById("email-error");
+  if (emailError) emailError.style.display = "none";
 
   if (modalId === "editPersonalModal") {
     const dateInput = document.getElementById("date_of_birth");
@@ -179,7 +181,6 @@ function checkUsername() {
   const currentUsername = "{{ user.username }}";
   const errorElement = document.getElementById("username-error");
 
-  // Don't sanitize here - just validate
   if (username === currentUsername || username === "") {
     errorElement.style.display = "none";
     return;
@@ -213,6 +214,46 @@ function checkUsername() {
     });
 }
 
+// Check email availability
+function checkEmail() {
+  const email = document.getElementById("email").value;
+  const currentEmail = "{{ user.email }}";
+  const errorElement = document.getElementById("email-error");
+
+  if (email === currentEmail || email === "") {
+    errorElement.style.display = "none";
+    return;
+  }
+
+  const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+  if (!emailPattern.test(email)) {
+    errorElement.textContent = "Invalid email format";
+    errorElement.style.display = "block";
+    return;
+  }
+
+  fetch("/users/check-email/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+    },
+    body: JSON.stringify({ email: email }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.exists) {
+        errorElement.textContent = "Email already exists";
+        errorElement.style.display = "block";
+      } else {
+        errorElement.style.display = "none";
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
 // Validate form inputs - prevent submission if dangerous chars or bio too long
 function validateForm(event) {
   const form = event.target;
@@ -220,7 +261,6 @@ function validateForm(event) {
     'input[type="text"], input[type="tel"], textarea'
   );
 
-  // Check for dangerous characters - prevent submission
   const hasDangerous = formHasDangerousChars(form);
   if (hasDangerous) {
     event.preventDefault();
@@ -230,7 +270,6 @@ function validateForm(event) {
     return false;
   }
 
-  // Check bio length
   const bioTextarea = form.querySelector(
     'textarea[name*="bio"], textarea[id*="bio"], #bio'
   );
@@ -241,7 +280,6 @@ function validateForm(event) {
     return false;
   }
 
-  // Sanitize inputs only during form submission (after validation)
   inputs.forEach((input) => {
     input.value = sanitizeInput(input.value);
   });
@@ -294,7 +332,7 @@ function validateForm(event) {
   }
 }
 
-// Show warning for potentially dangerous characters and update save button
+// Show warning for potentially dangerous characters
 function showSecurityWarning(input) {
   const form = input.closest("form");
 
@@ -306,27 +344,29 @@ function showSecurityWarning(input) {
     input.title = "";
   }
 
-  // Update save button state for the form
   if (form) {
     updateSaveButtonState(form);
   }
 }
 
-// DOM ready: attach events
+// DOM ready
 document.addEventListener("DOMContentLoaded", function () {
   const usernameInput = document.getElementById("username");
   if (usernameInput) {
     usernameInput.addEventListener("input", checkUsername);
   }
 
+  const emailInput = document.getElementById("email");
+  if (emailInput) {
+    emailInput.addEventListener("input", checkEmail);
+  }
+
   const allForms = document.querySelectorAll("form");
   allForms.forEach((form) => {
     form.addEventListener("submit", validateForm);
-    // Initial save button state check
     updateSaveButtonState(form);
   });
 
-  // Add event listeners for text inputs
   const textInputs = document.querySelectorAll(
     'input[type="text"], input[type="tel"], textarea'
   );
@@ -336,17 +376,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Special handling for bio textarea (character count)
   const bioTextareas = document.querySelectorAll(
     'textarea[name*="bio"], textarea[id*="bio"], #bio'
   );
   bioTextareas.forEach((textarea) => {
-    // Set max length attribute
     textarea.setAttribute("maxlength", "500");
-
-    // Initial character count
     updateCharCount(textarea);
-
     textarea.addEventListener("input", function () {
       updateCharCount(this);
       showSecurityWarning(this);
@@ -367,8 +402,7 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     const activeModal = document.querySelector(".modal-overlay.active");
     if (activeModal) {
-      const modalId = activeModal.id;
-      closeModal(modalId);
+      closeModal(activeModal.id);
     }
   }
 });
