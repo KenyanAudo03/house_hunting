@@ -25,6 +25,21 @@
     <div class="hostel-information">
       <!-- Media gallery: main image/video + thumbnails -->
       <div class="media-gallery">
+        {% if user.is_authenticated %}
+        <button 
+          id="favorite-btn"
+          class="favorite-btn"
+          data-hostel-id="{{ hostel.id }}"
+          title="{% if is_favorited %}Remove from favorites{% else %}Add to favorites{% endif %}"
+        >
+          {% if is_favorited %}
+            <i class="bx bxs-heart"></i>
+          {% else %}
+            <i class="bx bx-heart"></i>
+          {% endif %}
+        </button>
+        {% endif %}
+
         <div class="main-media">
           {% if hostel.video %}
           <video id="mainVideo" controls style="display: block" loading="lazy">
@@ -222,7 +237,7 @@
 
             {% if user.is_authenticated %}
               <a
-                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am "|add:user.get_full_name|add:" from Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here’s the link: "|add:request.build_absolute_uri|urlencode }}"
+                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am "|add:user.get_full_name|add:" from Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here's the link: "|add:request.build_absolute_uri|urlencode }}"
                 target="_blank"
                 class="whatsapp-link"
               >
@@ -230,7 +245,7 @@
               </a>
             {% else %}
               <a
-                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am a student at Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here’s the link: "|add:request.build_absolute_uri|urlencode }}"
+                href="https://wa.me/{{ phone_number }}?text={{ "Hello, I am a student at Jaramogi Oginga Odinga University. I found this hostel ("|add:hostel.name|add:" at "|add:hostel.location|add:") on JoouStay and I am interested in renting. Here's the link: "|add:request.build_absolute_uri|urlencode }}"
                 target="_blank"
                 class="whatsapp-link"
               >
@@ -347,5 +362,6 @@
 <div class="copy-success" id="copySuccess">Link copied to clipboard!</div>
 
 <script src="{% static 'js/core/hostel_detail.js' %}"></script>
+<script src="{% static 'js/core/add-to-fav.js' %}"></script>
 
 {% endblock %}
