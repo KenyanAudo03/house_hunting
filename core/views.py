@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Hostel, PropertyListing, HostelInquiry, ReviewInvitation, Review
+from accounts.models import Favorite
 from .forms import ReviewForm
 from django.http import HttpResponse
 import re
@@ -206,11 +207,17 @@ def hostel_detail(request, slug):
                         "error": "An error occurred while sending your message",
                     }
                 )
+    is_favorited = False
+    if request.user.is_authenticated:
+        is_favorited = Favorite.objects.filter(
+            user=request.user, hostel=hostel
+        ).exists()
 
     context = {
         "hostel": hostel,
         "page_title": page_title,
         "hostel_type": hostel_type_param or hostel.category,
+        "is_favorited": is_favorited,
     }
 
     return render(request, "core/hostel_detail.html", context)
