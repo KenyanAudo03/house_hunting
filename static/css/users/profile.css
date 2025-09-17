@@ -243,12 +243,12 @@
   flex-direction: column;
 }
 
-.passsword-button {
+.password-button {
   border: none;
   outline: none;
   background-color: transparent;
   color: #1a202c;
-  font-weight: 550;
+  font-weight: 500;
   font-size: 15px;
   cursor: pointer;
 }
