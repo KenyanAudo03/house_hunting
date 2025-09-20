@@ -320,7 +320,7 @@ JoouStay {% endblock %} {% block content %}
           at:
         </p>
         <p>
-          <strong>Email:</strong> privacy@jooustay.com<br />
+          <strong>Email:</strong> {{ platform_contact.privacy_email }}<br />
           <strong>Address:</strong> JoouStay, JOOUST Campus Area, Bondo, Kenya
         </p>
       </div>
@@ -331,7 +331,7 @@ JoouStay {% endblock %} {% block content %}
           If you have questions or concerns about how we handle your personal
           information, our privacy team is here to help.
         </p>
-        <a href="mailto:privacy@jooustay.com" class="contact-btn">
+        <a href="mailto:{{ platform_contact.privacy_email }}" class="contact-btn">
           Contact privacy team
         </a>
       </div>

@@ -15,7 +15,7 @@
 </section>
 
 <section class="content-section">
-  <div class="container" >
+  <div class="container">
     <h2 class="section-title">Contact Information</h2>
     <p class="section-subtitle">
       Choose the method that works best for you. We're committed to responding
@@ -33,7 +33,7 @@
           questions.
         </p>
         <div style="margin-top: 15px; font-weight: 600; color: var(--accent)">
-          +254 703 853 259
+          {{ platform_contact.contact_number }}
         </div>
         <div style="font-size: 0.9rem; color: var(--muted); margin-top: 5px">
           Mon - Fri: 8:00 AM - 8:00 PM<br />
@@ -51,7 +51,7 @@
           24 hours.
         </p>
         <div style="margin-top: 15px; font-weight: 600; color: var(--accent)">
-          support@jooustay.com
+          {{ platform_contact.support_email }}
         </div>
         <div style="font-size: 0.9rem; color: var(--muted); margin-top: 5px">
           For general inquiries and support
@@ -68,7 +68,7 @@
           accommodations.
         </p>
         <div style="margin-top: 15px; font-weight: 600; color: var(--accent)">
-          partners@jooustay.com
+          {{ platform_contact.partners_email }}
         </div>
         <div style="font-size: 0.9rem; color: var(--muted); margin-top: 5px">
           For property listing inquiries
@@ -85,7 +85,7 @@
           immediately.
         </p>
         <div style="margin-top: 15px; font-weight: 600; color: var(--accent)">
-          issues@jooustay.com
+          {{ platform_contact.issues_email }}
         </div>
         <div style="font-size: 0.9rem; color: var(--muted); margin-top: 5px">
           Priority response within 2 hours
@@ -228,7 +228,11 @@
       you find the perfect student accommodation that fits your needs and
       budget.
     </p>
-    <a href="tel:+254703853259" class="cta-button">
+    <a
+      href="tel:{{ platform_contact.contact_number }}"
+      class="cta-button"
+      aria-label="Call Us Now"
+    >
       <i class="bx bx-phone"></i>
       Call Us Now
     </a>

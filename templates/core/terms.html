@@ -240,7 +240,7 @@ JoouStay {% endblock %} {% block content %}
           us at:
         </p>
         <p>
-          <strong>Email:</strong> legal@jooustay.com<br />
+          <strong>Email:</strong> {{ platform_contact.terms_email }}<br />
           <strong>Address:</strong> JoouStay, JOOUST Campus Area, Bondo,
           Kenya<br />
         </p>
@@ -252,7 +252,7 @@ JoouStay {% endblock %} {% block content %}
           Our legal team is available to help clarify any questions you may have
           about these terms of service.
         </p>
-        <a href="mailto:legal@jooustay.com" class="contact-btn">
+        <a href="mailto:{{ platform_contact.terms_email }}" class="contact-btn">
           Contact legal team
         </a>
       </div>
