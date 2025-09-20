@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Available Roommates</h2>
+
+<ul>
+  {% for profile in profiles %}
+    <li>
+      {{ profile.user.first_name }} {{ profile.user.last_name }}  
+      – Place: {{ profile.place_of_stay }}  
+      – Rent: {{ profile.rent }}  
+      – Contact: {{ profile.contact_number }}
+    </li>
+  {% empty %}
+    <li>No active roommate profiles found.</li>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}
