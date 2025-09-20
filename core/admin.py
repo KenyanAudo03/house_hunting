@@ -107,7 +107,7 @@ class PropertyListingAdmin(admin.ModelAdmin):
     user_display.short_description = "User"
 
     def has_reply(self, obj):
-        return "Yes" if obj.reply else "No"
+        return bool(obj.reply)
 
     has_reply.short_description = "Replied"
     has_reply.boolean = True
