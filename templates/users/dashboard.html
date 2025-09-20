@@ -1,7 +1,247 @@
-{% extends 'users/base.html' %}
+{% extends 'users/base.html' %} {% load static %} {% block title %}Your
+Dashboard{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/users/dashboard.css' %}" />
 
-{% block title %}Your Dashboard{% endblock %}
+<div class="dashboard-container">
+  <div class="dashboard-main">
+    <div class="dashboard-left">
+      <div class="dashboard-profile-card">
+        <div class="dashboard-profile-bg"></div>
+        <div class="dashboard-profile-content">
+          <div class="dashboard-avatar-wrapper">
+            {% if user.profile.profile_picture %}
+            <img
+              src="{{ user.profile.profile_picture.url }}"
+              alt="Profile Picture"
+              class="dashboard-avatar"
+            />
+            {% elif user.profile.google_avatar_url %}
+            <img
+              src="{{ user.profile.google_avatar_url }}"
+              alt="Profile Picture"
+              class="dashboard-avatar"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/default_images/default_user.png' %}"
+              alt="Default Avatar"
+              class="dashboard-avatar"
+            />
+            {% endif %}
+          </div>
+          <div class="dashboard-user-info">
+            <h1 class="dashboard-username">
+              {{ user.get_full_name|title|default:user.username }}
+            </h1>
+            <p class="dashboard-handle">@{{ user.username }}</p>
+            <p class="dashboard-join-date">
+              Member since {{ user.date_joined|date:"F Y" }}
+            </p>
+          </div>
+        </div>
+      </div>
 
-{% block content %}
+      <!-- Uncompleted Profile -->
+      {% if not user.profile.profile_picture and not user.profile.google_avatar_url or not user.profile.phone_number or not user.profile.whatsapp_number %}
+      <div class="dashboard-suggestions-card">
+        <h3 class="dashboard-card-title">Complete Your Profile</h3>
+        <div class="dashboard-suggestions">
+          {% if not user.profile.profile_picture and not user.profile.google_avatar_url %}
+          <div class="dashboard-suggestion-item">
+            <i class="bx bx-camera dashboard-suggestion-icon"></i>
+            <div class="dashboard-suggestion-content">
+              <p class="dashboard-suggestion-text">Add a profile picture</p>
+              <small class="dashboard-suggestion-note"
+                >Required for roommate profile</small
+              >
+            </div>
+            <a
+              href="{% url 'users:profile' %}"
+              class="dashboard-btn dashboard-btn-primary"
+              >Add</a
+            >
+          </div>
+          {% endif %} {% if not user.profile.phone_number %}
+          <div class="dashboard-suggestion-item">
+            <i class="bx bx-phone dashboard-suggestion-icon"></i>
+            <div class="dashboard-suggestion-content">
+              <p class="dashboard-suggestion-text">Add phone number</p>
+              <small class="dashboard-suggestion-note"
+                >Required for phone calls</small
+              >
+            </div>
+            <a
+              href="{% url 'users:profile' %}"
+              class="dashboard-btn dashboard-btn-primary"
+              >Add</a
+            >
+          </div>
+          {% endif %} {% if not user.profile.whatsapp_number %}
+          <div class="dashboard-suggestion-item">
+            <i class="bx bxl-whatsapp dashboard-suggestion-icon"></i>
+            <div class="dashboard-suggestion-content">
+              <p class="dashboard-suggestion-text">Add WhatsApp number</p>
+              <small class="dashboard-suggestion-note"
+                >Required when contacting via WhatsApp</small
+              >
+            </div>
+            <a
+              href="{% url 'users:profile' %}"
+              class="dashboard-btn dashboard-btn-primary"
+              >Add</a
+            >
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %} 
+      <!-- Listing Repplies -->
+      {% if property_listings_with_replies %}
+      <div class="dashboard-replies-card">
+        <h3 class="dashboard-card-title">Property Listing Replies</h3>
+        <div class="dashboard-replies">
+          {% for listing in property_listings_with_replies %}
+          <div class="dashboard-reply-item">
+            <div class="dashboard-reply-header">
+              <strong class="dashboard-reply-title"
+                >{{ listing.hostel|default:listing.area }}</strong
+              >
+              <span class="dashboard-reply-date"
+                >{{ listing.created_at|date:"M d" }}</span
+              >
+            </div>
+            <div class="dashboard-reply-text">{{ listing.reply }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
 
+    <!-- Favorite and Listing stats -->
+    <div class="dashboard-right">
+      <div class="dashboard-stats-card">
+        <h3 class="dashboard-card-title">Quick Stats</h3>
+        <div class="dashboard-stats-grid">
+          <div class="dashboard-stat-item">
+            <div class="dashboard-stat-number">{{ favorites_count }}</div>
+            <div class="dashboard-stat-label">
+              <a href="{% url 'users:favorites' %}" class="dashboard-stat-link"
+                >Favorite Hostels</a
+              >
+            </div>
+          </div>
+          <div class="dashboard-stat-item">
+            <div class="dashboard-stat-number">{{ user_listings_count }}</div>
+            <div class="dashboard-stat-label">Property Listings</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-roommate-card">
+        <h3 class="dashboard-card-title">Roommate Profile</h3>
+        {% if user.roommate_profile %}
+        <div class="dashboard-roommate-status dashboard-roommate-active">
+          <i class="bx bx-check-circle dashboard-roommate-icon"></i>
+          <div class="dashboard-roommate-info">
+            <p class="dashboard-roommate-text">Profile Active</p>
+            <small class="dashboard-roommate-details"
+              >{{ user.roommate_profile.place_of_stay }} - KSh {{
+              user.roommate_profile.rent }}</small
+            >
+          </div>
+        </div>
+        <button
+          class="dashboard-btn dashboard-btn-danger"
+          onclick="toggleRoommateProfile()"
+        >
+          Turn Off
+        </button>
+        {% else %} {% if user.profile.profile_picture or user.profile.google_avatar_url and user.profile.phone_number and user.profile.whatsapp_number %}
+        <div class="dashboard-roommate-status dashboard-roommate-inactive">
+          <i class="bx bx-x-circle dashboard-roommate-icon"></i>
+          <div class="dashboard-roommate-info">
+            <p class="dashboard-roommate-text">Profile Inactive</p>
+            <small class="dashboard-roommate-details"
+              >Create a roommate profile</small
+            >
+          </div>
+        </div>
+        <a
+          href="{% url 'users:roomie_profile' %}"
+          class="dashboard-btn dashboard-btn-primary"
+          >Create Profile</a
+        >
+        {% else %}
+        <div class="dashboard-roommate-status dashboard-roommate-incomplete">
+          <i class="bx bx-info-circle dashboard-roommate-icon"></i>
+          <div class="dashboard-roommate-info">
+            <p class="dashboard-roommate-text">Profile Incomplete</p>
+            <small class="dashboard-roommate-details"
+              >Complete your profile first</small
+            >
+          </div>
+        </div>
+        {% endif %} {% endif %}
+      </div>
+
+      <!-- Quick links -->
+      <div class="dashboard-actions-card">
+        <h3 class="dashboard-card-title">Quick Actions</h3>
+        <div class="dashboard-actions">
+          <a href="{% url 'users:profile' %}" class="dashboard-action-link">
+            <i class="bx bx-user dashboard-action-icon"></i>
+            <span class="dashboard-action-text">Edit Profile</span>
+          </a>
+          <a href="{% url 'users:profile' %}" class="dashboard-action-link">
+            <i class="bx bx-lock dashboard-action-icon"></i>
+            <span class="dashboard-action-text">Change Password</span>
+          </a>
+          <a href="{% url 'users:profile' %}" class="dashboard-action-link">
+            <i class="bx bx-envelope dashboard-action-icon"></i>
+            <span class="dashboard-action-text">Change Email</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Rooommate Proifle -->
+<script>
+  function toggleRoommateProfile() {
+    if (confirm("Are you sure you want to turn off your roommate profile?")) {
+      fetch('{% url "users:toggle_roommate_profile" %}', {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCsrfToken(),
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert("Error updating profile");
+          }
+        });
+    }
+  }
+
+  function getCsrfToken() {
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]");
+    if (csrfToken) {
+      return csrfToken.value;
+    }
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "csrftoken") {
+        return value;
+      }
+    }
+    return "";
+  }
+</script>
 {% endblock %}
