@@ -56,4 +56,10 @@
     </a>
   </div>
 </div>
+{% empty %}
+<div class="roommate-empty">
+  <i class="bx bxs-user-x"></i>
+  <p>No active roommate profiles found.</p>
+  <a href="{% url 'users:roomie_profile' %}">Be the first to create a roommate profile!</a>
+</div>
 {% endfor %}

@@ -1,12 +1,18 @@
 {% extends 'base.html' %} {% block title %}Roommate Listings{% endblock %} 
 {% load static %} {% block content %}
-<link rel="stylesheet" href="{% static 'css/core/roommate_list.css' %}">
-
+<link rel="stylesheet" href="{% static 'css/core/roommate_list.css' %}" />
+<style>
+  .hero {
+    background: url('{% static "images/default_images/roomies_template_background.jpeg" %}')
+      center/cover;
+  }
+</style>
 <div class="hero">
   <div class="hero-content">
     <h1 class="hero-title">JOOUST Hostel Sharing</h1>
     <p class="hero-subtitle">
-      Find students at JOOUST who are looking to share hostels or rooms on and around campus.
+      Find students at JOOUST who are looking to share hostels or rooms on and
+      around campus.
     </p>
     <div class="search-container">
       <form class="search-form" method="GET" action="{% url 'roommate_list' %}">
@@ -31,145 +37,84 @@
 
 <div class="roommate-container">
   <div class="roommate-grid" id="roommate-grid">
-    {% for profile in profiles %}
-    <div class="roommate-card">
-      <div class="roommate-image">
-        {% if profile.profile.profile_picture %}
-        <img
-          src="{{ profile.profile.profile_picture.url }}"
-          alt="{{ profile.user.get_full_name|default:profile.user.username }}"
-        />
-        {% elif profile.profile.google_avatar_url %}
-        <img
-          src="{{ profile.profile.google_avatar_url }}"
-          alt="{{ profile.user.get_full_name|default:profile.user.username }}"
-        />
-        {% else %}
-        <img
-          src="{% static 'images/default_images/default_user.png' %}"
-          alt="Default Profile"
-        />
-        {% endif %}
-        <div class="roommate-overlay"></div>
-        <div class="roommate-badge">Available</div>
-      </div>
-
-      <div class="roommate-content">
-        <h3 class="roommate-name">
-          {{ profile.user.get_full_name|default:profile.user.username }}
-        </h3>
-
-        <div class="roommate-details">
-          <div class="roommate-detail">
-            <i class="bx bx-map roommate-icon"></i>
-            <div class="roommate-detail-content">
-              <span class="roommate-label">Location:</span>
-              <span class="roommate-value">{{ profile.place_of_stay }}</span>
-            </div>
-          </div>
-          <div class="roommate-detail">
-            <i class="bx bx-dollar roommate-icon"></i>
-            <div class="roommate-detail-content">
-              <span class="roommate-label">Rent:</span>
-              <span class="roommate-value">Ksh {{ profile.rent }}</span>
-            </div>
-          </div>
-          <div class="roommate-detail">
-            <i class="bx bx-phone roommate-icon"></i>
-            <div class="roommate-detail-content">
-              <span class="roommate-label">Phone:</span>
-              <span class="roommate-value">{{ profile.contact_number }}</span>
-            </div>
-          </div>
-        </div>
-
-        <a href="tel:{{ profile.contact_number }}" class="roommate-button">
-          <i class="fas fa-phone"></i> Contact
-        </a>
-      </div>
-    </div>
-    {% empty %}
-    <div class="roommate-empty">
-      <i class="bx bxs-user-x"></i>
-      <p>No active roommate profiles found.</p>
-      <a
-        href="{% url 'users:roomie_profile' %}"
-        style="font-size: 0.95rem; margin-top: 12px; opacity: 0.8"
-        >Be the first to create a roommate profile!</a
-      >
-    </div>
-    {% endfor %}
+    <!-- Script automatically loads roommate cards -->
   </div>
 
   <div class="loading" id="loading">
-    <div style="display: inline-block; animation: pulse 2s infinite;">
-      <i class="bx bx-loader-alt" style="font-size: 2rem; animation: spin 2s linear infinite;"></i>
+    <div style="display: inline-block; animation: pulse 2s infinite">
+      <i
+        class="bx bx-loader-alt"
+        style="font-size: 2rem; animation: spin 2s linear infinite"
+      ></i>
     </div>
     <p>Loading more profiles...</p>
   </div>
 </div>
 
 <script>
-let currentPage = 1;
-let isLoading = false;
-let hasMoreProfiles = true;
-const query = "{{ query|default:'' }}";
+  let currentPage = 1;
+  let isLoading = false;
+  let hasMoreProfiles = true;
+  const query = "{{ query|default:'' }}";
 
-function loadMoreProfiles() {
-  if (isLoading || !hasMoreProfiles) return;
-  
-  isLoading = true;
-  document.getElementById('loading').classList.remove('hidden');
-  
-  const params = new URLSearchParams({
-    page: currentPage + 1
-  });
-  
-  if (query) {
-    params.append('q', query);
-  }
-  
-  fetch(`{% url 'roommate_list' %}?${params.toString()}`, {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
+  function loadMoreProfiles() {
+    if (isLoading || !hasMoreProfiles) return;
+
+    isLoading = true;
+    document.getElementById("loading").classList.remove("hidden");
+
+    const params = new URLSearchParams({
+      page: currentPage + 1,
+    });
+
+    if (query) {
+      params.append("q", query);
     }
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.profiles && data.profiles.length > 0) {
-      const grid = document.getElementById('roommate-grid');
-      grid.insertAdjacentHTML('beforeend', data.html);
-      currentPage++;
-      hasMoreProfiles = data.has_next;
-    } else {
-      hasMoreProfiles = false;
-    }
-  })
-  .catch(error => {
-    console.error('Error loading profiles:', error);
-  })
-  .finally(() => {
-    isLoading = false;
-    document.getElementById('loading').classList.add('hidden');
-  });
-}
 
-function checkScroll() {
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
-    loadMoreProfiles();
+    fetch(`{% url 'roommate_list' %}?${params.toString()}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.profiles && data.profiles.length > 0) {
+          const grid = document.getElementById("roommate-grid");
+          grid.insertAdjacentHTML("beforeend", data.html);
+          currentPage++;
+          hasMoreProfiles = data.has_next;
+        } else {
+          hasMoreProfiles = false;
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading profiles:", error);
+      })
+      .finally(() => {
+        isLoading = false;
+        document.getElementById("loading").classList.add("hidden");
+      });
   }
-}
 
-window.addEventListener('scroll', checkScroll);
+  function checkScroll() {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 1000
+    ) {
+      loadMoreProfiles();
+    }
+  }
 
-const style = document.createElement('style');
-style.textContent = `
+  window.addEventListener("scroll", checkScroll);
+
+  const style = document.createElement("style");
+  style.textContent = `
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
 `;
-document.head.appendChild(style);
+  document.head.appendChild(style);
 </script>
 
 {% endblock %}
