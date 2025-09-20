@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, RoommateProfile
 
 
 # Optional: display fields for the list view
@@ -42,3 +42,17 @@ class ProfileAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+@admin.register(RoommateProfile)
+class RoommateProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "place_of_stay",
+        "rent",
+        "contact_number",
+        "is_active",
+        "created_at",
+    )
+    list_filter = ("is_active", "place_of_stay", "created_at")
+    search_fields = ("user__username", "user__first_name", "user__last_name", "place_of_stay")
+    ordering = ("-created_at",)
