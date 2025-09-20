@@ -16,6 +16,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.urls import reverse
 from accounts.models import RoommateProfile
+from django.template.loader import render_to_string
+
 
 
 def home(request):
@@ -317,51 +319,43 @@ def leave_review(request, token):
 
 
 def roommate_list(request):
+    query = request.GET.get("q", "")
     profiles = RoommateProfile.objects.filter(is_active=True)
-    
-    if request.user.is_authenticated:
-        profiles = profiles.exclude(user=request.user)
-    
-    location_filter = request.GET.get('location', '').strip()
-    min_rent = request.GET.get('min_rent', '').strip()
-    max_rent = request.GET.get('max_rent', '').strip()
-    search = request.GET.get('search', '').strip()
-    
-    if location_filter:
-        profiles = profiles.filter(place_of_stay__icontains=location_filter)
-    
-    if min_rent and min_rent.isdigit():
-        profiles = profiles.filter(rent__gte=int(min_rent))
-    
-    if max_rent and max_rent.isdigit():
-        profiles = profiles.filter(rent__lte=int(max_rent))
-    
-    if search:
+
+    if query:
         profiles = profiles.filter(
-            Q(user__first_name__icontains=search) |
-            Q(user__last_name__icontains=search) |
-            Q(user__username__icontains=search) |
-            Q(place_of_stay__icontains=search)
+            Q(user__first_name__icontains=query)
+            | Q(user__last_name__icontains=query)
+            | Q(user__username__icontains=query)
+            | Q(place_of_stay__icontains=query)
+            | Q(rent__icontains=query)
+            | Q(contact_number__icontains=query)
         )
-    
-    profiles = profiles.select_related('user', 'profile').order_by('-created_at')
-    
-    locations = RoommateProfile.objects.filter(is_active=True).values_list('place_of_stay', flat=True).distinct()
-    unique_locations = list(set([loc.strip().title() for loc in locations if loc]))
-    
-    context = {
-        'profiles': profiles,
-        'unique_locations': sorted(unique_locations),
-        'current_filters': {
-            'location': location_filter,
-            'min_rent': min_rent,
-            'max_rent': max_rent,
-            'search': search,
-        },
-        'total_count': profiles.count(),
-    }
-    
-    return render(request, 'core/roommate_list.html', context)
+
+    profiles = profiles.select_related("user", "profile").order_by("-created_at")
+
+    paginator = Paginator(profiles, 20)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        html = render_to_string(
+            "core/partials/roommate_cards.html", {"profiles": page_obj}
+        )
+
+        return JsonResponse(
+            {
+                "html": html,
+                "has_next": page_obj.has_next(),
+                "profiles": [{"id": p.id} for p in page_obj],
+            }
+        )
+
+    return render(
+        request,
+        "core/roommate_list.html",
+        {"profiles": page_obj, "query": query, "has_next": page_obj.has_next()},
+    )
 
 
 def about(request):
