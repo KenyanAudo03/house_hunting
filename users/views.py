@@ -16,6 +16,7 @@ import json
 import re
 from allauth.account.models import EmailAddress
 from accounts.models import EmailChangeRequest
+from core.models import PropertyListing
 import os
 from .sanitizer import (
     clean_text,
@@ -31,11 +32,19 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .utils import determine_price_winner, generate_recommendation
 from accounts.models import RoommateProfile
 from .forms import RoommateProfileForm
+from django.views.decorators.http import require_http_methods
 
 
 @login_required
 def dashboard(request):
-    return render(request, "users/dashboard.html")
+    property_listings_with_replies = PropertyListing.objects.filter(
+        user=request.user, reply__isnull=False
+    ).exclude(reply="")
+
+    context = {
+        "property_listings_with_replies": property_listings_with_replies,
+    }
+    return render(request, "users/dashboard.html", context)
 
 
 @login_required
@@ -442,6 +451,7 @@ def favorites(request):
     return render(request, "users/favorites.html", context)
 
 
+# Add and remove favorite hostels
 @login_required
 @require_POST
 def toggle_favorite(request, hostel_id):
@@ -459,6 +469,7 @@ def toggle_favorite(request, hostel_id):
     return JsonResponse({"success": True, "favorited": True})
 
 
+# Roomie Profile
 @login_required
 def roomie_profile(request):
     """Create or edit a user's roommate profile"""
@@ -517,6 +528,25 @@ def roomie_profile(request):
     }
 
     return render(request, "users/roomie_profile.html", context)
+
+
+# Delete Rommie Profile
+@login_required
+@require_http_methods(["POST"])
+@csrf_exempt
+def toggle_roommate_profile(request):
+    try:
+        if hasattr(request.user, "roommate_profile"):
+            request.user.roommate_profile.delete()
+            return JsonResponse(
+                {"success": True, "message": "Roommate profile turned off"}
+            )
+        else:
+            return JsonResponse(
+                {"success": False, "message": "No roommate profile found"}
+            )
+    except Exception:
+        return JsonResponse({"success": False, "message": "Error updating profile"})
 
 
 @login_required
