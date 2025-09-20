@@ -113,6 +113,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "contact.context_processors.platform_contact",
                 "accounts.context_processors.favorites_count",
+                "core.context_processors.user_listings_count",
             ],
         },
     },
