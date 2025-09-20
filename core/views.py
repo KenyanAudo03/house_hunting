@@ -243,7 +243,6 @@ def hostel_detail(request, slug):
 def submit_property_listing(request):
     try:
         data = json.loads(request.body)
-
         required_fields = ["name", "contact", "role", "area", "rent"]
         for field in required_fields:
             if not data.get(field):
@@ -258,6 +257,7 @@ def submit_property_listing(request):
             area=data["area"],
             rent=data["rent"],
             hostel=data.get("hostel", ""),
+            user=request.user if request.user.is_authenticated else None,
         )
 
         return JsonResponse(
@@ -267,12 +267,10 @@ def submit_property_listing(request):
                 "listing_id": property_listing.id,
             }
         )
-
     except json.JSONDecodeError:
         return JsonResponse(
             {"status": "error", "message": "Invalid JSON data"}, status=400
         )
-
     except Exception:
         return JsonResponse(
             {
