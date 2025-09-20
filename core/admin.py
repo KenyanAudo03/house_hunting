@@ -67,7 +67,7 @@ class PropertyListingAdmin(admin.ModelAdmin):
         "has_reply",
         "created_at",
     )
-    list_filter = ("role", "created_at", "user__isnull")
+    list_filter = ("role", "created_at")
     search_fields = ("name", "contact", "hostel", "area", "user__username")
     ordering = ("-created_at",)
     readonly_fields = (
@@ -113,7 +113,7 @@ class PropertyListingAdmin(admin.ModelAdmin):
     has_reply.boolean = True
 
     def has_change_permission(self, request, obj=None):
-        return True  # Allow editing for reply field
+        return True
 
     def has_delete_permission(self, request, obj=None):
         return True
