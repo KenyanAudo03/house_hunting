@@ -159,8 +159,8 @@ JoouStay {% endblock %} {% block content %}
           If you have questions about our use of cookies or this Cookie Policy, please contact us:
         </p>
         <p>
-          <strong>Email:</strong> privacy@jooustay.com<br />
-          <strong>Support:</strong> support@jooustay.com<br />
+          <strong>Email:</strong> {{ platform_contact.privacy_email }}<br />
+          <strong>Support:</strong> {{ platform_contact.cookie_email }}<br />
           <strong>Address:</strong> JoouStay, JOOUST Campus Area, Bondo, Kenya
         </p>
       </div>
@@ -170,7 +170,7 @@ JoouStay {% endblock %} {% block content %}
         <p>
           Our team is here to help you understand how cookies work on JoouStay and assist with your privacy preferences.
         </p>
-        <a href="mailto:privacy@jooustay.com" class="contact-btn">
+        <a href="mailto:{{ platform_contact.cookie_email }}" class="contact-btn">
           Contact Privacy Team
         </a>
       </div>

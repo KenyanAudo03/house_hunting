@@ -355,7 +355,7 @@ JoouStay {% endblock %} {% block content %}
         <h3>WhatsApp Support</h3>
         <p>Get instant help through WhatsApp during business hours</p>
         <a
-          href="https://wa.me/254703853259"
+          href="https://wa.me/{{ platform_contact.whatsapp_number }}"
           class="contact-btn primary"
           target="_blank"
           >Chat on WhatsApp</a
@@ -369,8 +369,8 @@ JoouStay {% endblock %} {% block content %}
         </div>
         <h3>Email Support</h3>
         <p>Send us detailed questions and we'll respond within 24 hours</p>
-        <a href="mailto:support@jooustay.com" class="contact-btn">Email Us</a>
-        <small>support@jooustay.com</small>
+        <a href="mailto:{{ platform_contact.support_email }}" class="contact-btn">Email Us</a>
+        <small>{{ platform_contact.support_email }}</small>
       </div>
 
       <div class="support-contact-card">
@@ -379,8 +379,8 @@ JoouStay {% endblock %} {% block content %}
         </div>
         <h3>Phone Support</h3>
         <p>Speak directly with our team for urgent issues</p>
-        <a href="tel:+254703853259" class="contact-btn">Call Now</a>
-        <small>+254 703 853 259</small>
+        <a href="tel:{{ platform_contact.contact_number }}" class="contact-btn">Call Now</a>
+        <small>{{ platform_contact.contact_number }}</small>
       </div>
     </div>
 
@@ -390,7 +390,7 @@ JoouStay {% endblock %} {% block content %}
           <h4>Need immediate assistance?</h4>
           <p>
             For urgent housing issues or safety concerns, contact our emergency
-            support line at +254 703 853 259 (available 24/7)
+            support line at {{ platform_contact.emergency_number }} (available 24/7)
           </p>
         </div>
       </div>

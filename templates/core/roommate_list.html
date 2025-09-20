@@ -2,10 +2,10 @@
 {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/core/roommate_list.css' %}" />
 
-<div class="main-content">
-  <div class="page-header">
-    <h1 class="page-title">JOOUST Hostel Sharing</h1>
-    <p class="page-description">
+<div class="roommate-container">
+  <div class="roommate-header">
+    <h1 class="roommate-title">JOOUST Hostel Sharing</h1>
+    <p class="roommate-subtitle">
       Find students at JOOUST who are looking to share hostels or rooms on and
       around campus.
     </p>
@@ -14,7 +14,7 @@
   <div class="roommate-grid">
     {% for profile in profiles %}
     <div class="roommate-card">
-      <div class="card-image">
+      <div class="roommate-image">
         {% if profile.profile.profile_picture %}
         <img
           src="{{ profile.profile.profile_picture.url }}"
@@ -31,46 +31,54 @@
           alt="Default Profile"
         />
         {% endif %}
-        <div class="card-overlay"></div>
-        <div class="status-badge">Available</div>
+        <div class="roommate-overlay"></div>
+        <div class="roommate-badge">Available</div>
       </div>
 
-      <div class="card-content">
+      <div class="roommate-content">
         <h3 class="roommate-name">
           {{ profile.user.get_full_name|default:profile.user.username }}
         </h3>
 
         <div class="roommate-details">
-          <div class="detail-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>{{ profile.place_of_stay }}</span>
+          <div class="roommate-detail">
+            <i class="bx bx-map roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Location:</span>
+              <span class="roommate-value">{{ profile.place_of_stay }}</span>
+            </div>
           </div>
-          <div class="detail-item">
-            <i class="fas fa-dollar-sign"></i>
-            <span>{{ profile.rent }}</span>
+          <div class="roommate-detail">
+            <i class="bx bx-dollar roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Rent:</span>
+              <span class="roommate-value">Ksh {{ profile.rent }}</span>
+            </div>
           </div>
-          <div class="detail-item">
-            <i class="fas fa-phone"></i>
-            <span>{{ profile.contact_number }}</span>
+          <div class="roommate-detail">
+            <i class="bx bx-phone roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Phone:</span>
+              <span class="roommate-value">{{ profile.contact_number }}</span>
+            </div>
           </div>
         </div>
 
-        <a href="tel:{{ profile.contact_number }}" class="contact-button">
+        <a href="tel:{{ profile.contact_number }}" class="roommate-button">
           <i class="fas fa-phone"></i> Contact
         </a>
       </div>
     </div>
     {% empty %}
-    <div class="no-profiles">
+    <div class="roommate-empty">
       <i class="bx bxs-user-x"></i>
       <p>No active roommate profiles found.</p>
-      <p style="font-size: 0.95rem; margin-top: 12px; opacity: 0.8">
-        <a href="{% url 'users:roomie_profile' %}"
-          >Be the first to create a roommate profile!</a
-        >
-      </p>
+      <a
+        href="{% url 'user:roomie_profile' %}"
+        style="font-size: 0.95rem; margin-top: 12px; opacity: 0.8"
+        >Be the first to create a roommate profile!</a
+      >
     </div>
-
     {% endfor %}
   </div>
 </div>

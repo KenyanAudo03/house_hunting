@@ -1,351 +1,354 @@
-  .main-content {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-  }
+.roommate-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-  }
+.roommate-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
 
-  .page-title {
-      font-size: 2.8rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--brand), #16a34a, #059669);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 16px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.roommate-title {
+  font-size: 2.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--brand), #16a34a, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .page-description {
-      font-size: 1.2rem;
-      color: #6b7280;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.7;
-      font-weight: 300;
-  }
+.roommate-subtitle {
+  font-size: 1.2rem;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-weight: 300;
+}
 
+.roommate-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-top: 50px;
+}
+
+.roommate-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid transparent;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.roommate-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--brand), #16a34a);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  border-radius: 18px;
+}
+
+.roommate-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.roommate-card:hover::before {
+  opacity: 0.02;
+}
+
+.roommate-image {
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.roommate-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s ease;
+  filter: brightness(0.95) contrast(1.05);
+}
+
+.roommate-card:hover .roommate-image img {
+  transform: scale(1.08);
+  filter: brightness(1) contrast(1.1);
+}
+
+.roommate-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.roommate-card:hover .roommate-overlay {
+  opacity: 1;
+}
+
+.roommate-content {
+  padding: 16px;
+  position: relative;
+}
+
+.roommate-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: -0.025em;
+}
+
+.roommate-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.roommate-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  transition: all 0.3s ease;
+}
+
+.roommate-detail:last-child {
+  border-bottom: none;
+}
+
+.roommate-card:hover .roommate-detail {
+  color: #374151;
+}
+
+.roommate-icon {
+  color: var(--brand);
+  width: 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.roommate-card:hover .roommate-icon {
+  color: #16a34a;
+  transform: scale(1.1);
+}
+
+.roommate-button {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, var(--brand), #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.025em;
+}
+
+.roommate-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.roommate-button:hover::before {
+  left: 100%;
+}
+
+.roommate-button:hover {
+  background: linear-gradient(135deg, #16a34a, #059669);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+}
+
+.roommate-button:active {
+  transform: scale(0.98);
+}
+
+.roommate-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: #6b7280;
+  font-size: 1.2rem;
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 20px;
+}
+
+.roommate-empty i {
+  font-size: 4rem;
+  color: var(--brand);
+  margin-bottom: 24px;
+  display: block;
+  opacity: 0.7;
+}
+
+.roommate-empty a {
+  color: var(--brand);
+}
+
+.roommate-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--brand);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.roommate-image::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.roommate-card:hover .roommate-image::after {
+  animation: shimmer 0.8s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1200px) {
   .roommate-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 28px;
-      margin-top: 50px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 780px) {
+  .roommate-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
-  .roommate-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 2px solid transparent;
-      position: relative;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.06);
+  .roommate-container {
+    padding: 30px 15px;
   }
 
-  .roommate-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, var(--brand), #16a34a);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: -1;
-      border-radius: 18px;
+  .roommate-title {
+    font-size: 2.2rem;
   }
 
-  .roommate-card:hover {
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
-      border-color: rgba(34, 197, 94, 0.3);
+  .roommate-image {
+    height: 120px;
   }
 
-  .roommate-card:hover::before {
-      opacity: 0.02;
-  }
-
-  .card-image {
-      position: relative;
-      height: 140px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  }
-
-  .card-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: all 0.5s ease;
-      filter: brightness(0.95) contrast(1.05);
-  }
-
-  .roommate-card:hover .card-image img {
-      transform: scale(1.08);
-      filter: brightness(1) contrast(1.1);
-  }
-
-  .card-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(180deg,
-              rgba(0, 0, 0, 0) 0%,
-              rgba(0, 0, 0, 0.7) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-  }
-
-  .roommate-card:hover .card-overlay {
-      opacity: 1;
-  }
-
-  .card-content {
-      padding: 16px;
-      position: relative;
+  .roommate-content {
+    padding: 14px;
   }
 
   .roommate-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 12px;
-      text-align: center;
-      letter-spacing: -0.025em;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .roommate-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .roommate-details {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 14px;
+  .roommate-container {
+    padding: 20px 10px;
   }
 
-  .detail-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.9rem;
-      color: #4b5563;
-      font-weight: 500;
-      padding: 4px 0;
-      transition: all 0.3s ease;
+  .roommate-title {
+    font-size: 1.9rem;
   }
 
-  .detail-item:last-child {
-      border-bottom: none;
+  .roommate-subtitle {
+    font-size: 1rem;
   }
 
-  .roommate-card:hover .detail-item {
-      color: #374151;
+  .roommate-image {
+    height: 100px;
   }
 
-  .detail-item i {
-      color: var(--brand);
-      width: 20px;
-      font-size: 16px;
-      transition: all 0.3s ease;
+  .roommate-content {
+    padding: 12px;
   }
-
-  .roommate-card:hover .detail-item i {
-      color: #16a34a;
-      transform: scale(1.1);
-  }
-
-  .contact-button {
-      margin-top: 16px;
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, var(--brand), #16a34a);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.025em;
-  }
-
-  .contact-button::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg,
-              transparent,
-              rgba(255, 255, 255, 0.2),
-              transparent);
-      transition: left 0.5s ease;
-  }
-
-  .contact-button:hover::before {
-      left: 100%;
-  }
-
-  .contact-button:hover {
-      background: linear-gradient(135deg, #16a34a, #059669);
-      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
-  }
-
-  .contact-button:active {
-      transform: scale(0.98);
-  }
-
-  .no-profiles {
-      text-align: center;
-      padding: 60px 20px;
-      color: #000;
-      font-size: 1.2rem;
-      grid-column: 1 / -1;
-      background: #f8f9fa;
-      border-radius: 20px;
-  }
-
-  .no-profiles i {
-      font-size: 4rem;
-      color: var(--brand);
-      margin-bottom: 24px;
-      display: block;
-      opacity: 0.7;
-  }
-
-  .no-profiles a {
-      color: #16a34a;
-  }
-
-  .status-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(34, 197, 94, 0.1);
-      color: var(--brand);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(34, 197, 94, 0.2);
-  }
-
-  @keyframes pulse {
-
-      0%,
-      100% {
-          opacity: 1;
-      }
-
-      50% {
-          opacity: 0.7;
-      }
-  }
-
-  .card-image::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg,
-              transparent,
-              rgba(255, 255, 255, 0.1),
-              transparent);
-      transform: rotate(45deg);
-      transition: all 0.6s ease;
-      opacity: 0;
-  }
-
-  .roommate-card:hover .card-image::after {
-      animation: shimmer 0.8s ease-out;
-  }
-
-  @keyframes shimmer {
-      0% {
-          transform: translateX(-100%) translateY(-100%) rotate(45deg);
-          opacity: 0;
-      }
-
-      50% {
-          opacity: 1;
-      }
-
-      100% {
-          transform: translateX(100%) translateY(100%) rotate(45deg);
-          opacity: 0;
-      }
-  }
-
-  @media (max-width: 1200px) {
-      .roommate-grid {
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-      }
-  }
-
-  @media (max-width: 780px) {
-      .roommate-grid {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
-      }
-
-      .main-content {
-          padding: 10px;
-      }
-
-      .page-title {
-          font-size: 2.2rem;
-      }
-
-      .card-image {
-          height: 180px;
-      }
-
-      .card-content {
-          padding: 18px;
-      }
-
-      .roommate-name {
-          font-size: 1.1rem;
-      }
-  }
-
-  @media (max-width: 400px) {
-      .roommate-grid {
-          grid-template-columns: 1fr;
-          gap: 16px;
-      }
-
-      .main-content {
-          padding: 20px 10px;
-      }
-
-      .page-title {
-          font-size: 1.9rem;
-      }
-
-      .page-description {
-          font-size: 1rem;
-      }
-
-      .card-image {
-          height: 160px;
-      }
-
-      .card-content {
-          padding: 16px;
-      }
-  }
+}

@@ -1,20 +1,155 @@
 {% extends 'users/base.html' %}
-
-{% block title %}Roomie Profile{% endblock %}
-
+{% load static %}
+{% block title %}
+{% if is_editing %}Edit Roommate Profile{% else %}Create Roommate Profile{% endif %}
+{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/users/roomie_profile.css' %}">
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
+<div class="roommate-profile-container">
+    <div class="roommate-profile-header">
+        <h1 class="roommate-profile-title">
+            {% if is_editing %}
+                <i class="fas fa-edit"></i> Update Your Roommate Profile
+            {% else %}
+                <i class="fas fa-users"></i> Find a Roommate to Share Costs
+            {% endif %}
+        </h1>
+        <p class="roommate-profile-subtitle">
+            {% if is_editing %}
+                Update your details to find the perfect roommate to share accommodation costs
+            {% else %}
+                Found a great place but need someone to split the rent? Create your profile to connect with other JOOUST students
+            {% endif %}
+        </p>
+    </div>
 
-{% if roommate_profile %}
-  <p><strong>Status:</strong>
-    {% if roommate_profile.is_active %} Active {% else %} Disabled {% endif %}
-  </p>
-{% endif %}
+    {% if roommate_profile %}
+    <div class="roommate-status-card {% if roommate_profile.is_active %}roommate-status-active{% else %}roommate-status-inactive{% endif %}">
+        <i class="fas {% if roommate_profile.is_active %}fa-check-circle{% else %}fa-pause-circle{% endif %} roommate-status-icon"></i>
+        <strong>Profile Status:</strong>
+        {% if roommate_profile.is_active %}
+            <span>Active & Visible to Students</span>
+            <div class="roommate-help-text" style="margin-top: 8px;">Other JOOUST students looking for roommates can see and contact you</div>
+        {% else %}
+            <span>Hidden from Students</span>
+            <div class="roommate-help-text" style="margin-top: 8px;">Your roommate profile is currently not visible to other students</div>
+        {% endif %}
+    </div>
+    {% endif %}
 
+    <form method="post" class="roommate-profile-form" id="roommateForm">
+        {% csrf_token %}
+        
+        <div class="roommate-form-group">
+            <label for="{{ form.place_of_stay.id_for_label }}" class="roommate-form-label">
+                <i class="fas fa-map-marker-alt"></i> {{ form.place_of_stay.label }}
+            </label>
+            {{ form.place_of_stay }}
+            {% if form.place_of_stay.help_text %}
+                <div class="roommate-help-text">{{ form.place_of_stay.help_text }}</div>
+            {% endif %}
+            {% if form.place_of_stay.errors %}
+                <div class="roommate-error">{{ form.place_of_stay.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="roommate-form-group">
+            <label for="{{ form.rent.id_for_label }}" class="roommate-form-label">
+                <i class="fas fa-dollar-sign"></i> {{ form.rent.label }}
+            </label>
+            {{ form.rent }}
+            {% if form.rent.help_text %}
+                <div class="roommate-help-text">{{ form.rent.help_text }}</div>
+            {% endif %}
+            {% if form.rent.errors %}
+                <div class="roommate-error">{{ form.rent.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="roommate-form-group">
+            <label for="{{ form.contact_number.id_for_label }}" class="roommate-form-label">
+                <i class="fas fa-phone"></i> {{ form.contact_number.label }}
+            </label>
+            {{ form.contact_number }}
+            {% if form.contact_number.help_text %}
+                <div class="roommate-help-text">{{ form.contact_number.help_text }}</div>
+            {% endif %}
+            {% if form.contact_number.errors %}
+                <div class="roommate-error">{{ form.contact_number.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="roommate-form-group">
+            <label class="roommate-form-label">
+                <i class="fas fa-eye"></i> Visibility
+            </label>
+            <div class="roommate-checkbox-group">
+                {{ form.is_active }}
+                <label for="{{ form.is_active.id_for_label }}" class="roommate-checkbox-label">
+                    {{ form.is_active.label }}
+                </label>
+            </div>
+            {% if form.is_active.help_text %}
+                <div class="roommate-help-text">{{ form.is_active.help_text }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="roommate-submit-btn" id="submitBtn">
+            <i class="fas {% if is_editing %}fa-save{% else %}fa-users{% endif %}"></i>
+            {% if is_editing %}Update My Profile{% else %}Find a Roommate{% endif %}
+        </button>
+    </form>
+</div>
+
+<div class="roommate-loader" id="loader">
+    <div class="roommate-loader-content">
+        <div class="roommate-spinner"></div>
+        <div class="roommate-loader-text" id="loaderText">
+            {% if is_editing %}Updating your roommate profile...{% else %}Creating your roommate profile...{% endif %}
+        </div>
+        <div class="roommate-loader-subtitle">Finding your perfect roommate match...</div>
+    </div>
+</div>
+
+<script>
+document.getElementById('roommateForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent immediate form submission
+    
+    const loader = document.getElementById('loader');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = this;
+    
+    // Show loader
+    loader.style.display = 'flex';
+    
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    // Submit form after 3 seconds
+    setTimeout(() => {
+        form.submit();
+    }, 3000);
+    
+    // Hide loader after 10 seconds as fallback
+    setTimeout(() => {
+        loader.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '{% if is_editing %}<i class="fas fa-save"></i> Update My Profile{% else %}<i class="fas fa-users"></i> Find a Roommate{% endif %}';
+    }, 10000);
+});
+
+// Add error styling to invalid inputs
+document.addEventListener('DOMContentLoaded', function() {
+    const errorInputs = document.querySelectorAll('.roommate-error');
+    errorInputs.forEach(function(errorDiv) {
+        const input = errorDiv.parentElement.querySelector('.roommate-input');
+        if (input) {
+            input.classList.add('error');
+        }
+    });
+});
+</script>
 
 {% endblock %}
