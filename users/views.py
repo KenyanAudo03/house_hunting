@@ -471,33 +471,52 @@ def roomie_profile(request):
     if request.method == "POST":
         form = RoommateProfileForm(request.POST, instance=roommate_profile)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.profile = request.user.profile
-            if not obj.has_valid_profile():
-                messages.error(
-                    request,
-                    "You need a name and profile picture before creating a roommate profile.",
-                )
-            else:
+            try:
+                obj = form.save(commit=False)
+                obj.user = request.user
+                obj.profile = request.user.profile
+
+                if not obj.has_valid_profile():
+                    messages.error(
+                        request,
+                        "You need a name and profile picture before creating a roommate profile.",
+                    )
+                    return render(
+                        request,
+                        "users/roomie_profile.html",
+                        {"form": form, "roommate_profile": roommate_profile},
+                    )
+
                 obj.save()
+
                 if roommate_profile:
                     messages.success(
-                        request, "Your roommate profile was updated successfully."
+                        request, "Your roommate profile has been updated successfully!"
                     )
                 else:
                     messages.success(
-                        request, "Your roommate profile was created successfully."
+                        request, "Your roommate profile has been created successfully!"
                     )
+
                 return redirect("users:roomie_profile")
+
+            except Exception as e:
+                messages.error(
+                    request,
+                    "An error occurred while saving your profile. Please try again.",
+                )
+        else:
+            messages.error(request, "Please correct the errors below and try again.")
     else:
         form = RoommateProfileForm(instance=roommate_profile)
 
-    return render(
-        request,
-        "users/roomie_profile.html",
-        {"form": form, "roommate_profile": roommate_profile},
-    )
+    context = {
+        "form": form,
+        "roommate_profile": roommate_profile,
+        "is_editing": bool(roommate_profile),
+    }
+
+    return render(request, "users/roomie_profile.html", context)
 
 
 @login_required
