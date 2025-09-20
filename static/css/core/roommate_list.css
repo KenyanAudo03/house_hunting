@@ -218,7 +218,6 @@
   grid-column: 1 / -1;
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border-radius: 20px;
-  border: 2px dashed #d1d5db;
 }
 
 .roommate-empty i {
