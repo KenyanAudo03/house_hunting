@@ -1,0 +1,59 @@
+{% load static %}
+{% for profile in profiles %}
+<div class="roommate-card">
+  <div class="roommate-image">
+    {% if profile.profile.profile_picture %}
+    <img
+      src="{{ profile.profile.profile_picture.url }}"
+      alt="{{ profile.user.get_full_name|default:profile.user.username }}"
+    />
+    {% elif profile.profile.google_avatar_url %}
+    <img
+      src="{{ profile.profile.google_avatar_url }}"
+      alt="{{ profile.user.get_full_name|default:profile.user.username }}"
+    />
+    {% else %}
+    <img
+      src="{% static 'images/default_images/default_user.png' %}"
+      alt="Default Profile"
+    />
+    {% endif %}
+    <div class="roommate-overlay"></div>
+    <div class="roommate-badge">Available</div>
+  </div>
+
+  <div class="roommate-content">
+    <h3 class="roommate-name">
+      {{ profile.user.get_full_name|default:profile.user.username }}
+    </h3>
+
+    <div class="roommate-details">
+      <div class="roommate-detail">
+        <i class="bx bx-map roommate-icon"></i>
+        <div class="roommate-detail-content">
+          <span class="roommate-label">Location:</span>
+          <span class="roommate-value">{{ profile.place_of_stay }}</span>
+        </div>
+      </div>
+      <div class="roommate-detail">
+        <i class="bx bx-dollar roommate-icon"></i>
+        <div class="roommate-detail-content">
+          <span class="roommate-label">Rent:</span>
+          <span class="roommate-value">Ksh {{ profile.rent }}</span>
+        </div>
+      </div>
+      <div class="roommate-detail">
+        <i class="bx bx-phone roommate-icon"></i>
+        <div class="roommate-detail-content">
+          <span class="roommate-label">Phone:</span>
+          <span class="roommate-value">{{ profile.contact_number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="tel:{{ profile.contact_number }}" class="roommate-button">
+      <i class="fas fa-phone"></i> Contact
+    </a>
+  </div>
+</div>
+{% endfor %}
