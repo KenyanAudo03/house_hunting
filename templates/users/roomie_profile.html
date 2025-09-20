@@ -4,4 +4,17 @@
 
 {% block content %}
 
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+
+{% if roommate_profile %}
+  <p><strong>Status:</strong>
+    {% if roommate_profile.is_active %} Active {% else %} Disabled {% endif %}
+  </p>
+{% endif %}
+
+
 {% endblock %}
