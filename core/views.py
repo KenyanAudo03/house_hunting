@@ -17,6 +17,7 @@ from django.contrib import messages
 from django.urls import reverse
 from accounts.models import RoommateProfile
 
+
 def home(request):
     query = request.GET.get("q", "")
 
@@ -314,10 +315,54 @@ def leave_review(request, token):
         {"form": form, "hostel": invitation.hostel, "invitation": invitation},
     )
 
+
 def roommate_list(request):
-    """List all active roommate profiles (excluding the current user)"""
     profiles = RoommateProfile.objects.filter(is_active=True)
-    return render(request, "core/roommate_list.html", {"profiles": profiles})
+    
+    if request.user.is_authenticated:
+        profiles = profiles.exclude(user=request.user)
+    
+    location_filter = request.GET.get('location', '').strip()
+    min_rent = request.GET.get('min_rent', '').strip()
+    max_rent = request.GET.get('max_rent', '').strip()
+    search = request.GET.get('search', '').strip()
+    
+    if location_filter:
+        profiles = profiles.filter(place_of_stay__icontains=location_filter)
+    
+    if min_rent and min_rent.isdigit():
+        profiles = profiles.filter(rent__gte=int(min_rent))
+    
+    if max_rent and max_rent.isdigit():
+        profiles = profiles.filter(rent__lte=int(max_rent))
+    
+    if search:
+        profiles = profiles.filter(
+            Q(user__first_name__icontains=search) |
+            Q(user__last_name__icontains=search) |
+            Q(user__username__icontains=search) |
+            Q(place_of_stay__icontains=search)
+        )
+    
+    profiles = profiles.select_related('user', 'profile').order_by('-created_at')
+    
+    locations = RoommateProfile.objects.filter(is_active=True).values_list('place_of_stay', flat=True).distinct()
+    unique_locations = list(set([loc.strip().title() for loc in locations if loc]))
+    
+    context = {
+        'profiles': profiles,
+        'unique_locations': sorted(unique_locations),
+        'current_filters': {
+            'location': location_filter,
+            'min_rent': min_rent,
+            'max_rent': max_rent,
+            'search': search,
+        },
+        'total_count': profiles.count(),
+    }
+    
+    return render(request, 'core/roommate_list.html', context)
+
 
 def about(request):
     return render(request, "core/about.html")
