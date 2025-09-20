@@ -15,7 +15,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.urls import reverse
-
+from accounts.models import RoommateProfile
 
 def home(request):
     query = request.GET.get("q", "")
@@ -314,6 +314,10 @@ def leave_review(request, token):
         {"form": form, "hostel": invitation.hostel, "invitation": invitation},
     )
 
+def roommate_list(request):
+    """List all active roommate profiles (excluding the current user)"""
+    profiles = RoommateProfile.objects.filter(is_active=True)
+    return render(request, "core/roommate_list.html", {"profiles": profiles})
 
 def about(request):
     return render(request, "core/about.html")
