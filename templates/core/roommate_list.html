@@ -6,6 +6,9 @@
     background: url('{% static "images/default_images/roomies_template_background.jpeg" %}')
       center/cover;
   }
+  .loading.hidden {
+    display: none !important;
+}
 </style>
 <div class="hero">
   <div class="hero-content">
@@ -34,12 +37,12 @@
     </div>
   </div>
 </div>
-
 <div class="roommate-container">
   <div class="roommate-grid" id="roommate-grid">
-    <!-- Script automatically loads roommate cards -->
+    <!-- Display initial cards -->
+    {{ cards_html|safe }}
   </div>
-
+  {% if has_next %}
   <div class="loading" id="loading">
     <div style="display: inline-block; animation: pulse 2s infinite">
       <i
@@ -49,28 +52,24 @@
     </div>
     <p>Loading more profiles...</p>
   </div>
+  {% endif %}
 </div>
-
 <script>
   let currentPage = 1;
   let isLoading = false;
-  let hasMoreProfiles = true;
+  let hasMoreProfiles = {{ has_next|yesno:"true,false" }};
   const query = "{{ query|default:'' }}";
-
+  
   function loadMoreProfiles() {
     if (isLoading || !hasMoreProfiles) return;
-
     isLoading = true;
     document.getElementById("loading").classList.remove("hidden");
-
     const params = new URLSearchParams({
       page: currentPage + 1,
     });
-
     if (query) {
       params.append("q", query);
     }
-
     fetch(`{% url 'roommate_list' %}?${params.toString()}`, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -92,10 +91,13 @@
       })
       .finally(() => {
         isLoading = false;
-        document.getElementById("loading").classList.add("hidden");
+        const loadingEl = document.getElementById("loading");
+        if (loadingEl) {
+          loadingEl.classList.add("hidden");
+        }
       });
   }
-
+  
   function checkScroll() {
     if (
       window.innerHeight + window.scrollY >=
@@ -104,17 +106,19 @@
       loadMoreProfiles();
     }
   }
-
+  
   window.addEventListener("scroll", checkScroll);
-
+  
   const style = document.createElement("style");
   style.textContent = `
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading.hidden {
+      display: none !important;
+    }
+  `;
   document.head.appendChild(style);
 </script>
-
 {% endblock %}

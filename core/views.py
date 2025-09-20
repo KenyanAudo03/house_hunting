@@ -19,7 +19,6 @@ from accounts.models import RoommateProfile
 from django.template.loader import render_to_string
 
 
-
 def home(request):
     query = request.GET.get("q", "")
 
@@ -333,19 +332,19 @@ def roommate_list(request):
         )
 
     profiles = profiles.select_related("user", "profile").order_by("-created_at")
-
     paginator = Paginator(profiles, 20)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
-    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        html = render_to_string(
-            "core/partials/roommate_cards.html", {"profiles": page_obj}
-        )
+    # Render the partial template HTML for initial cards
+    cards_html = render_to_string(
+        "core/partials/roommate_cards.html", {"profiles": page_obj}
+    )
 
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         return JsonResponse(
             {
-                "html": html,
+                "html": cards_html,
                 "has_next": page_obj.has_next(),
                 "profiles": [{"id": p.id} for p in page_obj],
             }
@@ -354,7 +353,7 @@ def roommate_list(request):
     return render(
         request,
         "core/roommate_list.html",
-        {"profiles": page_obj, "query": query, "has_next": page_obj.has_next()},
+        {"cards_html": cards_html, "query": query, "has_next": page_obj.has_next()},
     )
 
 
