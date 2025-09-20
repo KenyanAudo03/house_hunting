@@ -1,0 +1,350 @@
+.dashboard-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.dashboard-left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-profile-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.dashboard-profile-bg {
+  height: 200px;
+  background: linear-gradient(135deg,
+      rgba(34, 139, 34, 0.9),
+      rgba(30, 123, 30, 0.9)),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23228b22"/><path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="%231e7b1e" opacity="0.7"/><circle cx="80" cy="60" r="20" fill="white" opacity="0.3"/><circle cx="320" cy="80" r="15" fill="white" opacity="0.2"/><circle cx="200" cy="40" r="10" fill="white" opacity="0.4"/></svg>') center/cover;
+  position: relative;
+}
+
+.dashboard-profile-content {
+  padding: 80px 32px 32px;
+  position: relative;
+}
+
+.dashboard-avatar-wrapper {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: -75px;
+  left: 32px;
+}
+
+.dashboard-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 6px solid white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+.dashboard-user-info {
+  margin-top: 16px;
+}
+
+.dashboard-username {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1a202c;
+  margin: 0 0 4px 0;
+}
+
+.dashboard-handle {
+  color: #64748b;
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.dashboard-join-date {
+  color: #64748b;
+  font-size: 15px;
+  margin: 0 0 24px 0;
+}
+
+.dashboard-suggestions-card,
+.dashboard-replies-card,
+.dashboard-stats-card,
+.dashboard-roommate-card,
+.dashboard-actions-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 20px 0;
+}
+
+.dashboard-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.dashboard-suggestion-icon {
+  font-size: 20px;
+  color: #6c757d;
+}
+
+.dashboard-suggestion-content {
+  flex: 1;
+}
+
+.dashboard-suggestion-text {
+  margin: 0 0 4px 0;
+  font-weight: 500;
+  color: #1a202c;
+}
+
+.dashboard-suggestion-note {
+  color: #6c757d;
+}
+
+.dashboard-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-reply-item {
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #ffd700;
+}
+
+.dashboard-reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dashboard-reply-title {
+  color: #1a202c;
+  font-size: 14px;
+}
+
+.dashboard-reply-date {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.dashboard-reply-text {
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dashboard-stat-item {
+  text-align: center;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.dashboard-stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 4px;
+}
+
+.dashboard-stat-label {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.dashboard-stat-link {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.dashboard-stat-link:hover {
+  color: #ffd700;
+  text-decoration: underline;
+}
+
+.dashboard-roommate-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.dashboard-roommate-active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.dashboard-roommate-inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.dashboard-roommate-incomplete {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.dashboard-roommate-icon {
+  font-size: 20px;
+}
+
+.dashboard-roommate-text {
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.dashboard-roommate-details {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-action-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: #495057;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.dashboard-action-link:hover {
+  background: #f8f9fa;
+  color: #ffd700;
+}
+
+.dashboard-action-icon {
+  font-size: 18px;
+  width: 20px;
+}
+
+.dashboard-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+}
+
+.dashboard-btn-primary {
+  background: #ffd700;
+  color: #1a202c;
+}
+
+.dashboard-btn-primary:hover {
+  background: #e6c200;
+}
+
+.dashboard-btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.dashboard-btn-danger:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px 12px;
+  }
+
+  .dashboard-main {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dashboard-avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    top: -60px;
+    left: 16px;
+  }
+
+  .dashboard-profile-content {
+    padding: 70px 16px 24px;
+  }
+
+  .dashboard-username {
+    font-size: 24px;
+  }
+
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboard-suggestion-item,
+  .dashboard-roommate-status {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .dashboard-suggestions-card,
+  .dashboard-replies-card,
+  .dashboard-stats-card,
+  .dashboard-roommate-card,
+  .dashboard-actions-card {
+    padding: 16px;
+  }
+}
