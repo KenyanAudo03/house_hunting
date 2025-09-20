@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import ContactInquiry
+from .models import ContactInquiry, PlatformContact
 
 
 @admin.register(ContactInquiry)
@@ -40,3 +40,8 @@ class ContactInquiryAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         # Prevent editing while still allowing deletion
         return False
+
+
+@admin.register(PlatformContact)
+class PlatformContactAdmin(admin.ModelAdmin):
+    list_display = ("contact_number", "support_email", "partners_email")
