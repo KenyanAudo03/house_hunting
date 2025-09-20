@@ -7,6 +7,7 @@ import uuid
 from django.utils import timezone
 from datetime import timedelta
 from core.models import Hostel
+from django.conf import settings
 
 
 class Profile(models.Model):
@@ -96,3 +97,34 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.user.username} favorited {self.hostel.name}"
+
+
+class RoommateProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="roommate_profile",
+    )
+    profile = models.OneToOneField(
+        "Profile", on_delete=models.CASCADE, related_name="roommate_profile"
+    )
+    place_of_stay = models.CharField(max_length=100)
+    rent = models.DecimalField(max_digits=10, decimal_places=2)
+    contact_number = models.CharField(max_length=20)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Roommate profile for {self.user.username}"
+
+    def has_valid_profile(self):
+        """Check if user has a name and profile picture set up."""
+        return bool(
+            self.user.first_name
+            and self.user.last_name
+            and (self.profile.profile_picture or self.profile.google_avatar_url)
+        )
+
+    class Meta:
+        verbose_name = "Roommate Profile"
+        verbose_name_plural = "Roommate Profiles"
