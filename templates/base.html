@@ -51,7 +51,11 @@
         >
           Houses
         </a>
-        <a href="#">Roomies</a>
+        <a
+          href="{% url 'roommate_list' %}"
+          class="{% if request.path == '/roommate-list' %}active{% endif %}"
+          >Roomies</a
+        >
         <a
           href="{% url 'about' %}"
           class="{% if request.path == '/about' %}active{% endif %}"
@@ -89,10 +93,18 @@
             <i class="bx bx-chevron-down"></i>
           </div>
           <div class="profile-dropdown" id="profileDropdown">
-            <a href="{% url 'users:dashboard'  %}"><i class="bx bxs-dashboard"></i>Dashboard</a>
-            <a href="{% url 'users:favorites'  %}"><i class="bx bx-heart"></i>Favorites</a>
-            <a href="{% url 'users:profile'  %}"><i class="bx bx-user"></i>Profile</a>
-            <a href="{% url 'users:roomie_profile'  %}"><i class="bx bx-group"></i>Roomie Profile</a>
+            <a href="{% url 'users:dashboard'  %}"
+              ><i class="bx bxs-dashboard"></i>Dashboard</a
+            >
+            <a href="{% url 'users:favorites'  %}"
+              ><i class="bx bx-heart"></i>Favorites</a
+            >
+            <a href="{% url 'users:profile'  %}"
+              ><i class="bx bx-user"></i>Profile</a
+            >
+            <a href="{% url 'users:roomie_profile'  %}"
+              ><i class="bx bx-group"></i>Roomie Profile</a
+            >
             <a href="{% url 'account_logout' %}?next={{ request.path }}"
               ><i class="bx bx-log-out"></i>Logout</a
             >
@@ -145,7 +157,11 @@
           </a>
         </li>
         <li>
-          <a href="#">Roomies</a>
+          <a
+            href="{% url 'roommate_list' %}"
+            class="{% if request.path == '/roommate-list' %}active{% endif %}"
+            >Roomies</a
+          >
         </li>
         <li>
           <a
@@ -237,7 +253,7 @@
             <h4>Quick Links</h4>
             <div class="footer-links">
               <a href="/">Houses</a>
-              <a href="#">Roomies</a>
+              <a href="{% url 'roommate_list' %}">Roomies</a>
               <a href="{% url 'about' %}">About</a>
               <a href="{% url 'contact' %}">Contact</a>
             </div>
@@ -284,7 +300,7 @@
     </footer>
 
     <!-- Messages eg. Login and Logout -->
-      {% include 'core/partials/messages.html' %}
+    {% include 'core/partials/messages.html' %}
 
     <script src="{% static 'js/base.js' %}"></script>
 
