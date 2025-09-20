@@ -212,12 +212,13 @@
 
 .roommate-empty {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
   color: #6b7280;
   font-size: 1.2rem;
   grid-column: 1 / -1;
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border-radius: 20px;
+  border: 2px dashed #d1d5db;
 }
 
 .roommate-empty i {

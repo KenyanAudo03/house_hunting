@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% block title %}Roommate Listings{% endblock %} 
-{% load static %}
-{% block content %}
+{% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/core/roommate_list.css' %}" />
 
 <div class="roommate-container">
@@ -43,16 +42,25 @@
 
         <div class="roommate-details">
           <div class="roommate-detail">
-            <i class="fas fa-map-marker-alt roommate-icon"></i>
-            <span>{{ profile.place_of_stay }}</span>
+            <i class="bx bx-map roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Location:</span>
+              <span class="roommate-value">{{ profile.place_of_stay }}</span>
+            </div>
           </div>
           <div class="roommate-detail">
-            <i class="fas fa-dollar-sign roommate-icon"></i>
-            <span>{{ profile.rent }}</span>
+            <i class="bx bx-dollar roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Rent:</span>
+              <span class="roommate-value">Ksh {{ profile.rent }}</span>
+            </div>
           </div>
           <div class="roommate-detail">
-            <i class="fas fa-phone roommate-icon"></i>
-            <span>{{ profile.contact_number }}</span>
+            <i class="bx bx-phone roommate-icon"></i>
+            <div class="roommate-detail-content">
+              <span class="roommate-label">Phone:</span>
+              <span class="roommate-value">{{ profile.contact_number }}</span>
+            </div>
           </div>
         </div>
 
