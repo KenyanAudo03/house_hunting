@@ -29,6 +29,8 @@ from core.models import Hostel
 from accounts.models import Favorite
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .utils import determine_price_winner, generate_recommendation
+from accounts.models import RoommateProfile
+from .forms import RoommateProfileForm
 
 
 @login_required
@@ -459,7 +461,43 @@ def toggle_favorite(request, hostel_id):
 
 @login_required
 def roomie_profile(request):
-    return render(request, "users/roomie_profile.html")
+    """Create or edit a user's roommate profile"""
+    if not hasattr(request.user, "profile"):
+        messages.error(request, "You need to complete your user profile first.")
+        return redirect("users:profile")
+
+    roommate_profile = RoommateProfile.objects.filter(user=request.user).first()
+
+    if request.method == "POST":
+        form = RoommateProfileForm(request.POST, instance=roommate_profile)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.profile = request.user.profile
+            if not obj.has_valid_profile():
+                messages.error(
+                    request,
+                    "You need a name and profile picture before creating a roommate profile.",
+                )
+            else:
+                obj.save()
+                if roommate_profile:
+                    messages.success(
+                        request, "Your roommate profile was updated successfully."
+                    )
+                else:
+                    messages.success(
+                        request, "Your roommate profile was created successfully."
+                    )
+                return redirect("users:roomie_profile")
+    else:
+        form = RoommateProfileForm(instance=roommate_profile)
+
+    return render(
+        request,
+        "users/roomie_profile.html",
+        {"form": form, "roommate_profile": roommate_profile},
+    )
 
 
 @login_required
