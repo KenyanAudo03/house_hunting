@@ -1,618 +1,36 @@
-{% extends 'base.html' %} 
-{% block title %}Roommate Listings{% endblock %} 
-{% load static %} 
-
-{% block content %}
-<style>
-.roommate-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.roommate-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.roommate-title {
-  font-size: 2.8rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--brand), #16a34a, #059669);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 16px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.roommate-subtitle {
-  font-size: 1.2rem;
-  color: #6b7280;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-.roommate-filters {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-}
-
-.roommate-filters-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #374151;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.roommate-filters-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 2fr;
-  gap: 16px;
-  align-items: end;
-}
-
-.roommate-filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.roommate-filter-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #4b5563;
-}
-
-.roommate-filter-input,
-.roommate-filter-select {
-  padding: 10px 12px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  background: #f9fafb;
-}
-
-.roommate-filter-input:focus,
-.roommate-filter-select:focus {
-  outline: none;
-  border-color: var(--brand);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-}
-
-.roommate-filter-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.roommate-filter-btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.roommate-filter-search {
-  background: linear-gradient(135deg, var(--brand), #16a34a);
-  color: white;
-}
-
-.roommate-filter-search:hover {
-  background: linear-gradient(135deg, #16a34a, #059669);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-}
-
-.roommate-filter-clear {
-  background: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
-}
-
-.roommate-filter-clear:hover {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-.roommate-results-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: #f0fdf4;
-  border-radius: 12px;
-  border: 1px solid #bbf7d0;
-}
-
-.roommate-count {
-  font-weight: 600;
-  color: #166534;
-}
-
-.roommate-active-filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.roommate-filter-tag {
-  background: var(--brand);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.roommate-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-  margin-top: 32px;
-}
-
-.roommate-card {
-  background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 2px solid transparent;
-  position: relative;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.06);
-}
-
-.roommate-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, var(--brand), #16a34a);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: -1;
-  border-radius: 18px;
-}
-
-.roommate-card:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-.roommate-card:hover::before {
-  opacity: 0.02;
-}
-
-.roommate-image {
-  position: relative;
-  height: 140px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-}
-
-.roommate-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 0.5s ease;
-  filter: brightness(0.95) contrast(1.05);
-}
-
-.roommate-card:hover .roommate-image img {
-  transform: scale(1.08);
-  filter: brightness(1) contrast(1.1);
-}
-
-.roommate-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.roommate-card:hover .roommate-overlay {
-  opacity: 1;
-}
-
-.roommate-content {
-  padding: 16px;
-  position: relative;
-}
-
-.roommate-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 12px;
-  text-align: center;
-  letter-spacing: -0.025em;
-}
-
-.roommate-details {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.roommate-detail {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  color: #4b5563;
-  font-weight: 500;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-  transition: all 0.3s ease;
-}
-
-.roommate-detail:last-child {
-  border-bottom: none;
-}
-
-.roommate-card:hover .roommate-detail {
-  color: #374151;
-}
-
-.roommate-detail-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-}
-
-.roommate-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.roommate-value {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #374151;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.roommate-icon {
-  color: var(--brand);
-  width: 20px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.roommate-card:hover .roommate-icon {
-  color: #16a34a;
-  transform: scale(1.1);
-}
-
-.roommate-button {
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
-  background: linear-gradient(135deg, var(--brand), #16a34a);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  letter-spacing: 0.025em;
-}
-
-.roommate-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.roommate-button:hover::before {
-  left: 100%;
-}
-
-.roommate-button:hover {
-  background: linear-gradient(135deg, #16a34a, #059669);
-  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
-}
-
-.roommate-button:active {
-  transform: scale(0.98);
-}
-
-.roommate-empty {
-  text-align: center;
-  padding: 80px 20px;
-  color: #6b7280;
-  font-size: 1.2rem;
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border-radius: 20px;
-  border: 2px dashed #d1d5db;
-}
-
-.roommate-empty i {
-  font-size: 4rem;
-  color: var(--brand);
-  margin-bottom: 24px;
-  display: block;
-  opacity: 0.7;
-}
-
-.roommate-empty a {
-  color: var(--brand);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.roommate-empty a:hover {
-  text-decoration: underline;
-}
-
-.roommate-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--brand);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-}
-
-.roommate-image::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: rotate(45deg);
-  transition: all 0.6s ease;
-  opacity: 0;
-}
-
-.roommate-card:hover .roommate-image::after {
-  animation: shimmer 0.8s ease-out;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-    opacity: 0;
-  }
-}
-
-@media (max-width: 1200px) {
-  .roommate-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  
-  .roommate-filters-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-}
-
-@media (max-width: 780px) {
-  .roommate-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .roommate-container {
-    padding: 30px 15px;
-  }
-
-  .roommate-title {
-    font-size: 2.2rem;
-  }
-
-  .roommate-image {
-    height: 120px;
-  }
-
-  .roommate-content {
-    padding: 14px;
-  }
-
-  .roommate-name {
-    font-size: 1rem;
-  }
-  
-  .roommate-filters-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .roommate-filters {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 400px) {
-  .roommate-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .roommate-container {
-    padding: 20px 10px;
-  }
-
-  .roommate-title {
-    font-size: 1.9rem;
-  }
-
-  .roommate-subtitle {
-    font-size: 1rem;
-  }
-
-  .roommate-image {
-    height: 100px;
-  }
-
-  .roommate-content {
-    padding: 12px;
-  }
-  
-  .roommate-results-info {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-  }
-}
-</style>
-
-<div class="roommate-container">
-  <div class="roommate-header">
-    <h1 class="roommate-title">JOOUST Hostel Sharing</h1>
-    <p class="roommate-subtitle">
+{% extends 'base.html' %} {% block title %}Roommate Listings{% endblock %} 
+{% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/core/roommate_list.css' %}">
+
+<div class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">JOOUST Hostel Sharing</h1>
+    <p class="hero-subtitle">
       Find students at JOOUST who are looking to share hostels or rooms on and around campus.
     </p>
-  </div>
-
-  <div class="roommate-filters">
-    <h3 class="roommate-filters-title">
-      <i class="bx bx-filter"></i>
-      Filter Roommates
-    </h3>
-    
-    <form method="get" class="roommate-filters-form">
-      <div class="roommate-filters-grid">
-        <div class="roommate-filter-group">
-          <label class="roommate-filter-label">Location</label>
-          <select name="location" class="roommate-filter-select">
-            <option value="">All Locations</option>
-            {% for location in unique_locations %}
-              <option value="{{ location }}" {% if current_filters.location == location %}selected{% endif %}>
-                {{ location }}
-              </option>
-            {% endfor %}
-          </select>
+    <div class="search-container">
+      <form class="search-form" method="GET" action="{% url 'roommate_list' %}">
+        <div class="search-input-group">
+          <i class="bx bx-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            name="q"
+            placeholder="Search by name, location, rent..."
+            value="{{ query }}"
+          />
+          <button type="submit" class="search-btn">
+            <i class="bx bx-search"></i>
+            Search
+          </button>
         </div>
-        
-        <div class="roommate-filter-group">
-          <label class="roommate-filter-label">Min Rent (KES)</label>
-          <input 
-            type="number" 
-            name="min_rent" 
-            class="roommate-filter-input"
-            placeholder="e.g., 3000"
-            value="{{ current_filters.min_rent }}"
-            min="0"
-            step="500"
-          >
-        </div>
-        
-        <div class="roommate-filter-group">
-          <label class="roommate-filter-label">Max Rent (KES)</label>
-          <input 
-            type="number" 
-            name="max_rent" 
-            class="roommate-filter-input"
-            placeholder="e.g., 15000"
-            value="{{ current_filters.max_rent }}"
-            min="0"
-            step="500"
-          >
-        </div>
-        
-        <div class="roommate-filter-group">
-          <label class="roommate-filter-label">Search Name/Location</label>
-          <div class="roommate-filter-actions" style="flex-direction: column; gap: 8px;">
-            <input 
-              type="text" 
-              name="search" 
-              class="roommate-filter-input"
-              placeholder="Search..."
-              value="{{ current_filters.search }}"
-            >
-            <div style="display: flex; gap: 8px;">
-              <button type="submit" class="roommate-filter-btn roommate-filter-search">
-                <i class="bx bx-search"></i> Search
-              </button>
-              <a href="?" class="roommate-filter-btn roommate-filter-clear">
-                <i class="bx bx-x"></i> Clear
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  {% if current_filters.location or current_filters.min_rent or current_filters.max_rent or current_filters.search %}
-  <div class="roommate-results-info">
-    <div class="roommate-count">
-      <i class="bx bx-user"></i>
-      Found {{ total_count }} roommate{{ total_count|pluralize }}
-    </div>
-    <div class="roommate-active-filters">
-      {% if current_filters.location %}
-        <span class="roommate-filter-tag">{{ current_filters.location }}</span>
-      {% endif %}
-      {% if current_filters.min_rent %}
-        <span class="roommate-filter-tag">Min: Ksh {{ current_filters.min_rent }}</span>
-      {% endif %}
-      {% if current_filters.max_rent %}
-        <span class="roommate-filter-tag">Max: Ksh {{ current_filters.max_rent }}</span>
-      {% endif %}
-      {% if current_filters.search %}
-        <span class="roommate-filter-tag">"{{ current_filters.search }}"</span>
-      {% endif %}
+      </form>
     </div>
   </div>
-  {% endif %}
+</div>
 
-  <div class="roommate-grid">
+<div class="roommate-container">
+  <div class="roommate-grid" id="roommate-grid">
     {% for profile in profiles %}
     <div class="roommate-card">
       <div class="roommate-image">
@@ -638,11 +56,7 @@
 
       <div class="roommate-content">
         <h3 class="roommate-name">
-          {% if profile.user == request.user %}
-            You
-          {% else %}
-            {{ profile.user.get_full_name|default:profile.user.username }}
-          {% endif %}
+          {{ profile.user.get_full_name|default:profile.user.username }}
         </h3>
 
         <div class="roommate-details">
@@ -657,7 +71,7 @@
             <i class="bx bx-dollar roommate-icon"></i>
             <div class="roommate-detail-content">
               <span class="roommate-label">Rent:</span>
-              <span class="roommate-value">Ksh {{ profile.rent|floatformat:0 }}</span>
+              <span class="roommate-value">Ksh {{ profile.rent }}</span>
             </div>
           </div>
           <div class="roommate-detail">
@@ -670,19 +84,92 @@
         </div>
 
         <a href="tel:{{ profile.contact_number }}" class="roommate-button">
-          <i class="bx bx-phone"></i> Contact
+          <i class="fas fa-phone"></i> Contact
         </a>
       </div>
     </div>
     {% empty %}
     <div class="roommate-empty">
       <i class="bx bxs-user-x"></i>
-      <p>No roommate profiles match your filters.</p>
-      <a href="?">Clear filters to see all profiles</a> or 
-      <a href="{% url 'users:roomie_profile' %}">create your own profile!</a>
+      <p>No active roommate profiles found.</p>
+      <a
+        href="{% url 'users:roomie_profile' %}"
+        style="font-size: 0.95rem; margin-top: 12px; opacity: 0.8"
+        >Be the first to create a roommate profile!</a
+      >
     </div>
     {% endfor %}
   </div>
+
+  <div class="loading" id="loading">
+    <div style="display: inline-block; animation: pulse 2s infinite;">
+      <i class="bx bx-loader-alt" style="font-size: 2rem; animation: spin 2s linear infinite;"></i>
+    </div>
+    <p>Loading more profiles...</p>
+  </div>
 </div>
+
+<script>
+let currentPage = 1;
+let isLoading = false;
+let hasMoreProfiles = true;
+const query = "{{ query|default:'' }}";
+
+function loadMoreProfiles() {
+  if (isLoading || !hasMoreProfiles) return;
+  
+  isLoading = true;
+  document.getElementById('loading').classList.remove('hidden');
+  
+  const params = new URLSearchParams({
+    page: currentPage + 1
+  });
+  
+  if (query) {
+    params.append('q', query);
+  }
+  
+  fetch(`{% url 'roommate_list' %}?${params.toString()}`, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.profiles && data.profiles.length > 0) {
+      const grid = document.getElementById('roommate-grid');
+      grid.insertAdjacentHTML('beforeend', data.html);
+      currentPage++;
+      hasMoreProfiles = data.has_next;
+    } else {
+      hasMoreProfiles = false;
+    }
+  })
+  .catch(error => {
+    console.error('Error loading profiles:', error);
+  })
+  .finally(() => {
+    isLoading = false;
+    document.getElementById('loading').classList.add('hidden');
+  });
+}
+
+function checkScroll() {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+    loadMoreProfiles();
+  }
+}
+
+window.addEventListener('scroll', checkScroll);
+
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+</script>
 
 {% endblock %}
