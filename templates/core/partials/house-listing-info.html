@@ -20,6 +20,19 @@
         property. Once everything is reviewed and approved, our admin will add
         your listing to the platform.
       </p>
+      <br />
+      {% if user.is_authenticated %}
+      <p class="tip">
+        <strong>Tip:</strong> Since you're logged in, you can receive messages
+        and updates about your listing directly on your dashboard.
+      </p>
+      {% else %}
+      <p class="tip">
+        <strong>Tip:</strong> <a href="{% url 'account_login' %}">Log in</a> or
+        <a href="{% url 'account_signup' %}">create an account</a> to receive
+        messages and updates about your listing directly on your dashboard.
+      </p>
+      {% endif %}
     </div>
   </div>
   <div class="listing-right-side">
