@@ -63,24 +63,60 @@ class PropertyListingAdmin(admin.ModelAdmin):
         "area",
         "rent",
         "hostel",
+        "user_display",
+        "has_reply",
         "created_at",
     )
-    list_filter = ("role", "created_at")
-    search_fields = ("name", "contact", "hostel", "area")
+    list_filter = ("role", "created_at", "user__isnull")
+    search_fields = ("name", "contact", "hostel", "area", "user__username")
     ordering = ("-created_at",)
+    readonly_fields = (
+        "name",
+        "contact",
+        "role",
+        "area",
+        "rent",
+        "hostel",
+        "user",
+        "created_at",
+    )
+    fields = (
+        "name",
+        "contact",
+        "role",
+        "area",
+        "rent",
+        "hostel",
+        "user",
+        "created_at",
+        "reply",
+    )
 
     def contact_link(self, obj):
-        if obj.contact and "@" in obj.contact:  # looks like an email
+        if obj.contact and "@" in obj.contact:
             return format_html('<a href="mailto:{}">{}</a>', obj.contact, obj.contact)
-        elif obj.contact:  # assume it's a phone number
+        elif obj.contact:
             return format_html('<a href="tel:{}">{}</a>', obj.contact, obj.contact)
         return "-"
 
     contact_link.short_description = "Contact"
 
+    def user_display(self, obj):
+        return obj.user.username if obj.user else "Anonymous"
+
+    user_display.short_description = "User"
+
+    def has_reply(self, obj):
+        return "Yes" if obj.reply else "No"
+
+    has_reply.short_description = "Replied"
+    has_reply.boolean = True
+
     def has_change_permission(self, request, obj=None):
-        # Prevent editing while still allowing delete
-        return False
+        return True  # Allow editing for reply field
+
+    def has_delete_permission(self, request, obj=None):
+        return True
 
 
 @admin.register(HostelInquiry)
