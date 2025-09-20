@@ -1,4 +1,4 @@
-  .page-title {
+.page-title {
       color: #000;
   }
 
@@ -238,23 +238,36 @@
   @media (max-width: 900px) {
       .side-side {
           flex-direction: column;
+          width: 100%;
+      }
+
+      .hostel-container {
+          width: 100%;
+          max-width: 100%;
       }
 
       .compare-hostels {
           position: static;
           margin-top: 20px;
-          max-height: none;
+          max-height: 400px;
           height: auto;
+          width: 100%;
+          max-width: 100%;
       }
 
       .comparison-results {
           flex: none;
+          max-height: 200px;
+      }
+
+      .add-favorites {
+          height: 100px;
       }
   }
 
   @media (max-width: 768px) {
       .compare-hostels {
-          padding: 15px;
+          padding: 10px;
       }
 
       .comparison-table th,
