@@ -5,6 +5,7 @@ app_name = "users"
 
 urlpatterns = [
     path("dashboard", views.dashboard, name="dashboard"),
+    path('toggle-roommate-profile/', views.toggle_roommate_profile, name='toggle_roommate_profile'),
     path("profile", views.profile, name="profile"),
     path("favorites", views.favorites, name="favorites"),
     path(
