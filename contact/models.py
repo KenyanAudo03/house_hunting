@@ -30,6 +30,8 @@ class ContactInquiry(models.Model):
 
 class PlatformContact(models.Model):
     contact_number = models.CharField(max_length=20, blank=True, null=True)
+    whatsapp_number = models.CharField(max_length=20, blank=True, null=True)
+    emergency_number = models.CharField(max_length=20, blank=True, null=True)
     support_email = models.EmailField(blank=True, null=True)
     partners_email = models.EmailField(blank=True, null=True)
     issues_email = models.EmailField(blank=True, null=True)
