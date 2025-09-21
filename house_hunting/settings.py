@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "core",
     "contact",
     "accounts",
-    "users",  # Keep user account urls separately
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +46,10 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-# Updated to include first_name and last_name in signup
+# Allauth settings for proper email handling
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = [
     "email*",
@@ -58,13 +61,16 @@ ACCOUNT_SIGNUP_FIELDS = [
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
-
+# Social account settings
 SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_STORE_TOKENS = True
 
+# Custom forms and adapters
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
-
-# Add the custom social account adapter
 SOCIALACCOUNT_ADAPTER = "accounts.adapters.CustomSocialAccountAdapter"
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -80,7 +86,6 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         "AUTH_PARAMS": {
             "access_type": "online",
-            "prompt": "select_account",  # This forces account selection every time
         },
         "OAUTH_PKCE_ENABLED": True,
     }
@@ -95,7 +100,6 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip confirmation page
 ACCOUNT_LOGOUT_ON_GET = True
 
 ROOT_URLCONF = "house_hunting.urls"
@@ -114,6 +118,7 @@ TEMPLATES = [
                 "contact.context_processors.platform_contact",
                 "accounts.context_processors.favorites_count",
                 "core.context_processors.user_listings_count",
+                "core.context_processors.google_client_id",
             ],
         },
     },
@@ -156,3 +161,25 @@ USE_I18N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Logging configuration for debugging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "accounts": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
