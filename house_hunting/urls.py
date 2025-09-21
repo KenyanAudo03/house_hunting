@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import CustomConfirmEmailView
+from accounts import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -13,11 +14,14 @@ urlpatterns = [
         "accounts/confirm-email/<key>/",
         CustomConfirmEmailView.as_view(),
         name="account_confirm_email",
-    ), # Custom email confirmation view to auto-login after confirmation
+    ),  # Custom email confirmation view to auto-login after confirmation
+    path(
+        "google-one-tap-login/", views.google_one_tap_login, name="google_one_tap_login"
+    ),
     path("accounts/", include("allauth.urls")),
     path("", include("core.urls")),
     path("contact/", include("contact.urls")),
-    path("users/", include("users.urls")), # Keep user account urls separately
+    path("users/", include("users.urls")),  # Keep user account urls separately
 ]
 
 
