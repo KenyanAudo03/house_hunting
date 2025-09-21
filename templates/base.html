@@ -27,8 +27,14 @@
       href="{% static 'images/favicon.ico' %}"
     />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   </head>
   <body>
+    
+    <!-- One tap Login -->
+     {% include 'partials/one-tap-login.html' %}
+
     <header>
       <!-- Logo -->
       <a href="/">

@@ -1,0 +1,128 @@
+{% if not user.is_authenticated %}
+<script>
+  // Config values injected from Django
+  const GOOGLE_CLIENT_ID = "{{ google_client_id }}";
+  const ONE_TAP_LOGIN_URL = "{% url 'google_one_tap_login' %}";
+
+  // Try to grab CSRF token from cookie or meta tag
+  function getCSRFToken() {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "csrftoken") {
+        return value;
+      }
+    }
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    return csrfMeta ? csrfMeta.getAttribute("content") : null;
+  }
+
+  // Called when Google One Tap library finishes loading
+  window.onGoogleLibraryLoad = () => {
+    initializeGoogleOneTap();
+  };
+
+  // Initialize Google One Tap prompt
+  function initializeGoogleOneTap() {
+    if (!GOOGLE_CLIENT_ID) {
+      console.error("Google Client ID not configured");
+      return;
+    }
+
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+      cancel_on_tap_outside: false,
+      context: "signin",
+      ux_mode: "popup",
+      use_fedcm_for_prompt: false,
+    });
+
+    // Show the Google One Tap prompt
+    google.accounts.id.prompt();
+
+    // Attach handler for fallback manual sign-in button
+    setupManualSignIn();
+  }
+
+  // Handle the credential returned by Google One Tap
+  function handleCredentialResponse(response) {
+    const csrfToken = getCSRFToken();
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    if (csrfToken) {
+      headers["X-CSRFToken"] = csrfToken;
+    }
+
+    // Send the credential to the backend for verification
+    fetch(ONE_TAP_LOGIN_URL, {
+      method: "POST",
+      headers: headers,
+      credentials: "same-origin",
+      body: JSON.stringify({
+        credential: response.credential,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          // Update CSRF token if backend returned a new one
+          if (data.csrf_token) {
+            updateCSRFToken(data.csrf_token);
+          }
+          // Redirect to home page after login
+          window.location.href = "/";
+        } else {
+          throw new Error(data.error || "Login failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
+  }
+
+  // Update CSRF token in meta tag, cookie, and hidden form inputs
+  function updateCSRFToken(token) {
+    let csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    if (!csrfMeta) {
+      csrfMeta = document.createElement("meta");
+      csrfMeta.name = "csrf-token";
+      document.head.appendChild(csrfMeta);
+    }
+    csrfMeta.content = token;
+
+    document.cookie = `csrftoken=${token}; path=/; SameSite=Lax`;
+
+    const csrfInputs = document.querySelectorAll(
+      'input[name="csrfmiddlewaretoken"]'
+    );
+    csrfInputs.forEach((input) => {
+      input.value = token;
+    });
+  }
+
+  // Hook up "manual sign-in" button as a fallback option
+  function setupManualSignIn() {
+    const manualButton = document.getElementById("manual-google-signin");
+    if (manualButton) {
+      manualButton.addEventListener("click", () => {
+        google.accounts.id.prompt();
+      });
+    }
+  }
+
+  // Run initialization once the DOM is ready
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof google !== "undefined" && google.accounts) {
+      initializeGoogleOneTap();
+    }
+  });
+</script>
+{% endif %}
